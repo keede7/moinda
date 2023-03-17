@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  local-db:
+    container_name: local-db
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: boilerplate
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+      TZ: 'Asia/Seoul'
+    restart: always
+    ports:
+      - "3306:3306"
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+    networks:
+      - boilerplate-local
+
+  local-app:
+    container_name: local-app
+    build:
+      context: ..
+      dockerfile: ../Dockerfile
+    ports:
+      - "9090:9090"
+    restart: always
+    depends_on:
+      - local-db
+    networks:
+      - boilerplate-local
+
+networks:
+  boilerplate-local:
+    driver: bridge

@@ -1,0 +1,12 @@
+spring.profiles.active: local
+
+spring:
+  profiles:
+    include:
+      - core
+#  config:
+#    import:
+#      - application-core.yml
+  # 수동 & 자동 빈 이름 충돌 방지 설정
+  main:
+    allow-bean-definition-overriding: true
