@@ -10,6 +10,7 @@
 - **api** : `Presentation` 모듈
 - **core** : `Infrastructure` 모듈
 - **domain** : `Domain` 모듈
+- **commons** : `commons` 모듈
 
 ### 개발 환경 분리
 - master
