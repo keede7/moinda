@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.group.adapter.imlpements
+package io.keede.moinda.core.model.group.adapter.implements
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.core.model.group.adapter.GroupCommandAdapter
@@ -13,20 +13,20 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional
-internal class GroupCommand(
+internal class GroupCommandPort(
     private val groupJpaRepository: GroupJpaRepository
 ) : GroupCommandAdapter {
 
     /**
      * override - 메서드를 구현할 떄 주로 사용한다.
      */
-    override fun save(createGroup: CreateGroup): Long {
+    override fun save(createGroup: CreateGroup): GroupJpaEntity {
         val entity = GroupJpaEntity(
             createGroup.name,
             createGroup.description,
             createGroup.capacity
         )
 
-        return groupJpaRepository.save(entity).id
+        return groupJpaRepository.save(entity)
     }
 }
