@@ -1,18 +1,20 @@
-# Spring-kotlin-boilerplate
+# Moinda Kotlin Ver.
 
 ### 작업 사항
 - [x] 멀티 모듈 설정
 - [x] 개발 환경 분리
 - [x] Docker 환경 설정
-- [ ] 도메인 계층 분리
+- [x] 도메인 계층 분리
 
 ### 멀티 모듈 설정
-- api : `Presentation` 모듈
-- core : `Domain` 모듈
+- **api** : `Presentation` 모듈
+- **core** : `Infrastructure` 모듈
+- **domain** : `Domain` 모듈
 
 ### 개발 환경 분리
-- local
+- master
 - dev
+- prod
 
 #### 이외의 모듈 패키지
 

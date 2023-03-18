@@ -7,7 +7,7 @@ tasks.getByName("jar") {
 }
 
 dependencies {
-    implementation(project(":moinda-core"))
+    implementation(project(":moinda-domain"))
     implementation("org.springframework.boot:spring-boot-starter-web")
 }
 

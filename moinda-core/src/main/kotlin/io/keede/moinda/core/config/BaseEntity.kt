@@ -1,4 +1,4 @@
-package io.kopring.boilerplate.core.config
+package io.keede.moinda.core.config
 
 import java.time.LocalDateTime
 import javax.persistence.*

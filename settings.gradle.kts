@@ -2,5 +2,6 @@ rootProject.name = "moinda-kotlin"
 
 include(
     "moinda-api",
-    "moinda-core"
+    "moinda-core",
+    "moinda-domain"
 )
