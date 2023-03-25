@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 import io.keede.moinda.presentation.group.*
+import javax.validation.Valid
 
 /**
  * @author keede
@@ -27,7 +28,7 @@ class GroupRestController(
      */
     @PostMapping
     fun create(
-        @RequestBody createGroupDto: CreateGroupDto
+        @RequestBody @Valid createGroupDto: CreateGroupDto
     ): GroupResponseDto =
         groupCommandUseCase.create(
             GroupCommandUseCase.Command(createGroupDto.toDomain())

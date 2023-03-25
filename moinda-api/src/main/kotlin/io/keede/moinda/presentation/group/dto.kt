@@ -2,8 +2,12 @@ package io.keede.moinda.presentation.group
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.domains.group.domain.Group
+import javax.validation.constraints.Min
+import javax.validation.constraints.NotEmpty
+import javax.validation.constraints.NotNull
 
 /**
+ * TODO : Advice 작업 필요.
  * @author keede
  * Created on 2023-03-25
  */
@@ -15,8 +19,12 @@ data class GroupResponseDto(
 )
 
 data class CreateGroupDto(
+    @field:NotEmpty(message = "그룹명을 입력하세요.")
     val name: String,
+    @field:NotNull(message = "그룹명을 입력하세요.")
     val description: String?,
+    // TODO : 값이 없을 때 추가적인 Validation
+    @field:Min(message = "최소 2명 이상 입력하세요.", value = 2)
     val capacity: Int
 )
 
