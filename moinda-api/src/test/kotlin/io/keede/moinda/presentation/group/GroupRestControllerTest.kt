@@ -4,6 +4,7 @@ import com.ninjasquad.springmockk.MockkBean
 import io.keede.moinda.domains.group.service.GroupCommand
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.keede.moinda.presentation.config.BaseApi
+import io.keede.moinda.presentation.config.UriProvider
 import io.keede.moinda.presentation.group.fixture.ofCreateGroupDto
 import io.mockk.every
 import io.mockk.mockk
@@ -21,8 +22,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 @WebMvcTest(GroupRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
 internal class GroupRestControllerTest : BaseApi() {
-
-    private val uri = "/api/group"
 
     @MockkBean
     private lateinit var groupCommand: GroupCommand
@@ -48,7 +47,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         // When
         val perform = mockMvc.perform(
-            post(uri)
+            post(UriProvider.GROUP_URI)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(sut))
         )
