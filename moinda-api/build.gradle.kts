@@ -11,5 +11,7 @@ dependencies {
     implementation(project(":moinda-commons"))
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    // @MockkBean Dependency
+    testImplementation("com.ninja-squad:springmockk:4.0.2")
 }
 
