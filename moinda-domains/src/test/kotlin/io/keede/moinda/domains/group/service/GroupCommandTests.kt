@@ -3,6 +3,7 @@ package io.keede.moinda.domains.group.service
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.core.model.group.adapter.GroupCommandAdapter
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
+import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -21,8 +22,7 @@ import org.junit.jupiter.api.extension.ExtendWith
  * @author keede
  * Created on 2023-03-18
  */
-@ExtendWith(MockKExtension::class)
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
+@UseCaseTest
 class GroupCommandTests {
 
     @MockK
