@@ -10,6 +10,9 @@ abstract class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long = 0
 
+    @Column(name = "is_delete", nullable = false)
+    var deleteStatus : Boolean = false
+
     @Column(updatable = false)
     lateinit var createdAt: LocalDateTime
 
