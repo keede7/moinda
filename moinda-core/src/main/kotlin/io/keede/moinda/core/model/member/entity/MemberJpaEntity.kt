@@ -2,6 +2,7 @@ package io.keede.moinda.core.model.member.entity
 
 import io.keede.moinda.core.config.BaseEntity
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
+import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
 /**
@@ -10,6 +11,7 @@ import javax.persistence.*
  */
 @Entity
 @Table(name = "member_t")
+@DynamicUpdate
 class MemberJpaEntity(
 
     @Column(name = "name", length = 10, nullable = false)

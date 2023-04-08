@@ -10,8 +10,8 @@ internal class MemberQueryPort(
     private val memberJpaRepository: MemberJpaRepository
 ) : MemberQueryAdapter {
 
-    override fun findById(id: Long): MemberJpaEntity {
-        return memberJpaRepository.findById(id)
+    override fun findById(memberId: Long): MemberJpaEntity {
+        return memberJpaRepository.findById(memberId)
             .orElseThrow { RuntimeException() }
     }
 }
