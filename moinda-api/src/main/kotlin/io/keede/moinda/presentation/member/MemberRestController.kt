@@ -2,6 +2,9 @@ package io.keede.moinda.presentation.member
 
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
+import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -15,16 +18,24 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/member")
 class MemberRestController(
-    private val memberCommandUseCase: MemberCommandUseCase
+    private val memberCommandUseCase: MemberCommandUseCase,
+    private val memberQueryUseCase: MemberQueryUseCase
 ) {
 
-    // TODO : Need To Write Test Code
     @PostMapping
     fun signup(
         @RequestBody @Valid signUpMemberDto: SignUpMemberDto
     ) : MemberResponseDto =
         memberCommandUseCase.signup(
             MemberCommandUseCase.Command(signUpMemberDto.toDomain())
+        ).let(Member::toMemberResponseDto)
+
+    @GetMapping("/{memberId}")
+    fun getOne(
+        @PathVariable("memberId") memberId: Long
+    ) : MemberResponseDto =
+         memberQueryUseCase.findById(
+            MemberQueryUseCase.Query(memberId)
         ).let(Member::toMemberResponseDto)
 
 }

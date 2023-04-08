@@ -47,7 +47,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         // When
         val perform = mockMvc.perform(
-            post(UriProvider.GROUP_URI)
+            post(UriProvider.GROUP_API)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(sut))
         )
