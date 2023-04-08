@@ -28,6 +28,13 @@ data class CreateGroupDto(
     val capacity: Int
 )
 
+data class ParticipateDto(
+    @field:NotNull(message = "그룹을 지정해야 합니다.")
+    val groupId: Long,
+    @field:NotNull(message = "가입자를 지정해야 합니다.")
+    val memberId: Long,
+)
+
 /**
  * Class.Method() = ReturnType
  * Class로 선언한 값으로 ReturnType의 객체를 생성해낼 수 있다.
