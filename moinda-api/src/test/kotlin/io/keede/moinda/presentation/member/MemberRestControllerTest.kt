@@ -3,9 +3,7 @@ package io.keede.moinda.presentation.member
 import com.ninjasquad.springmockk.MockkBean
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
-import io.keede.moinda.presentation.config.BaseApi
-import io.keede.moinda.presentation.config.UriProvider.MEMBER_API
-import io.keede.moinda.presentation.config.UriProvider.PATH_SEPARATOR
+import io.keede.moinda.presentation.config.*
 import io.keede.moinda.presentation.member.fixture.*
 import io.mockk.every
 import io.mockk.mockk
@@ -41,7 +39,7 @@ internal class MemberRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc
             .perform(
-                post(MEMBER_API)
+                post(UriMaker.MEMBER_API)
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(toJson(sut))
             )
@@ -61,7 +59,7 @@ internal class MemberRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc
             .perform(
-                get(String.format("%s%s%s", MEMBER_API, PATH_SEPARATOR, memberId))
+                get(UriMaker.toMemberApiUri(memberId))
             )
 
         // Then

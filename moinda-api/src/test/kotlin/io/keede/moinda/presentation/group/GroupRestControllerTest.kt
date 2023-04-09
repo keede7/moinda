@@ -4,7 +4,8 @@ import com.ninjasquad.springmockk.MockkBean
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.presentation.config.BaseApi
-import io.keede.moinda.presentation.config.UriProvider
+import io.keede.moinda.presentation.config.UriMaker
+import io.keede.moinda.presentation.config.toGroupApiUri
 import io.keede.moinda.presentation.group.fixture.ofCreateGroupDto
 import io.mockk.every
 import io.mockk.mockk
@@ -42,7 +43,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         // When
         val perform = mockMvc.perform(
-            post(UriProvider.GROUP_API)
+            post(UriMaker.GROUP_API)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
         )
@@ -66,7 +67,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         // When
         val perform = mockMvc.perform(
-            post(String.format("%s%s%s", UriProvider.GROUP_API, UriProvider.PATH_SEPARATOR, "participate"))
+            post(UriMaker.toGroupApiUri("participate"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
         )
