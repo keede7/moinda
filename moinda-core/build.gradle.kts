@@ -10,6 +10,10 @@ allOpen {
 
 dependencies {
     implementation(project(":moinda-commons"))
+    // Querydsl 관련 라이브러리
+    implementation("com.querydsl:querydsl-jpa")
+    // TODO : 적용해야하는 부분.
+    kapt("com.querydsl:querydsl-apt")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("com.h2database:h2")

@@ -1,9 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
+//
 plugins {
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.jpa") version "1.6.21"  // JPA 플러그인 설정 필요.
     kotlin("plugin.spring") version "1.6.21" apply (false)
+    id("org.jetbrains.kotlin.kapt") version "1.5.31" apply (false)
     id("org.springframework.boot") version "2.7.7" apply (false)
     id("io.spring.dependency-management") version "1.0.15.RELEASE" apply (false)
 }
@@ -21,9 +22,11 @@ allprojects {
 
 subprojects {
 
+    // 예외
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.kotlin.plugin.jpa")
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")
+    apply(plugin = "org.jetbrains.kotlin.kapt")
     apply(plugin = "org.springframework.boot")
     apply(plugin = "io.spring.dependency-management")
 
