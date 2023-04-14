@@ -24,5 +24,11 @@ internal class GroupQueryPort(
             .where(groupJpaEntity.id.eq(groupId))
             .fetchOne() ?: throw RuntimeException()
     }
+
+    override fun findGroups(): List<GroupJpaEntity> {
+        return jpaQueryFactory.selectFrom(groupJpaEntity)
+            .where(groupJpaEntity.deleteStatus.isFalse)
+            .fetch()
+    }
 }
 

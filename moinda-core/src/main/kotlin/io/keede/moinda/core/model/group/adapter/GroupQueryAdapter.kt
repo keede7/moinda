@@ -10,4 +10,6 @@ interface GroupQueryAdapter {
 
     fun findById(groupId: Long): GroupJpaEntity
 
+    fun findGroups(): List<GroupJpaEntity>
+
 }

@@ -41,13 +41,13 @@ data class ParticipateDto(
  * Class의 Property를 이용해서 넣어줄 수 있다.
  * 아래와 동일한 결과물이다.
  * internal fun Group.toGroupResponseDto(): GroupResponseDto {
-        return GroupResponseDto(
-        groupId,
-        name,
-        description,
-        capacity
-        )
-    }
+return GroupResponseDto(
+groupId,
+name,
+description,
+capacity
+)
+}
  *
  */
 internal fun Group.toGroupResponseDto() = GroupResponseDto(
@@ -56,6 +56,12 @@ internal fun Group.toGroupResponseDto() = GroupResponseDto(
     description,
     capacity
 )
+
+internal fun toGroupResponseDtoList(
+    groups: List<Group>
+): List<GroupResponseDto> = groups
+        .map(Group::toGroupResponseDto)
+        .toList()
 
 internal fun CreateGroupDto.toDomain() = CreateGroup(
     name,

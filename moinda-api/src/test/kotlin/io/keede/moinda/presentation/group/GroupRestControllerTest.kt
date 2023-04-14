@@ -72,6 +72,20 @@ internal class GroupRestControllerTest : BaseApi() {
     }
 
     @Test
+    fun 그룹_전체_조회를_성공한다() {
+        //Given
+        every { groupQueryUseCase.getGroups() } returns mockk(relaxed = true)
+
+        // When
+        val perform = mockMvc.perform(
+            get(UriMaker.GROUP_API)
+        )
+
+        // Then
+        perform.andExpect(status().isOk)
+    }
+
+    @Test
     fun 그룹_참여를_성공한다() {
 
         // Given
