@@ -41,6 +41,10 @@ class GroupRestController(
             GroupQueryUseCase.Query(groupId)
         ).let(Group::toGroupResponseDto)
 
+    @GetMapping
+    fun getList(): List<GroupResponseDto>
+    = toGroupResponseDtoList(groups = groupQueryUseCase.getGroups())
+
     @PostMapping("/participate")
     fun participate(
         @RequestBody @Valid participateDto: ParticipateDto

@@ -11,6 +11,8 @@ interface GroupQueryUseCase {
     // TODO : Naming
     fun findById(query: Query): Group
 
+    fun getGroups(): List<Group>
+
     data class Query(
         val groupId: Long
     )

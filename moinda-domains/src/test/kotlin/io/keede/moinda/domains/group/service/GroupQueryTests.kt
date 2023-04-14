@@ -36,4 +36,17 @@ internal class GroupQueryTests {
 
     }
 
+    @Test
+    fun 그룹_전체_조회() {
+        // Given
+        every { groupQueryAdapter.findGroups() } returns mockk(relaxed = true)
+
+        // When
+        this.sut.getGroups()
+
+        // Then
+        verify { groupQueryAdapter.findGroups() }
+
+    }
+
 }

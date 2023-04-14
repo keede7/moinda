@@ -22,4 +22,12 @@ class GroupQuery(
         // TODO : 매퍼를 사용하는 방향으로,
         return Group(entity)
     }
+
+    override fun getGroups(): List<Group> {
+        val entities = groupQueryAdapter.findGroups()
+
+        return entities.stream()
+            .map { Group(entity = it) }
+            .toList()
+    }
 }
