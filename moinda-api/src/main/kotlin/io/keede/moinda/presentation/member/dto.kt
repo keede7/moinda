@@ -30,6 +30,14 @@ data class MemberResponseDto(
     val introduce: String?
 )
 
+data class LoginRequestDto(
+    @field:Email(message = "이메일 형식이 아닙니다.")
+    @field:NotBlank(message = "이메일을 입력하세요.")
+    val email: String,
+    @field:NotBlank(message = "패스워드를 입력하세요.")
+    val password: String,
+)
+
 // SignUpMemberDto to CreateMember
 internal fun SignUpMemberDto.toDomain() = CreateMember(
     name,
@@ -38,9 +46,19 @@ internal fun SignUpMemberDto.toDomain() = CreateMember(
     introduce
 )
 
+data class SessionResponse(
+    val memberId: Long,
+    val name: String,
+)
+
 internal fun Member.toMemberResponseDto() = MemberResponseDto(
     memberId,
     name,
     email,
     introduce
+)
+
+internal fun Member.toSessionResponse() = SessionResponse(
+    memberId,
+    name
 )
