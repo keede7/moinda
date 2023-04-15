@@ -2,6 +2,7 @@ package io.keede.moinda.core.model.member.entity
 
 import io.keede.moinda.core.config.BaseEntity
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
+import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
@@ -12,6 +13,7 @@ import javax.persistence.*
 @Entity
 @Table(name = "member_t")
 @DynamicUpdate
+@DynamicInsert
 class MemberJpaEntity(
 
     @Column(name = "name", length = 10, nullable = false)
@@ -34,5 +36,11 @@ class MemberJpaEntity(
 
     fun participate(groupEntity: GroupJpaEntity) {
         this.groupEntity = groupEntity;
+    }
+
+    fun isMatchPassword(password: String) {
+        if(this.password != password) {
+            throw RuntimeException("패스워드가 일치하지 않습니다.")
+        }
     }
 }

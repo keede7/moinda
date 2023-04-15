@@ -20,4 +20,11 @@ internal class MemberQueryPort(
             .fetchOne() ?: throw RuntimeException()
     }
 
+    // TODO : 용도에 따라서 비슷한 메서드를 만들 수 도 있다.
+    override fun findByEmail(email: String): MemberJpaEntity {
+        return jpaQueryFactory
+            .selectFrom(memberJpaEntity)
+            .where(memberJpaEntity.email.eq(email))
+            .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
+    }
 }

@@ -1,6 +1,7 @@
 package io.keede.moinda.presentation.member
 
 import com.ninjasquad.springmockk.MockkBean
+import io.keede.moinda.domains.member.usecase.LoginUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
 import io.keede.moinda.presentation.config.*
@@ -14,6 +15,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 @WebMvcTest(MemberRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
@@ -24,6 +27,9 @@ internal class MemberRestControllerTest : BaseApi() {
 
     @MockkBean
     private lateinit var commandSut: MemberCommandUseCase
+
+    @MockkBean
+    private lateinit var loginSut: LoginUseCase
 
     @Test
     fun 회원가입_성공() {
@@ -47,6 +53,34 @@ internal class MemberRestControllerTest : BaseApi() {
         // Then
         perform
             .andExpect(status().is2xxSuccessful)
+    }
+
+    @Test
+    fun 로그인_성공() {
+
+        val email = "test@test.com"
+        val password = "1212" // TODO : 추후 암호화
+
+        val requestDto = ofLoginRequestDto(email, password)
+
+        val request = mockk<HttpServletRequest>()
+        val response = mockk<HttpServletResponse>()
+
+        every { loginSut.login(any()) } returns mockk(relaxed = true)
+
+        val perform = mockMvc
+            .perform(
+                post(
+                    UriMaker.toMemberApiUri("login"),
+                    request,
+                    response
+                ).content(toJson(requestDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+            )
+
+        perform
+            .andExpect(status().is2xxSuccessful)
+            .andExpect(cookie().exists("login"))
     }
 
     @Test
