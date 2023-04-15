@@ -16,7 +16,7 @@ class GroupQuery(
     private val groupQueryAdapter: GroupQueryAdapter
 ) : GroupQueryUseCase {
 
-    override fun findById(query: GroupQueryUseCase.Query): Group {
+    override fun getGroupById(query: GroupQueryUseCase.Query): Group {
         val entity = groupQueryAdapter.findById(query.groupId)
 
         // TODO : 매퍼를 사용하는 방향으로,

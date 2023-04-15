@@ -60,7 +60,7 @@ internal class GroupRestControllerTest : BaseApi() {
         //Given
         val groupId = 1L
 
-        every { groupQueryUseCase.findById(GroupQueryUseCase.Query(groupId)) } returns mockk(relaxed = true)
+        every { groupQueryUseCase.getGroupById(GroupQueryUseCase.Query(groupId)) } returns mockk(relaxed = true)
 
         // When
         val perform = mockMvc.perform(

@@ -37,7 +37,7 @@ class GroupRestController(
     fun getOne(
         @PathVariable groupId: Long
     ): GroupResponseDto =
-        groupQueryUseCase.findById(
+        groupQueryUseCase.getGroupById(
             GroupQueryUseCase.Query(groupId)
         ).let(Group::toGroupResponseDto)
 

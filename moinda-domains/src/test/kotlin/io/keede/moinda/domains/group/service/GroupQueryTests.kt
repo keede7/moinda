@@ -30,7 +30,7 @@ internal class GroupQueryTests {
 
         every { groupQueryAdapter.findById(query.groupId) } returns mockk(relaxed = true)
         // When
-        this.sut.findById(query)
+        this.sut.getGroupById(query)
         // Then
         verify { groupQueryAdapter.findById(query.groupId) }
 
