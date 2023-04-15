@@ -1,6 +1,7 @@
 package io.keede.moinda.presentation.member
 
 import io.keede.moinda.common.member.CreateMember
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.member.domain.Member
 import javax.validation.constraints.Email
 import javax.validation.constraints.NotBlank
@@ -44,11 +45,6 @@ internal fun SignUpMemberDto.toDomain() = CreateMember(
     email,
     password,
     introduce
-)
-
-data class SessionResponse(
-    val memberId: Long,
-    val name: String,
 )
 
 internal fun Member.toMemberResponseDto() = MemberResponseDto(

@@ -1,6 +1,8 @@
 package io.keede.moinda.presentation.member
 
 import com.ninjasquad.springmockk.MockkBean
+import io.keede.moinda.common.member.session.Constants
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.member.usecase.LoginUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
@@ -8,13 +10,16 @@ import io.keede.moinda.presentation.config.*
 import io.keede.moinda.presentation.member.fixture.*
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayNameGeneration
 import org.junit.jupiter.api.DisplayNameGenerator
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
+import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
+import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -31,6 +36,14 @@ internal class MemberRestControllerTest : BaseApi() {
     @MockkBean
     private lateinit var loginSut: LoginUseCase
 
+    private lateinit var session: MockHttpSession
+
+    @BeforeEach
+    fun init() {
+        this.session = MockHttpSession()
+        this.session.setAttribute("session", mockk<SessionResponse>())
+    }
+
     @Test
     fun 회원가입_성공() {
         // Given
@@ -45,7 +58,7 @@ internal class MemberRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc
             .perform(
-                post(UriMaker.MEMBER_API)
+                post(UriMaker.toMemberApiUri("signup"))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(toJson(sut))
             )
@@ -80,7 +93,7 @@ internal class MemberRestControllerTest : BaseApi() {
 
         perform
             .andExpect(status().is2xxSuccessful)
-            .andExpect(cookie().exists("login"))
+            .andExpect(cookie().exists(Constants.COOKIE_NAME))
     }
 
     @Test
@@ -94,6 +107,8 @@ internal class MemberRestControllerTest : BaseApi() {
         val perform = mockMvc
             .perform(
                 get(UriMaker.toMemberApiUri(memberId))
+                    .session(session)
+                    .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
             )
 
         // Then
