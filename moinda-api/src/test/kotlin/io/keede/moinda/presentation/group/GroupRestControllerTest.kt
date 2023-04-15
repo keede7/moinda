@@ -1,6 +1,8 @@
 package io.keede.moinda.presentation.group
 
 import com.ninjasquad.springmockk.MockkBean
+import io.keede.moinda.common.member.session.Constants
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.keede.moinda.domains.group.usecase.GroupQueryUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
@@ -10,14 +12,17 @@ import io.keede.moinda.presentation.config.toGroupApiUri
 import io.keede.moinda.presentation.group.fixture.ofCreateGroupDto
 import io.mockk.every
 import io.mockk.mockk
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayNameGeneration
 import org.junit.jupiter.api.DisplayNameGenerator
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
+import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import javax.servlet.http.Cookie
 
 @WebMvcTest(GroupRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
@@ -31,6 +36,14 @@ internal class GroupRestControllerTest : BaseApi() {
 
     @MockkBean
     private lateinit var memberCommandUseCase: MemberCommandUseCase
+
+    private lateinit var session: MockHttpSession
+
+    @BeforeEach
+    fun init() {
+        this.session = MockHttpSession()
+        this.session.setAttribute("session", mockk<SessionResponse>())
+    }
 
     @Test
     fun 그룹_생성을_성공한다() {
@@ -49,6 +62,8 @@ internal class GroupRestControllerTest : BaseApi() {
             post(UriMaker.GROUP_API)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
+                .session(session)
+                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
         )
 
         // Then
@@ -65,6 +80,8 @@ internal class GroupRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc.perform(
             get(UriMaker.toGroupApiUri(groupId.toString()))
+                .session(session)
+                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
         )
 
         // Then
@@ -79,6 +96,8 @@ internal class GroupRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc.perform(
             get(UriMaker.GROUP_API)
+                .session(session)
+                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
         )
 
         // Then
@@ -105,6 +124,8 @@ internal class GroupRestControllerTest : BaseApi() {
             post(UriMaker.toGroupApiUri("participate"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
+                .session(session)
+                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
         )
 
         // Then

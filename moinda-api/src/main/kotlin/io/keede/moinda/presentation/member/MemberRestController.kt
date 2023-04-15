@@ -22,7 +22,7 @@ class MemberRestController(
     private val loginUseCase: LoginUseCase
 ) {
 
-    @PostMapping
+    @PostMapping("/signup")
     fun signup(
         @RequestBody @Valid signUpMemberDto: SignUpMemberDto
     ): MemberResponseDto =
@@ -64,6 +64,7 @@ class MemberRestController(
         val toSessionResponse = member.toSessionResponse()
 
         session.setAttribute("session", toSessionResponse)
+        session.maxInactiveInterval = 1800
 
         Cookie("login", "session")
             .also {
