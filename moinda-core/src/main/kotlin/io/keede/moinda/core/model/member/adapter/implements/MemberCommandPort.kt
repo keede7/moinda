@@ -19,6 +19,7 @@ internal class MemberCommandPort(
         val entity = MemberJpaEntity(
             createMember.name,
             createMember.email,
+            createMember.password,
             createMember.introduce
         )
 

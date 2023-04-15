@@ -12,5 +12,6 @@ data class Member(
     val memberId: Long = memberJpaEntity.id
     val name: String = memberJpaEntity.name
     val email: String = memberJpaEntity.email
+    val password: String = memberJpaEntity.password
     val introduce: String? = memberJpaEntity.introduce
 }

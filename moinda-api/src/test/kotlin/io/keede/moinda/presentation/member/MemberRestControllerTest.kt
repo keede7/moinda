@@ -30,9 +30,9 @@ internal class MemberRestControllerTest : BaseApi() {
         // Given
         val name = "테스트1"
         val email = "nana@naver.com"
-        val introduce = "안녕하세요?"
+        val password = "1212"
 
-        val sut = ofCreateMember(name, email, introduce)
+        val sut = ofCreateMember(name, email, password)
 
         every { commandSut.signup(MemberCommandUseCase.Command(sut)) } returns mockk(relaxed = true)
 

@@ -3,6 +3,7 @@ package io.keede.moinda.presentation.member
 import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.domains.member.domain.Member
 import javax.validation.constraints.Email
+import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
 
@@ -17,6 +18,8 @@ data class SignUpMemberDto(
     @field:Email(message = "이메일 형식이 아닙니다.")
     @field:NotEmpty(message = "이메일을 입력하세요.")
     val email: String,
+    @field:NotBlank(message = "패스워드를 입력하세요.")
+    val password: String,
     val introduce: String?,
 )
 
@@ -27,9 +30,11 @@ data class MemberResponseDto(
     val introduce: String?
 )
 
+// SignUpMemberDto to CreateMember
 internal fun SignUpMemberDto.toDomain() = CreateMember(
     name,
     email,
+    password,
     introduce
 )
 

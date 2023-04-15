@@ -7,5 +7,6 @@ package io.keede.moinda.common.member
 data class CreateMember(
     val name: String,
     val email: String,
+    val password: String,
     val introduce: String?,
 )
