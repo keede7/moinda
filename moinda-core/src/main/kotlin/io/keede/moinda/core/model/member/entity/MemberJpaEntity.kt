@@ -43,4 +43,8 @@ class MemberJpaEntity(
             throw RuntimeException("패스워드가 일치하지 않습니다.")
         }
     }
+
+    override fun toString(): String {
+        return "MemberJpaEntity: id: $id, name: $name"
+    }
 }

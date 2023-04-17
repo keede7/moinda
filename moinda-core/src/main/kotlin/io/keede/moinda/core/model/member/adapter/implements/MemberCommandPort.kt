@@ -5,6 +5,7 @@ import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 import io.keede.moinda.core.model.member.entity.MemberJpaRepository
 import org.springframework.stereotype.Service
+import javax.annotation.PostConstruct
 
 /**
  * @author keede
@@ -24,5 +25,17 @@ internal class MemberCommandPort(
         )
 
         return memberJpaRepository.save(entity)
+    }
+
+    @PostConstruct
+    fun initDummiesMember() {
+        var entity = MemberJpaEntity(
+            "테스트유저",
+            "test1@naver.com",
+            "1212",
+            "안녕하세요?"
+        )
+        entity = memberJpaRepository.save(entity)
+        println("더미 데이터 추가 : $entity")
     }
 }

@@ -18,8 +18,8 @@ class SessionUserInterceptor : HandlerInterceptor {
         val session = request.getSession(false)
 
         val sessionKey = request.cookies
-            .filter { it.name == Constants.COOKIE_NAME }[0]
-            .value
+            .filter { it.name == Constants.COOKIE_NAME }
+            .firstOrNull()?.value
 
         if(session?.getAttribute(sessionKey) == null) {
             throw RuntimeException("세션이 만료되었습니다. 다시 로그인 해주세요.")
