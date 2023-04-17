@@ -1,5 +1,6 @@
 package io.keede.moinda.presentation.config.session
 
+import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
 import org.springframework.core.MethodParameter
 import org.springframework.web.bind.support.WebDataBinderFactory
@@ -32,7 +33,7 @@ class SessionUserResolver : HandlerMethodArgumentResolver {
 
         val cookies = request?.cookies ?: return null
 
-        return cookies.filter { it.name == "login" }[0]
+        return cookies.filter { it.name == Constants.COOKIE_NAME }[0]
             .let {
                 request
                     .getSession(false)
