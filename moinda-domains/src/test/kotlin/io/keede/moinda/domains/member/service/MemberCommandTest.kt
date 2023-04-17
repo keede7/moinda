@@ -66,4 +66,16 @@ internal class MemberCommandTest {
         verify(exactly = 1) { memberQueryAdapter.findById(participate.memberId) }
     }
 
+    @Test
+    fun 사용자가_그룹_탈퇴_성공() {
+
+        val leave = mockk<MemberCommandUseCase.Leave>(relaxed = true)
+
+        every { memberQueryAdapter.findById(any()) } returns mockk(relaxed = true)
+
+        sut.leave(leave)
+
+        verify(exactly = 1) { memberQueryAdapter.findById(leave.memberId) }
+    }
+
 }

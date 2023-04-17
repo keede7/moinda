@@ -23,6 +23,10 @@ import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * @author keede
+ * Created on 2023-04-08
+ */
 @WebMvcTest(MemberRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
 internal class MemberRestControllerTest : BaseApi() {

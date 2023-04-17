@@ -54,4 +54,12 @@ class GroupRestController(
         )
     )
 
+    @PostMapping("/leave")
+    fun leave(
+        @RequestBody @Valid leaveGroupRequestDto: LeaveGroupRequestDto,
+    ) = memberCommandUseCase.leave(
+        MemberCommandUseCase.Leave(
+            leaveGroupRequestDto.memberId
+        )
+    )
 }

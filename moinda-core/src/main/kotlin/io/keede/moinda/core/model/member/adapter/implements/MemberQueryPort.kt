@@ -8,6 +8,10 @@ import io.keede.moinda.core.model.member.entity.QMemberJpaEntity.memberJpaEntity
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Service
 
+/**
+ * @author keede
+ * Created on 2023-04-05
+ */
 @Service
 internal class MemberQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
@@ -16,6 +20,7 @@ internal class MemberQueryPort(
     override fun findById(memberId: Long): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
+            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
             .where(memberJpaEntity.id.eq(memberId))
             .fetchOne() ?: throw RuntimeException()
     }
@@ -24,6 +29,7 @@ internal class MemberQueryPort(
     override fun findByEmail(email: String): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
+            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
             .where(memberJpaEntity.email.eq(email))
             .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
     }

@@ -3,6 +3,10 @@ package io.keede.moinda.presentation.member.fixture
 import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.presentation.member.LoginRequestDto
 
+/**
+ * @author keede
+ * Created on 2023-04-08
+ */
 fun ofCreateMember(
     name: String,
     email: String,

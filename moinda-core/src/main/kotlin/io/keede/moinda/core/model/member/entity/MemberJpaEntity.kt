@@ -44,6 +44,10 @@ class MemberJpaEntity(
         }
     }
 
+    fun leaveGroup() {
+        this.groupEntity = null
+    }
+
     override fun toString(): String {
         return "MemberJpaEntity: id: $id, name: $name"
     }
