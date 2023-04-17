@@ -39,6 +39,8 @@ internal class GroupRestControllerTest : BaseApi() {
 
     private lateinit var session: MockHttpSession
 
+    private val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
+    
     @BeforeEach
     fun init() {
         this.session = MockHttpSession()
@@ -63,7 +65,7 @@ internal class GroupRestControllerTest : BaseApi() {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
                 .session(session)
-                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
+                .cookie(cookie)
         )
 
         // Then
@@ -81,7 +83,7 @@ internal class GroupRestControllerTest : BaseApi() {
         val perform = mockMvc.perform(
             get(UriMaker.toGroupApiUri(groupId.toString()))
                 .session(session)
-                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
+                .cookie(cookie)
         )
 
         // Then
@@ -97,7 +99,7 @@ internal class GroupRestControllerTest : BaseApi() {
         val perform = mockMvc.perform(
             get(UriMaker.GROUP_API)
                 .session(session)
-                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
+                .cookie(cookie)
         )
 
         // Then
@@ -125,7 +127,7 @@ internal class GroupRestControllerTest : BaseApi() {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
                 .session(session)
-                .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
+                .cookie(cookie)
         )
 
         // Then

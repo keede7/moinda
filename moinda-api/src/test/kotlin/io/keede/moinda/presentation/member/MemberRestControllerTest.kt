@@ -38,10 +38,12 @@ internal class MemberRestControllerTest : BaseApi() {
 
     private lateinit var session: MockHttpSession
 
+    private val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
+
     @BeforeEach
     fun init() {
         this.session = MockHttpSession()
-        this.session.setAttribute("session", mockk<SessionResponse>())
+        this.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
     }
 
     @Test
@@ -108,7 +110,7 @@ internal class MemberRestControllerTest : BaseApi() {
             .perform(
                 get(UriMaker.toMemberApiUri(memberId))
                     .session(session)
-                    .cookie(Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY))
+                    .cookie(cookie)
             )
 
         // Then
