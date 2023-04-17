@@ -1,5 +1,6 @@
 package io.keede.moinda.presentation.member
 
+import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.LoginUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
@@ -46,6 +47,12 @@ class MemberRestController(
         this.createSession(member, request, response)
     }
 
+    @PostMapping("/logout")
+    fun logout(
+        request: HttpServletRequest,
+        response: HttpServletResponse
+    ) = this.removeSession(request)
+
     @GetMapping("/{memberId}")
     fun getOne(
         @PathVariable("memberId") memberId: Long
@@ -54,7 +61,7 @@ class MemberRestController(
             MemberQueryUseCase.Query(memberId)
         ).let(Member::toMemberResponseDto)
 
-    fun createSession(
+    private fun createSession(
         member: Member,
         request: HttpServletRequest,
         response: HttpServletResponse
@@ -63,14 +70,22 @@ class MemberRestController(
 
         val toSessionResponse = member.toSessionResponse()
 
-        session.setAttribute("session", toSessionResponse)
+        session.setAttribute(Constants.SESSION_KEY, toSessionResponse)
         session.maxInactiveInterval = 1800
 
-        Cookie("login", "session")
+        Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
             .also {
                 it.maxAge = 1800
                 it.path = "/"
                 response.addCookie(it)
             }
+    }
+
+    private fun removeSession(
+        request: HttpServletRequest
+    ) {
+        val session = request.getSession(false)
+
+        session?.invalidate()
     }
 }
