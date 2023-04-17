@@ -13,6 +13,8 @@ interface MemberCommandUseCase {
 
     fun participate(target: Participate)
 
+    fun leave(leave: Leave)
+
     data class Command(
         val createMember: CreateMember
     )
@@ -20,5 +22,9 @@ interface MemberCommandUseCase {
     data class Participate(
         val groupId: Long,
         val memberId: Long
+    )
+
+    data class Leave(
+        val memberId: Long,
     )
 }

@@ -5,8 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
 
 
-
-
+/**
+ * @author keede
+ * Created on 2023-04-17
+ */
 @Controller
 class ViewController {
     @GetMapping("/")

@@ -35,6 +35,11 @@ data class ParticipateDto(
     val memberId: Long,
 )
 
+data class LeaveGroupRequestDto(
+    @field:NotNull(message = "사용자 번호가 필요합니다.")
+    val memberId: Long,
+)
+
 /**
  * Class.Method() = ReturnType
  * Class로 선언한 값으로 ReturnType의 객체를 생성해낼 수 있다.

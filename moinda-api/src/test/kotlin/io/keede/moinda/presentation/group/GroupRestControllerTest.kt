@@ -10,6 +10,8 @@ import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
 import io.keede.moinda.presentation.config.toGroupApiUri
 import io.keede.moinda.presentation.group.fixture.ofCreateGroupDto
+import io.keede.moinda.presentation.group.fixture.ofLeaveGroupRequestDto
+import io.keede.moinda.presentation.group.fixture.ofParticipateDto
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
@@ -24,6 +26,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import javax.servlet.http.Cookie
 
+/**
+ * @author keede
+ * Created on 2023-03-25
+ */
 @WebMvcTest(GroupRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
 internal class GroupRestControllerTest : BaseApi() {
@@ -44,7 +50,7 @@ internal class GroupRestControllerTest : BaseApi() {
     @BeforeEach
     fun init() {
         this.session = MockHttpSession()
-        this.session.setAttribute("session", mockk<SessionResponse>())
+        this.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
     }
 
     @Test
@@ -113,7 +119,7 @@ internal class GroupRestControllerTest : BaseApi() {
         val groupId = 1L
         val memberId = 1L
 
-        val actual = ParticipateDto(groupId, memberId)
+        val actual = ofParticipateDto(groupId, memberId)
 
         every {
             memberCommandUseCase.participate(
@@ -124,6 +130,32 @@ internal class GroupRestControllerTest : BaseApi() {
         // When
         val perform = mockMvc.perform(
             post(UriMaker.toGroupApiUri("participate"))
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(toJson(actual))
+                .session(session)
+                .cookie(cookie)
+        )
+
+        // Then
+        perform.andExpect(status().isOk)
+    }
+
+    @Test
+    fun 그룹_퇴장를_성공한다() {
+        // Given
+        val memberId = session.id.toLong()
+
+        val actual = ofLeaveGroupRequestDto(memberId)
+
+        every {
+            memberCommandUseCase.leave(
+                MemberCommandUseCase.Leave(actual.memberId)
+            )
+        } returns mockk(relaxed = true)
+
+        // When
+        val perform = mockMvc.perform(
+            post(UriMaker.toGroupApiUri("leave"))
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(toJson(actual))
                 .session(session)
