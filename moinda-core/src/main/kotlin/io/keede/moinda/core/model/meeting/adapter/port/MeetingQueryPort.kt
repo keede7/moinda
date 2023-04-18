@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
  * Created on 2023-04-18
  */
 @Service
-class MeetingQueryPort(
+internal class MeetingQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
 ) : MeetingQueryAdapter, QuerydslRepositorySupport(QMeetingJpaEntity::class.java) {
 
