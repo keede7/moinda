@@ -20,13 +20,18 @@ internal class GroupQueryPort(
 ) : GroupQueryAdapter, QuerydslRepositorySupport(QGroupJpaEntity::class.java) {
 
     override fun findById(groupId: Long): GroupJpaEntity {
-        return jpaQueryFactory.selectFrom(groupJpaEntity)
-            .where(groupJpaEntity.id.eq(groupId))
+        return jpaQueryFactory
+            .selectFrom(groupJpaEntity)
+            .where(
+                groupJpaEntity.id.eq(groupId)
+                    .and(groupJpaEntity.deleteStatus.isFalse)
+            )
             .fetchOne() ?: throw RuntimeException()
     }
 
     override fun findGroups(): List<GroupJpaEntity> {
-        return jpaQueryFactory.selectFrom(groupJpaEntity)
+        return jpaQueryFactory
+            .selectFrom(groupJpaEntity)
             .where(groupJpaEntity.deleteStatus.isFalse)
             .fetch()
     }

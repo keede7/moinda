@@ -20,14 +20,17 @@ abstract class BaseEntity {
 
     @PrePersist
     fun prePersist() {
-        val now = LocalDateTime.now()
+        val now = getNow()
         createdAt = now
         lastModifiedAt = now
     }
 
     @PreUpdate
     fun preUpdate() {
-        lastModifiedAt = LocalDateTime.now()
+        lastModifiedAt = getNow()
     }
 
+    private fun getNow(): LocalDateTime {
+        return LocalDateTime.now().withNano(0)
+    }
 }
