@@ -21,7 +21,10 @@ internal class MemberQueryPort(
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
             .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
-            .where(memberJpaEntity.id.eq(memberId))
+            .where(
+                memberJpaEntity.id.eq(memberId)
+                    .and(memberJpaEntity.deleteStatus.isFalse)
+            )
             .fetchOne() ?: throw RuntimeException()
     }
 
@@ -30,7 +33,10 @@ internal class MemberQueryPort(
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
             .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
-            .where(memberJpaEntity.email.eq(email))
+            .where(
+                memberJpaEntity.email.eq(email)
+                    .and(memberJpaEntity.deleteStatus.isFalse)
+            )
             .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
     }
 }
