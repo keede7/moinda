@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.group.adapter.implements
+package io.keede.moinda.core.model.group.adapter.port
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.core.model.group.adapter.GroupCommandAdapter

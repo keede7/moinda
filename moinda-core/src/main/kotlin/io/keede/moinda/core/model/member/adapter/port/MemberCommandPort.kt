@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.member.adapter.implements
+package io.keede.moinda.core.model.member.adapter.port
 
 import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter

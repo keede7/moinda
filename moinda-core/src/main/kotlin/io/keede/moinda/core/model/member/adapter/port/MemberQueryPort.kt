@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.member.adapter.implements
+package io.keede.moinda.core.model.member.adapter.port
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter

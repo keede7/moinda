@@ -10,6 +10,10 @@ import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
+/**
+ * @author keede
+ * Created on 2023-03-25
+ */
 @UseCaseTest
 internal class GroupQueryTests {
 

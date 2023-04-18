@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.group.adapter.implements
+package io.keede.moinda.core.model.group.adapter.port
 
 import com.querydsl.jpa.impl.JPAQueryFactory
 import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter

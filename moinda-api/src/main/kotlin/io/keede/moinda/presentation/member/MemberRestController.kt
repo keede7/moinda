@@ -71,11 +71,11 @@ class MemberRestController(
         val toSessionResponse = member.toSessionResponse()
 
         session.setAttribute(Constants.SESSION_KEY, toSessionResponse)
-        session.maxInactiveInterval = 1800
+        session.maxInactiveInterval = Constants.MAX_IN_ACTIVE_INTERVAL
 
         Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
             .also {
-                it.maxAge = 1800
+                it.maxAge = Constants.MAX_IN_ACTIVE_INTERVAL
                 it.path = "/"
                 response.addCookie(it)
             }

@@ -13,6 +13,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
  */
 @Configuration
 class WebConfig : WebMvcConfigurer {
+
+    private val ALLOW_PATH = "/api/**"
+    private val EXCLUDE_PATH = listOf(
+        "/api/member/login",
+        "/api/member/signup",
+    )
+
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
         resolvers.add(SessionUserResolver())
     }
@@ -21,11 +28,10 @@ class WebConfig : WebMvcConfigurer {
         registry
             .addInterceptor(SessionUserInterceptor())
             .excludePathPatterns(
-                "/api/member/login",
-                "/api/member/signup"
+                EXCLUDE_PATH
             )
             .addPathPatterns(
-                "/api/**"
+                ALLOW_PATH
             )
     }
 }
