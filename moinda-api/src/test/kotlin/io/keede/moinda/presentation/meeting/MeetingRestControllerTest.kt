@@ -22,7 +22,6 @@ import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
-import javax.servlet.http.Cookie
 
 @WebMvcTest(MeetingRestController::class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores::class)
@@ -34,14 +33,10 @@ internal class MeetingRestControllerTest : BaseApi() {
     @MockkBean
     private lateinit var meetingQueryUseCase: MeetingQueryUseCase
 
-    private lateinit var session: MockHttpSession
-
-    private val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
-
     @BeforeEach
     fun init() {
-        this.session = MockHttpSession()
-        this.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
+        super.session = MockHttpSession()
+        super.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
     }
 
     @Test
@@ -69,8 +64,8 @@ internal class MeetingRestControllerTest : BaseApi() {
                 post(UriMaker.MEETING_API)
                     .content(toJson(sut))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .session(this.session)
-                    .cookie(this.cookie)
+                    .session(super.session)
+                    .cookie(super.cookie)
             )
 
         // Then
@@ -90,8 +85,8 @@ internal class MeetingRestControllerTest : BaseApi() {
         val perform = super.mockMvc
             .perform(
                 get(UriMaker.toMeetingApiUri(meetingId))
-                    .session(this.session)
-                    .cookie(this.cookie)
+                    .session(super.session)
+                    .cookie(super.cookie)
             )
 
         // Then
@@ -109,8 +104,8 @@ internal class MeetingRestControllerTest : BaseApi() {
         val perform = super.mockMvc
             .perform(
                 get(UriMaker.MEETING_API)
-                    .session(this.session)
-                    .cookie(this.cookie)
+                    .session(super.session)
+                    .cookie(super.cookie)
             )
 
         // Then

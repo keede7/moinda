@@ -4,6 +4,7 @@ import io.keede.moinda.domains.group.domain.Group
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.keede.moinda.domains.group.usecase.GroupQueryUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
+import io.keede.moinda.util.toResponseDtoList
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
 
@@ -42,7 +43,9 @@ class GroupRestController(
         ).let(Group::toGroupResponseDto)
 
     @GetMapping
-    fun getList(): List<GroupResponseDto> = toGroupResponseDtoList(groups = groupQueryUseCase.getGroups())
+    fun getList(): List<GroupResponseDto> =
+        groupQueryUseCase.getGroups()
+            .toResponseDtoList(Group::toGroupResponseDto)
 
     @PostMapping("/participate")
     fun participate(

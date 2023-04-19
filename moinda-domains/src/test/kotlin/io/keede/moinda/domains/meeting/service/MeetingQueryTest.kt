@@ -26,13 +26,13 @@ internal class MeetingQueryTest {
     @Test
     fun 특정_모임_조회를_성공한다() {
 
-        val meetingId = 1L
+        val query = mockk<MeetingQueryUseCase.Query>(relaxed = true)
 
         every { meetingQueryAdapter.findById(any()) } returns mockk(relaxed = true)
 
-        this.sut.getById(meetingId)
+        this.sut.getById(query)
 
-        verify(exactly = 1) { meetingQueryAdapter.findById(meetingId) }
+        verify(exactly = 1) { meetingQueryAdapter.findById(query.meetingId) }
 
     }
 

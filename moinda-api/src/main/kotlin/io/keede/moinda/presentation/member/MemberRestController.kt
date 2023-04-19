@@ -57,7 +57,7 @@ class MemberRestController(
     fun getOne(
         @PathVariable("memberId") memberId: Long
     ): MemberResponseDto =
-        memberQueryUseCase.findById(
+        memberQueryUseCase.getById(
             MemberQueryUseCase.Query(memberId)
         ).let(Member::toMemberResponseDto)
 

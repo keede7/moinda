@@ -4,7 +4,7 @@ import io.keede.moinda.domains.member.domain.Member
 
 interface MemberQueryUseCase {
 
-    fun findById(query: Query) : Member
+    fun getById(query: Query) : Member
 
     data class Query(
         val memberId: Long

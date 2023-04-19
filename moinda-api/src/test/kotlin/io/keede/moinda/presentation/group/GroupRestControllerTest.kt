@@ -21,10 +21,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
-import javax.servlet.http.Cookie
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 /**
  * @author keede
@@ -43,14 +41,10 @@ internal class GroupRestControllerTest : BaseApi() {
     @MockkBean
     private lateinit var memberCommandUseCase: MemberCommandUseCase
 
-    private lateinit var session: MockHttpSession
-
-    private val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
-    
     @BeforeEach
     fun init() {
-        this.session = MockHttpSession()
-        this.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
+        super.session = MockHttpSession()
+        super.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
     }
 
     @Test
@@ -66,16 +60,18 @@ internal class GroupRestControllerTest : BaseApi() {
         every { groupCommandUseCase.create(GroupCommandUseCase.Command(actual.toDomain())) } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc.perform(
-            post(UriMaker.GROUP_API)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(toJson(actual))
-                .session(session)
-                .cookie(cookie)
-        )
+        val perform = super.mockMvc
+            .perform(
+                post(UriMaker.GROUP_API)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(toJson(actual))
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
 
         // Then
-        perform.andExpect(status().isOk)
+        perform
+            .andExpect(status().isOk)
     }
 
     @Test
@@ -86,11 +82,12 @@ internal class GroupRestControllerTest : BaseApi() {
         every { groupQueryUseCase.getGroupById(GroupQueryUseCase.Query(groupId)) } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc.perform(
-            get(UriMaker.toGroupApiUri(groupId.toString()))
-                .session(session)
-                .cookie(cookie)
-        )
+        val perform = super.mockMvc
+            .perform(
+                get(UriMaker.toGroupApiUri(groupId.toString()))
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
 
         // Then
         perform.andExpect(status().isOk)
@@ -102,14 +99,16 @@ internal class GroupRestControllerTest : BaseApi() {
         every { groupQueryUseCase.getGroups() } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc.perform(
-            get(UriMaker.GROUP_API)
-                .session(session)
-                .cookie(cookie)
-        )
+        val perform = super.mockMvc
+            .perform(
+                get(UriMaker.GROUP_API)
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
 
         // Then
-        perform.andExpect(status().isOk)
+        perform
+            .andExpect(status().isOk)
     }
 
     @Test
@@ -128,16 +127,18 @@ internal class GroupRestControllerTest : BaseApi() {
         } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc.perform(
-            post(UriMaker.toGroupApiUri("participate"))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(toJson(actual))
-                .session(session)
-                .cookie(cookie)
-        )
+        val perform = super.mockMvc
+            .perform(
+                post(UriMaker.toGroupApiUri("participate"))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(toJson(actual))
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
 
         // Then
-        perform.andExpect(status().isOk)
+        perform
+            .andExpect(status().isOk)
     }
 
     @Test
@@ -154,16 +155,18 @@ internal class GroupRestControllerTest : BaseApi() {
         } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc.perform(
-            post(UriMaker.toGroupApiUri("leave"))
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(toJson(actual))
-                .session(session)
-                .cookie(cookie)
-        )
+        val perform = super.mockMvc
+            .perform(
+                post(UriMaker.toGroupApiUri("leave"))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .content(toJson(actual))
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
 
         // Then
-        perform.andExpect(status().isOk)
+        perform
+            .andExpect(status().isOk)
     }
 
 }

@@ -8,7 +8,6 @@ import io.keede.moinda.domains.group.domain.Group
  */
 interface GroupQueryUseCase {
 
-    // TODO : Naming
     fun getGroupById(query: Query): Group
 
     fun getGroups(): List<Group>

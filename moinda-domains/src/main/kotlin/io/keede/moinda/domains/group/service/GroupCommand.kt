@@ -20,7 +20,6 @@ class GroupCommand(
     override fun create(command: GroupCommandUseCase.Command): Group {
         val entity: GroupJpaEntity = commandAdapter.save(command.createGroup)
 
-        // TODO : 매퍼를 사용하는 방향으로,
         return Group(entity)
     }
 }

@@ -16,7 +16,7 @@ internal class MemberQuery(
     private val memberQueryAdapter: MemberQueryAdapter
 ) : MemberQueryUseCase {
 
-    override fun findById(query: MemberQueryUseCase.Query): Member {
+    override fun getById(query: MemberQueryUseCase.Query): Member {
         val memberJpaEntity = memberQueryAdapter.findById(query.memberId)
 
         return Member(memberJpaEntity)

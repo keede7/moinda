@@ -34,7 +34,7 @@ internal class MemberQueryTest {
 
         every { memberQueryAdapter.findById(query.memberId) } returns mockk(relaxed = true)
 
-        this.sut.findById(query)
+        this.sut.getById(query)
 
         verify(exactly = 1) { memberQueryAdapter.findById(query.memberId) }
 

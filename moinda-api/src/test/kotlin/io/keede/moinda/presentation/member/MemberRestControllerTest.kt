@@ -19,7 +19,6 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -40,14 +39,10 @@ internal class MemberRestControllerTest : BaseApi() {
     @MockkBean
     private lateinit var loginSut: LoginUseCase
 
-    private lateinit var session: MockHttpSession
-
-    private val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
-
     @BeforeEach
     fun init() {
-        this.session = MockHttpSession()
-        this.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
+        super.session = MockHttpSession()
+        super.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
     }
 
     @Test
@@ -62,7 +57,7 @@ internal class MemberRestControllerTest : BaseApi() {
         every { commandSut.signup(MemberCommandUseCase.Command(sut)) } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc
+        val perform = super.mockMvc
             .perform(
                 post(UriMaker.toMemberApiUri("signup"))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -87,7 +82,7 @@ internal class MemberRestControllerTest : BaseApi() {
 
         every { loginSut.login(any()) } returns mockk(relaxed = true)
 
-        val perform = mockMvc
+        val perform = super.mockMvc
             .perform(
                 post(
                     UriMaker.toMemberApiUri("login"),
@@ -107,14 +102,14 @@ internal class MemberRestControllerTest : BaseApi() {
         // Given
         val memberId = 1L
 
-        every { querySut.findById(MemberQueryUseCase.Query(memberId)) } returns mockk(relaxed = true)
+        every { querySut.getById(MemberQueryUseCase.Query(memberId)) } returns mockk(relaxed = true)
 
         // When
-        val perform = mockMvc
+        val perform = super.mockMvc
             .perform(
                 get(UriMaker.toMemberApiUri(memberId))
-                    .session(session)
-                    .cookie(cookie)
+                    .session(super.session)
+                    .cookie(super.cookie)
             )
 
         // Then
