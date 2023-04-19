@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
  */
 @Service
 @Transactional
-class MeetingCommandPort(
+internal class MeetingCommandPort(
     private val meetingJpaRepository: MeetingJpaRepository,
 ) : MeetingCommandAdapter {
     override fun save(createMeeting: CreateMeeting): MeetingJpaEntity {
