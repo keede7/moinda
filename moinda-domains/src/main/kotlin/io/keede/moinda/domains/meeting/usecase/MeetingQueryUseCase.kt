@@ -8,8 +8,12 @@ import io.keede.moinda.domains.meeting.domain.Meeting
  */
 interface MeetingQueryUseCase {
 
-    fun getById(meetingId: Long) : Meeting
+    fun getById(query: Query) : Meeting
 
     fun getMeetings() : List<Meeting>
+
+    data class Query(
+        val meetingId: Long
+    )
 
 }

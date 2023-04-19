@@ -16,8 +16,8 @@ internal class MeetingQuery(
     private val meetingQueryAdapter: MeetingQueryAdapter
 ) : MeetingQueryUseCase {
 
-    override fun getById(meetingId: Long): Meeting {
-        val meetingJpaEntity = meetingQueryAdapter.findById(meetingId)
+    override fun getById(query: MeetingQueryUseCase.Query): Meeting {
+        val meetingJpaEntity = meetingQueryAdapter.findById(query.meetingId)
 
         return Meeting(meetingJpaEntity)
     }

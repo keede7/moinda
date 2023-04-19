@@ -9,6 +9,7 @@ import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 data class Meeting(
     private val meetingJpaEntity: MeetingJpaEntity
 ) {
+    val meetingId = meetingJpaEntity.id
     val name = meetingJpaEntity.name
     val postCode = meetingJpaEntity.location.postCode
     val primaryAddress = meetingJpaEntity.location.primaryAddress

@@ -9,6 +9,7 @@ import java.util.*
 object UriMaker {
     const val GROUP_API = "/api/group"
     const val MEMBER_API = "/api/member"
+    const val MEETING_API = "/api/meeting"
 }
 
 fun UriMaker.toGroupApiUri(vararg resources: String): String {
@@ -23,4 +24,13 @@ fun UriMaker.toMemberApiUri(vararg resources: String): String {
 
 fun UriMaker.toMemberApiUri(resource: Long): String {
     return "$MEMBER_API/$resource"
+}
+
+fun UriMaker.toMeetingApiUri(vararg resources: String): String {
+    return Arrays.stream(resources)
+        .reduce(MEETING_API) { prefix: String, resource: String -> "$prefix/$resource" }
+}
+
+fun UriMaker.toMeetingApiUri(resource: Long): String {
+    return "$MEETING_API/$resource"
 }

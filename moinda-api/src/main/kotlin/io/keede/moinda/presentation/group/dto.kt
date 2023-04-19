@@ -2,6 +2,7 @@ package io.keede.moinda.presentation.group
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.domains.group.domain.Group
+import java.util.function.Function
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
