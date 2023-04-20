@@ -51,7 +51,7 @@ class GroupRestController(
     fun participate(
         @RequestBody @Valid participateDto: ParticipateDto
     ) = memberCommandUseCase.participate(
-        MemberCommandUseCase.Participate(
+        MemberCommandUseCase.ParticipateToGroup(
             participateDto.groupId,
             participateDto.memberId
         )
@@ -61,7 +61,7 @@ class GroupRestController(
     fun leave(
         @RequestBody @Valid leaveGroupRequestDto: LeaveGroupRequestDto,
     ) = memberCommandUseCase.leave(
-        MemberCommandUseCase.Leave(
+        MemberCommandUseCase.LeaveGroup(
             leaveGroupRequestDto.memberId
         )
     )

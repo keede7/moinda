@@ -11,20 +11,20 @@ interface MemberCommandUseCase {
 
     fun signup(command: Command): Member
 
-    fun participate(target: Participate)
+    fun participate(participate: ParticipateToGroup)
 
-    fun leave(leave: Leave)
+    fun leave(leave: LeaveGroup)
 
     data class Command(
         val createMember: CreateMember
     )
 
-    data class Participate(
+    data class ParticipateToGroup(
         val groupId: Long,
         val memberId: Long
     )
 
-    data class Leave(
+    data class LeaveGroup(
         val memberId: Long,
     )
 }

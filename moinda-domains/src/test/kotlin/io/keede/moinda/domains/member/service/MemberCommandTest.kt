@@ -28,14 +28,14 @@ internal class MemberCommandTest {
     @MockK
     private lateinit var groupQueryAdapter: GroupQueryAdapter
 
-    private lateinit var sut : MemberCommandUseCase
+    private lateinit var sut: MemberCommandUseCase
 
     @BeforeEach
     fun init() {
         this.sut = MemberCommand(
             this.memberCommandAdapter,
             this.memberQueryAdapter,
-            this.groupQueryAdapter
+            this.groupQueryAdapter,
         )
     }
 
@@ -55,21 +55,21 @@ internal class MemberCommandTest {
 
     @Test
     fun 사용자_그룹참여_성공() {
-        val participate = mockk<MemberCommandUseCase.Participate>(relaxed = true)
+        val participateToGroup = mockk<MemberCommandUseCase.ParticipateToGroup>(relaxed = true)
 
-        every { groupQueryAdapter.findById(participate.groupId) } returns mockk(relaxed = true)
-        every { memberQueryAdapter.findById(participate.memberId) } returns mockk(relaxed = true)
+        every { groupQueryAdapter.findById(participateToGroup.groupId) } returns mockk(relaxed = true)
+        every { memberQueryAdapter.findById(participateToGroup.memberId) } returns mockk(relaxed = true)
 
-        sut.participate(participate)
+        sut.participate(participateToGroup)
 
-        verify(exactly = 1) { groupQueryAdapter.findById(participate.groupId) }
-        verify(exactly = 1) { memberQueryAdapter.findById(participate.memberId) }
+        verify(exactly = 1) { groupQueryAdapter.findById(participateToGroup.groupId) }
+        verify(exactly = 1) { memberQueryAdapter.findById(participateToGroup.memberId) }
     }
 
     @Test
     fun 사용자가_그룹_탈퇴_성공() {
 
-        val leave = mockk<MemberCommandUseCase.Leave>(relaxed = true)
+        val leave = mockk<MemberCommandUseCase.LeaveGroup>(relaxed = true)
 
         every { memberQueryAdapter.findById(any()) } returns mockk(relaxed = true)
 

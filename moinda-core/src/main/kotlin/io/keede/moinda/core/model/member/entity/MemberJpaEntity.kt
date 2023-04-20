@@ -1,10 +1,12 @@
 package io.keede.moinda.core.model.member.entity
 
 import io.keede.moinda.core.config.BaseEntity
-import io.keede.moinda.core.model.group.entity.GroupJpaEntity
 import org.hibernate.annotations.DynamicInsert
 import org.hibernate.annotations.DynamicUpdate
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Lob
+import javax.persistence.Table
 
 /**
  * @author keede
@@ -28,24 +30,25 @@ class MemberJpaEntity(
     @Lob
     var introduce: String?,
 
-) : BaseEntity() {
+    ) : BaseEntity() {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "group_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
-    var groupEntity: GroupJpaEntity? = null
-
-    fun participate(groupEntity: GroupJpaEntity) {
-        this.groupEntity = groupEntity;
-    }
+    // TODO : 2차
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
+//    @JoinColumn(name = "group_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+//    var groupEntity: GroupJpaEntity? = null
+//
+//    fun participate(groupEntity: GroupJpaEntity) {
+//        this.groupEntity = groupEntity
+//    }
+//
+//    fun leaveGroup() {
+//        this.groupEntity = null
+//    }
 
     fun isMatchPassword(password: String) {
-        if(this.password != password) {
+        if (this.password != password) {
             throw RuntimeException("패스워드가 일치하지 않습니다.")
         }
-    }
-
-    fun leaveGroup() {
-        this.groupEntity = null
     }
 
     override fun toString(): String {
