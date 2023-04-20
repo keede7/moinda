@@ -50,12 +50,16 @@ class MemberJpaEntity(
 //    }
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
-    @JoinColumn(name = "group_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "meeting_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
     @Comment("모임 번호")
     var meetingJpaEntity: MeetingJpaEntity? = null
 
     fun participate(meetingJpaEntity: MeetingJpaEntity) {
         this.meetingJpaEntity = meetingJpaEntity
+    }
+
+    fun leaveMeeting() {
+        this.meetingJpaEntity = null
     }
 
     fun isMatchPassword(password: String) {

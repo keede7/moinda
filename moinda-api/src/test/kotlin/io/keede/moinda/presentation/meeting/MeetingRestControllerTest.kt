@@ -10,6 +10,8 @@ import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
 import io.keede.moinda.presentation.config.toMeetingApiUri
 import io.keede.moinda.presentation.meeting.fixture.ofCreateMeetingDto
+import io.keede.moinda.presentation.meeting.fixture.ofLeaveMeetingRequestDto
+import io.keede.moinda.presentation.meeting.fixture.ofParticipateMeetingRequestDto
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
@@ -124,7 +126,7 @@ internal class MeetingRestControllerTest : BaseApi() {
         val meetingId = 1L
         val memberId = 1L
 
-        val participateDto = ParticipateMeetingRequestDto(
+        val participateDto = ofParticipateMeetingRequestDto(
             meetingId,
             memberId,
         )
@@ -140,6 +142,37 @@ internal class MeetingRestControllerTest : BaseApi() {
             .perform(
                 post(UriMaker.toMeetingApiUri("participate"))
                     .content(toJson(participateDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
+
+        // Then
+        perform
+            .andExpect(status().is2xxSuccessful)
+    }
+
+    @Test
+    fun 모임에_퇴장한다() {
+
+        // Given
+        val memberId = 1L
+
+        val leaveMeetingRequestDto = ofLeaveMeetingRequestDto(
+            memberId,
+        )
+
+        every {
+            memberCommandUseCase.leave(
+                MemberCommandUseCase.LeaveMeeting(leaveMeetingRequestDto.memberId)
+            )
+        } returns mockk(relaxed = true)
+
+        // When
+        val perform = super.mockMvc
+            .perform(
+                post(UriMaker.toMeetingApiUri("leave"))
+                    .content(toJson(leaveMeetingRequestDto))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
                     .cookie(super.cookie)
