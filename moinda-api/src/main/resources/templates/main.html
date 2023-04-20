@@ -2,12 +2,33 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <script src="https://unpkg.com/htmx.org/dist/htmx.min.js"></script>
+    <title>모각코하자</title>
 </head>
 <body>
-    <div>hi</div>
-    <div hx-get="/get-load" hx-trigger="load">
+
+<th:block th:if="${session.session != null}">
+    <div>
+        안녕하세요, [[${session.session.name}]] 님 모각코 월드입니다..
     </div>
+</th:block>
+
+<h1>Hello Mo Gak Ko World </h1>
+
+<button type="button" id="toMeetings" >모각코 찾기</button>
+<button type="button" id="myMeetings" >나의 모각코</button>
+
+<script th:inline="javascript">
+
+    window.onload = function() {
+        const session = [[${session.session}]]
+
+        if(!session) {
+            alert("세션이 만료되어 다시 로그인을 해주세요.")
+            location.href = "/login"
+        }
+    }
+
+</script>
+
 </body>
 </html>
