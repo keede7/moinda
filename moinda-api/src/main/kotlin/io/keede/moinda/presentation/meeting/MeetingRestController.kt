@@ -3,6 +3,7 @@ package io.keede.moinda.presentation.meeting
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
+import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.util.toResponseDtoList
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -21,6 +22,7 @@ import javax.validation.Valid
 class MeetingRestController(
     private val meetingCommandUseCase: MeetingCommandUseCase,
     private val meetingQueryUseCase: MeetingQueryUseCase,
+    private val memberCommandUseCase: MemberCommandUseCase,
 ) {
 
     @PostMapping
@@ -46,4 +48,13 @@ class MeetingRestController(
         meetingQueryUseCase.getMeetings()
             .toResponseDtoList(Meeting::toMeetingResponseDto)
 
+    @PostMapping("/participate")
+    fun participate(
+        @RequestBody @Valid participateMeetingRequestDto: ParticipateMeetingRequestDto
+    ) = memberCommandUseCase.participate(
+        MemberCommandUseCase.ParticipateToMeeting(
+            participateMeetingRequestDto.meetingId,
+            participateMeetingRequestDto.memberId
+        )
+    )
 }

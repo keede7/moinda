@@ -1,6 +1,7 @@
 package io.keede.moinda.presentation.meeting.fixture
 
 import io.keede.moinda.presentation.meeting.CreateMeetingDto
+import io.keede.moinda.presentation.meeting.ParticipateMeetingRequestDto
 import java.time.LocalDateTime
 
 internal fun ofCreateMeetingDto(
@@ -21,4 +22,12 @@ internal fun ofCreateMeetingDto(
     capacity,
     startAt,
     endAt,
+)
+
+internal fun ofParticipateMeetingRequestDto(
+    meetingId: Long,
+    memberId: Long,
+) = ParticipateMeetingRequestDto(
+    meetingId,
+    memberId,
 )

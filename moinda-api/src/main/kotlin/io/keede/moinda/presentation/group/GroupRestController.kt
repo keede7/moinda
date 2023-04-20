@@ -49,11 +49,11 @@ class GroupRestController(
 
     @PostMapping("/participate")
     fun participate(
-        @RequestBody @Valid participateDto: ParticipateDto
+        @RequestBody @Valid participateGroupRequestDto: ParticipateGroupRequestDto
     ) = memberCommandUseCase.participate(
         MemberCommandUseCase.ParticipateToGroup(
-            participateDto.groupId,
-            participateDto.memberId
+            participateGroupRequestDto.groupId,
+            participateGroupRequestDto.memberId
         )
     )
 
