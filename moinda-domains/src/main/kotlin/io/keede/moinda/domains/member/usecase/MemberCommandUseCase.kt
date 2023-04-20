@@ -17,6 +17,8 @@ interface MemberCommandUseCase {
 
     fun participate(participate: ParticipateToMeeting)
 
+    fun leave(leave: LeaveMeeting)
+
     data class Command(
         val createMember: CreateMember
     )
@@ -32,6 +34,10 @@ interface MemberCommandUseCase {
 
     data class ParticipateToMeeting(
         val meetingId: Long,
+        val memberId: Long,
+    )
+
+    data class LeaveMeeting(
         val memberId: Long,
     )
 

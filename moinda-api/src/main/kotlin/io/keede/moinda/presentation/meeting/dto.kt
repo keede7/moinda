@@ -31,7 +31,14 @@ data class CreateMeetingDto(
 )
 
 data class ParticipateMeetingRequestDto(
+    @field:NotNull(message = "모임 번호가 필요합니다.")
     val meetingId: Long,
+    @field:NotNull(message = "사용자 번호가 필요합니다.")
+    val memberId: Long,
+)
+
+data class LeaveMeetingRequestDto(
+    @field:NotNull(message = "사용자 번호가 필요합니다.")
     val memberId: Long,
 )
 

@@ -49,4 +49,10 @@ internal class MemberCommand(
 
         memberJpaEntity.participate(meetingJpaEntity)
     }
+
+    override fun leave(leave: MemberCommandUseCase.LeaveMeeting) {
+        val memberJpaEntity = memberQueryAdapter.findById(leave.memberId)
+
+        memberJpaEntity.leaveMeeting()
+    }
 }
