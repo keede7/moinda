@@ -122,7 +122,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         every {
             memberCommandUseCase.participate(
-                MemberCommandUseCase.Participate(actual.groupId, actual.memberId)
+                MemberCommandUseCase.ParticipateToGroup(actual.groupId, actual.memberId)
             )
         } returns mockk(relaxed = true)
 
@@ -150,7 +150,7 @@ internal class GroupRestControllerTest : BaseApi() {
 
         every {
             memberCommandUseCase.leave(
-                MemberCommandUseCase.Leave(actual.memberId)
+                MemberCommandUseCase.LeaveGroup(actual.memberId)
             )
         } returns mockk(relaxed = true)
 

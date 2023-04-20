@@ -3,7 +3,6 @@ package io.keede.moinda.domains.member.service
 import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
 import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
 import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
-import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import org.springframework.stereotype.Service
@@ -18,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 internal class MemberCommand(
     private val memberCommandAdapter: MemberCommandAdapter,
     private val memberQueryAdapter: MemberQueryAdapter,
-    private val groupQueryAdapter: GroupQueryAdapter
+    private val groupQueryAdapter: GroupQueryAdapter,
 ) : MemberCommandUseCase {
 
     override fun signup(command: MemberCommandUseCase.Command): Member {
@@ -26,17 +25,19 @@ internal class MemberCommand(
         return Member(entity)
     }
 
-    override fun participate(target: MemberCommandUseCase.Participate) {
-        val groupJpaEntity = groupQueryAdapter.findById(target.groupId)
+    // TODO : 2차
+    override fun participate(participate: MemberCommandUseCase.ParticipateToGroup) {
+        val groupJpaEntity = groupQueryAdapter.findById(participate.groupId)
         // TODO : fetch 걸지 않는 조회성 메서드로 변경
-        val memberJpaEntity = memberQueryAdapter.findById(target.memberId)
+        val memberJpaEntity = memberQueryAdapter.findById(participate.memberId)
 
-        memberJpaEntity.participate(groupJpaEntity)
+//        memberJpaEntity.participate(groupJpaEntity)
     }
 
-    override fun leave(leave: MemberCommandUseCase.Leave) {
+    // TODO : 2차
+    override fun leave(leave: MemberCommandUseCase.LeaveGroup) {
         val memberJpaEntity = memberQueryAdapter.findById(leave.memberId)
 
-        memberJpaEntity.leaveGroup()
+//        memberJpaEntity.leaveGroup()
     }
 }

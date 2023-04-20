@@ -20,7 +20,7 @@ internal class MemberQueryPort(
     override fun findById(memberId: Long): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
-            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
+//            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
             .where(
                 memberJpaEntity.id.eq(memberId)
                     .and(memberJpaEntity.deleteStatus.isFalse)
@@ -32,7 +32,8 @@ internal class MemberQueryPort(
     override fun findByEmail(email: String): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
-            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
+//            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
+            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
             .where(
                 memberJpaEntity.email.eq(email)
                     .and(memberJpaEntity.deleteStatus.isFalse)
