@@ -18,6 +18,7 @@ class WebConfig : WebMvcConfigurer {
     private val EXCLUDE_PATH = listOf(
         "/api/member/login",
         "/api/member/signup",
+        "/api/meeting/**"
     )
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {

@@ -7,6 +7,8 @@ import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
+import javax.annotation.PostConstruct
 
 /**
  * @author keede
@@ -34,5 +36,25 @@ internal class MeetingCommandPort(
         )
 
         return meetingJpaRepository.save(meetingJpaEntity)
+    }
+
+    @PostConstruct
+    fun init() {
+        for (index in 1..10) {
+            val entity = MeetingJpaEntity(
+                "오늘의 모임 $index",
+                Location(
+                    "우편번호 $index",
+                    "우우우우우$index",
+                    "여기입니다 $index",
+                ),
+                "설명$index",
+                index,
+                // TODO: 화면에서 직접 DateTime 까지만 줄 수 도 있다.
+                LocalDateTime.now().withNano(0),
+                LocalDateTime.now().withNano(0)
+            )
+            meetingJpaRepository.save(entity)
+        }
     }
 }
