@@ -5,13 +5,13 @@ import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
+import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
 import io.keede.moinda.presentation.config.toMeetingApiUri
 import io.keede.moinda.presentation.meeting.fixture.ofCreateMeetingDto
 import io.mockk.every
 import io.mockk.mockk
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayNameGeneration
 import org.junit.jupiter.api.DisplayNameGenerator
@@ -19,7 +19,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.time.LocalDateTime
 
@@ -32,6 +33,9 @@ internal class MeetingRestControllerTest : BaseApi() {
 
     @MockkBean
     private lateinit var meetingQueryUseCase: MeetingQueryUseCase
+
+    @MockkBean
+    private lateinit var memberCommandUseCase: MemberCommandUseCase
 
     @BeforeEach
     fun init() {
@@ -104,6 +108,39 @@ internal class MeetingRestControllerTest : BaseApi() {
         val perform = super.mockMvc
             .perform(
                 get(UriMaker.MEETING_API)
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
+
+        // Then
+        perform
+            .andExpect(status().is2xxSuccessful)
+    }
+
+    @Test
+    fun 모임에_참가한다() {
+
+        // Given
+        val meetingId = 1L
+        val memberId = 1L
+
+        val participateDto = ParticipateMeetingRequestDto(
+            meetingId,
+            memberId,
+        )
+
+        every {
+            memberCommandUseCase.participate(
+                MemberCommandUseCase.ParticipateToMeeting(participateDto.meetingId, participateDto.memberId)
+            )
+        } returns mockk(relaxed = true)
+
+        // When
+        val perform = super.mockMvc
+            .perform(
+                post(UriMaker.toMeetingApiUri("participate"))
+                    .content(toJson(participateDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
                     .cookie(super.cookie)
             )

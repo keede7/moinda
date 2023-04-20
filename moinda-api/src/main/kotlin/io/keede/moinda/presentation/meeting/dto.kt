@@ -30,6 +30,11 @@ data class CreateMeetingDto(
     val endAt: LocalDateTime,
 )
 
+data class ParticipateMeetingRequestDto(
+    val meetingId: Long,
+    val memberId: Long,
+)
+
 data class MeetingResponseDto(
     val meetingId: Long,
     val name: String,

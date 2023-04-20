@@ -2,7 +2,7 @@ package io.keede.moinda.presentation.group.fixture
 
 import io.keede.moinda.presentation.group.CreateGroupDto
 import io.keede.moinda.presentation.group.LeaveGroupRequestDto
-import io.keede.moinda.presentation.group.ParticipateDto
+import io.keede.moinda.presentation.group.ParticipateGroupRequestDto
 
 
 /**
@@ -22,7 +22,7 @@ fun ofCreateGroupDto(
 fun ofParticipateDto(
     groupId: Long,
     memberId: Long,
-) = ParticipateDto(
+) = ParticipateGroupRequestDto(
     groupId,
     memberId
 )

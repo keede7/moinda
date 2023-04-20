@@ -2,7 +2,6 @@ package io.keede.moinda.presentation.group
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.domains.group.domain.Group
-import java.util.function.Function
 import javax.validation.constraints.Min
 import javax.validation.constraints.NotEmpty
 import javax.validation.constraints.NotNull
@@ -29,7 +28,7 @@ data class CreateGroupDto(
     val capacity: Int
 )
 
-data class ParticipateDto(
+data class ParticipateGroupRequestDto(
     @field:NotNull(message = "그룹을 지정해야 합니다.")
     val groupId: Long,
     @field:NotNull(message = "가입자를 지정해야 합니다.")
@@ -62,12 +61,6 @@ internal fun Group.toGroupResponseDto() = GroupResponseDto(
     description,
     capacity
 )
-
-internal fun toGroupResponseDtoList(
-    groups: List<Group>
-): List<GroupResponseDto> = groups
-        .map(Group::toGroupResponseDto)
-        .toList()
 
 internal fun CreateGroupDto.toDomain() = CreateGroup(
     name,
