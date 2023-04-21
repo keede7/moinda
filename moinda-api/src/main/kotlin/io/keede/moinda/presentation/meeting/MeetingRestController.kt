@@ -3,7 +3,11 @@ package io.keede.moinda.presentation.meeting
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
+import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
+import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
+import io.keede.moinda.presentation.member.MemberResponseDto
+import io.keede.moinda.presentation.member.toMemberResponseDto
 import io.keede.moinda.util.toResponseDtoList
 import org.springframework.web.bind.annotation.*
 import javax.validation.Valid
@@ -18,6 +22,7 @@ class MeetingRestController(
     private val meetingCommandUseCase: MeetingCommandUseCase,
     private val meetingQueryUseCase: MeetingQueryUseCase,
     private val memberCommandUseCase: MemberCommandUseCase,
+    private val memberQueryUseCase: MemberQueryUseCase
 ) {
 
     @PostMapping
@@ -42,6 +47,16 @@ class MeetingRestController(
     fun getList(): List<MeetingResponseDto> =
         meetingQueryUseCase.getMeetings()
             .toResponseDtoList(Meeting::toMeetingResponseDto)
+
+    @GetMapping("/{meetingId}/participant")
+    fun participate(
+        @PathVariable meetingId: Long
+    ): List<MemberResponseDto> =
+        memberQueryUseCase.getParticipateInMeetMembers(
+            MemberQueryUseCase.ParticipateMemberByMeetingId(
+                meetingId
+            )
+        ).toResponseDtoList(Member::toMemberResponseDto)
 
     @PostMapping("/participate")
     fun participate(

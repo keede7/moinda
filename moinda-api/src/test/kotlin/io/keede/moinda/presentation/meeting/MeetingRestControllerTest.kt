@@ -6,6 +6,7 @@ import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
+import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
 import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
 import io.keede.moinda.presentation.config.toMeetingApiUri
@@ -38,6 +39,9 @@ internal class MeetingRestControllerTest : BaseApi() {
 
     @MockkBean
     private lateinit var memberCommandUseCase: MemberCommandUseCase
+
+    @MockkBean
+    private lateinit var memberQueryUseCase: MemberQueryUseCase
 
     @BeforeEach
     fun init() {
@@ -173,6 +177,32 @@ internal class MeetingRestControllerTest : BaseApi() {
             .perform(
                 post(UriMaker.toMeetingApiUri("leave"))
                     .content(toJson(leaveMeetingRequestDto))
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
+
+        // Then
+        perform
+            .andExpect(status().is2xxSuccessful)
+    }
+
+    @Test
+    fun 특정_모임의_참가자들을_조회한다() {
+
+        // Given
+        val meetingId = 1L;
+
+        every {
+            memberQueryUseCase.getParticipateInMeetMembers(
+                MemberQueryUseCase.ParticipateMemberByMeetingId(meetingId)
+            )
+        } returns mockk(relaxed = true)
+
+        // When
+        val perform = super.mockMvc
+            .perform(
+                get(UriMaker.toMeetingApiUri(meetingId.toString(), "participant"))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
                     .cookie(super.cookie)

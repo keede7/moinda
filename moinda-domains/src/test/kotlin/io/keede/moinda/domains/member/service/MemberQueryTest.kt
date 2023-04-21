@@ -39,4 +39,17 @@ internal class MemberQueryTest {
         verify(exactly = 1) { memberQueryAdapter.findById(query.memberId) }
 
     }
+
+    @Test
+    fun 특정_모임을_참가중인_사용자목록을_조회한다() {
+
+        val query = mockk<MemberQueryUseCase.ParticipateMemberByMeetingId>(relaxed = true)
+
+        every { memberQueryAdapter.findParticipateInMeetMembers(query.meetingId) } returns mockk(relaxed = true)
+
+        this.sut.getParticipateInMeetMembers(query)
+
+        verify(exactly = 1) { memberQueryAdapter.findParticipateInMeetMembers(query.meetingId) }
+
+    }
 }

@@ -40,4 +40,15 @@ internal class MemberQueryPort(
             )
             .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
     }
+
+    override fun findParticipateInMeetMembers(meetingId: Long): List<MemberJpaEntity> {
+        return jpaQueryFactory
+            .selectFrom(memberJpaEntity)
+//            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
+            .where(
+                memberJpaEntity.meetingJpaEntity.id.eq(meetingId)
+                    .and(memberJpaEntity.deleteStatus.isFalse)
+            )
+            .fetch()
+    }
 }
