@@ -6,8 +6,14 @@ interface MemberQueryUseCase {
 
     fun getById(query: Query) : Member
 
+    fun getParticipateInMeetMembers(participateMemberByMeetingId: ParticipateMemberByMeetingId) : List<Member>
+
     data class Query(
         val memberId: Long
+    )
+
+    data class ParticipateMemberByMeetingId(
+        val meetingId: Long
     )
 
 }

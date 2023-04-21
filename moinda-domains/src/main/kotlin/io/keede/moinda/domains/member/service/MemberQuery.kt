@@ -21,5 +21,16 @@ internal class MemberQuery(
 
         return Member(memberJpaEntity)
     }
+
+    override fun getParticipateInMeetMembers(participateMemberByMeetingId: MemberQueryUseCase.ParticipateMemberByMeetingId): List<Member> {
+
+        val entities = memberQueryAdapter.findParticipateInMeetMembers(
+            participateMemberByMeetingId.meetingId
+        )
+
+        return entities
+            .map { Member(it) }
+            .toList()
+    }
 }
 
