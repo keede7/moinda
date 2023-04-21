@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+</head>
+<body>
+
+<div>
+    이메일 : <input type="text" id="email">
+</div>
+<div>
+    이름 : <input type="text" id="name">
+</div>
+<div>
+    패스워드 : <input type="password" id="password">
+</div>
+<div>
+    <button type="button" id="signup">가입</button>
+</div>
+
+
+<script th:inline="javascript">
+
+    window.onload = () => {
+        var httpRequest
+
+        const email = document.querySelector("#email")
+        const name = document.querySelector("#name")
+        const password = document.querySelector("#password")
+        const signUpButton = document.querySelector("#signup")
+
+        signUpButton.addEventListener("click", () => {
+
+            const signUpRequest = {
+                "email" : email.value,
+                "name" : name.value,
+                "password" : password.value,
+            }
+
+            callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
+        })
+
+        function signupProcess() {
+            try {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        alert("가입성공")
+                        window.location.href = "/login"
+                    } else {
+                        alert(httpRequest.responseText);
+                        return;
+                    }
+                }
+            }
+            catch( e ) {
+                alert('Caught Exception: ' + e.description);
+            }
+        }
+
+        function getHttpInstance() {
+            if(!httpRequest) {
+                httpRequest = new XMLHttpRequest();
+            }
+
+            return httpRequest;
+        }
+
+        function callRestApi(e, type, url, data) {
+            const jsonParsedData = data ? JSON.stringify(data) : null;
+
+            httpRequest = getHttpInstance();
+
+            httpRequest.onreadystatechange = e;
+            httpRequest.open(type, url);
+            httpRequest.setRequestHeader("Content-Type", "application/json")
+            httpRequest.send(jsonParsedData);
+        }
+
+    }
+</script>
+
+</body>
+</html>
