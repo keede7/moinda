@@ -13,24 +13,41 @@
 <script th:inline="javascript">
 
     window.onload = () => {
+        var httpRequest = getHttpInstance();
 
         const meetingsDiv = document.querySelector(".meetings")
+
 
         fetch('/api/meeting')
             .then(response => response.json())
             .then(meetings => {
-                // 응답 데이터를 처리하는 코드 작성
+
                 meetings.forEach(meeting => {
                     const body = `
-                        ${makeBody("모임 이름", meeting.name)}
-                        ${makeBody("위치", meeting.primaryAddress, meeting.detailAddress)}
-                        ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                        <div style="margin: 10px 0px 10px 10px" name="meeting">
+                            <div name="meetingInfo" value="${meeting.meetingId}">
+                                ${makeBody("모임 이름", meeting.name)}
+                                ${makeBody("위치", meeting.primaryAddress, meeting.detailAddress)}
+                                ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                            </div>
+                            <button type="button" name='participate'> 참가하기 </button>
+                        </div>
                      `
 
-                    meetingsDiv.innerHTML += `<div style="margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}"> ${body} </div>`
+                    meetingsDiv.innerHTML += body
                 })
 
-                const meetingElements = document.querySelectorAll('div[name="meeting"]');
+                const participateButton = document.querySelectorAll('button[name="participate"]');
+
+                participateButton.forEach( button => {
+                    const meetingId = button.closest('div[name="meeting"]')
+                        .querySelector('div[name="meetingInfo"]')
+                        .getAttribute(`value`)
+
+                    button.addEventListener("click", () => participate(meetingId))
+                })
+
+                const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
 
                 meetingElements
                     .forEach(element => element.addEventListener(
@@ -48,6 +65,49 @@
 
         // Function
         const makeBody = (text, ...data) => `<div> ${text} : ${data.join(" ")} </div>`
+
+        const participate = meetingId => {
+            const participateMeetingRequestDto = {
+                "meetingId" : meetingId,
+                "memberId": 1,
+            }
+
+            callRestApi(() => participateEvent(meetingId), "POST", "/api/meeting/participate", participateMeetingRequestDto)
+        }
+
+        function getHttpInstance() {
+            if(!httpRequest) {
+                httpRequest = new XMLHttpRequest();
+            }
+
+            return httpRequest;
+        }
+
+        function callRestApi(e, type, url, data) {
+            const jsonParsedData = data ? JSON.stringify(data) : null;
+
+            httpRequest.onreadystatechange = e;
+            httpRequest.open(type, url);
+            httpRequest.setRequestHeader("Content-Type", "application/json")
+            httpRequest.send(jsonParsedData);
+        }
+
+        function participateEvent(meetingId) {
+            try {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        alert("모임 참가에 성공했습니다.")
+                        window.location.href = `/meeting-detail/${meetingId}`
+                    } else {
+                        alert("모임 참가에 실패했습니다.");
+                        return;
+                     }
+                }
+            }
+            catch( e ) {
+                alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
+            }
+        }
     }
 
 </script>
