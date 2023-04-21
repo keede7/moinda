@@ -15,6 +15,9 @@ class ViewController {
     @GetMapping("/")
     fun main(): String = "main"
 
+    @GetMapping("/signup")
+    fun signup(): String = "signup"
+
     @GetMapping("/login")
     fun login(): String = "login"
 
