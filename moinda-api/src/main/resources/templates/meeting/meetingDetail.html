@@ -1,13 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>모각코</title>
+    <title>모각코 상세 보기</title>
 </head>
 <body>
 
 <h1> 모각코 상세 보기 </h1>
 
+<div class="meeting">
+
+</div>
+
+<script th:inline="javascript">
+
+    window.onload = () => {
+
+        const session = [[${session.session}]]
+
+        // if(!session) {
+        //     alert("세션이 만료되어 다시 로그인을 해주세요.")
+        //     location.href = "/login"
+        // }
+
+        const meetingDetailDiv = document.querySelector(".meeting")
+
+        var parts = window.location.pathname.split('/');
+        var meetingId = parts[parts.length - 1];
+
+        console.log("meetingId : ", meetingId)
+
+        // REST API 호출 및 응답 처리
+        fetch(`/api/meeting/${meetingId}`)
+            .then(response => response.json())
+            .then(meeting => {
+                // 응답 데이터를 처리하는 코드 작성
+                const body = `
+                    ${makeBody("모임 이름", meeting.name)}
+                    ${makeBody("위치", meeting.primaryAddress, meeting.detailAddress)}
+                    ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                 `
+
+                meetingDetailDiv.innerHTML += `<div style="margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}"> ${body} </div>`
+            })
+            .catch(error => console.error(error));
+
+        // Function
+        const makeBody = (text, ...data) => `<div> ${text} : ${data.join(" ")} </div>`
+    }
+
+</script>
 
 </body>
 </html>
