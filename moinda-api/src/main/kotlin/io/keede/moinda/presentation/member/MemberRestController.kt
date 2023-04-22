@@ -6,6 +6,7 @@ import io.keede.moinda.domains.member.usecase.LoginUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
 import org.springframework.web.bind.annotation.*
+import javax.annotation.PostConstruct
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
