@@ -26,7 +26,8 @@
                         <div style="margin: 10px 0px 10px 10px" name="meeting">
                             <div name="meetingInfo" value="${meeting.meetingId}">
                                 ${makeBody("모임 이름", meeting.name)}
-                                ${makeBody("위치", meeting.primaryAddress, meeting.detailAddress)}
+                                ${makeBody("주소", meeting.primaryAddress)}
+                                ${makeBody("장소명",  meeting.placeName)}
                                 ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
                             </div>
                             <button type="button" name='leave'> 참여취소 </button>

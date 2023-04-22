@@ -15,12 +15,10 @@ import javax.validation.constraints.NotNull
 data class CreateMeetingDto(
     @field:NotBlank(message = "모임 이름을 입력하세요.")
     val name: String,
-    @field:NotBlank(message = "우편 번호가 필요합니다.")
-    val postCode: String,
     @field:NotBlank(message = "기본 주소가 필요합니다.")
     val primaryAddress: String,
-    @field:NotBlank(message = "상세 주소가 필요합니다.")
-    val detailAddress: String,
+    @field:NotBlank(message = "장소 명칭이 필요합니다.")
+    val placeName: String,
     val description: String?,
     @field:NotNull(message = "최대 인원 수를 입력하세요.")
     val capacity: Int,
@@ -45,9 +43,8 @@ data class LeaveMeetingRequestDto(
 data class MeetingResponseDto(
     val meetingId: Long,
     val name: String,
-    val postCode: String,
     val primaryAddress: String,
-    val detailAddress: String,
+    val placeName: String,
     val description: String?,
     val capacity: Int,
     val startAt: String,
@@ -56,9 +53,8 @@ data class MeetingResponseDto(
 
 internal fun CreateMeetingDto.toDomain() = CreateMeeting(
     name,
-    postCode,
     primaryAddress,
-    detailAddress,
+    placeName,
     description,
     capacity,
     startAt,
@@ -68,9 +64,8 @@ internal fun CreateMeetingDto.toDomain() = CreateMeeting(
 internal fun Meeting.toMeetingResponseDto() = MeetingResponseDto(
     meetingId,
     name,
-    postCode,
     primaryAddress,
-    detailAddress,
+    placeName,
     description,
     capacity,
     startAt.toFullPattern(),

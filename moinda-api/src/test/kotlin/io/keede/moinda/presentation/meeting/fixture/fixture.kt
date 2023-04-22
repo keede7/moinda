@@ -7,18 +7,16 @@ import java.time.LocalDateTime
 
 internal fun ofCreateMeetingDto(
     name: String,
-    postCode: String,
     primaryAddress: String,
-    detailAddress: String,
+    placeName: String,
     description: String?,
     capacity: Int,
     startAt: LocalDateTime,
     endAt: LocalDateTime
 ) = CreateMeetingDto(
     name,
-    postCode,
     primaryAddress,
-    detailAddress,
+    placeName,
     description,
     capacity,
     startAt,

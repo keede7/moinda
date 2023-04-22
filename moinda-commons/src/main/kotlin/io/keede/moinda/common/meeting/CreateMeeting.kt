@@ -8,9 +8,8 @@ import java.time.LocalDateTime
  */
 data class CreateMeeting(
     val name: String,
-    val postCode: String,
     val primaryAddress: String,
-    val detailAddress: String,
+    val placeName: String,
     var description: String?,
     val capacity: Int,
     var startAt: LocalDateTime,

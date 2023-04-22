@@ -12,16 +12,10 @@
     모각코 명칭 : <input id="name" type="text" name="name">
 </div>
 <div>
-    <button type="button" id="searchLocation">주소찾기</button>
+    기본 주소 : <input id="primaryAddress" type="text" name="primaryAddress">
 </div>
 <div>
-    우편번호 : <input id="postCode" type="text" name="postCode" value="2020" disabled>
-</div>
-<div>
-    기본 주소 : <input id="primaryAddress" type="text" name="primaryAddress" value="테스트주소" disabled>
-</div>
-<div>
-    상세 주소 : <input id="detailAddress" type="text" name="detailAddress">
+    상세 주소 : <input id="placeName" type="text" name="placeName">
 </div>
 <div>
     모각코 설명 : <input id="description" type="text" name="description">
@@ -50,9 +44,8 @@
         const cancelButton = document.querySelector("#cancel")
 
         const name = document.querySelector("input[id='name']")
-        const postCode = document.querySelector("input[id='postCode']")
         const primaryAddress = document.querySelector("input[id='primaryAddress']")
-        const detailAddress = document.querySelector("input[id='detailAddress']")
+        const placeName = document.querySelector("input[id='placeName']")
         const description = document.querySelector("input[id='description']")
         const capacity = document.querySelector("input[id='capacity']")
         const startAt = document.querySelector("input[id='startAt']")
@@ -67,9 +60,8 @@
 
             const createMeetingRequest = {
                 "name" : name.value,
-                "postCode" : postCode.value,
                 "primaryAddress" : primaryAddress.value,
-                "detailAddress" : detailAddress.value,
+                "placeName" : placeName.value,
                 "description" : description.value,
                 "capacity" : capacity.value,
                 "startAt" : startAt.value,
@@ -117,9 +109,7 @@
 
     }
 
-
 </script>
-
 
 </body>
 </html>
