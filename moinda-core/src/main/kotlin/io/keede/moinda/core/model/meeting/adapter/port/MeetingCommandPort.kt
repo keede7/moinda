@@ -24,9 +24,8 @@ internal class MeetingCommandPort(
         val meetingJpaEntity = MeetingJpaEntity(
             createMeeting.name,
             Location(
-                createMeeting.postCode,
                 createMeeting.primaryAddress,
-                createMeeting.detailAddress
+                createMeeting.placeName
             ),
             createMeeting.description,
             createMeeting.capacity,
@@ -44,7 +43,6 @@ internal class MeetingCommandPort(
             val entity = MeetingJpaEntity(
                 "오늘의 모임 $index",
                 Location(
-                    "우편번호 $index",
                     "우우우우우$index",
                     "여기입니다 $index",
                 ),

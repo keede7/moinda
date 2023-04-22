@@ -11,9 +11,8 @@ data class Meeting(
 ) {
     val meetingId = meetingJpaEntity.id
     val name = meetingJpaEntity.name
-    val postCode = meetingJpaEntity.location.postCode
     val primaryAddress = meetingJpaEntity.location.primaryAddress
-    val detailAddress = meetingJpaEntity.location.detailAddress
+    val placeName = meetingJpaEntity.location.placeName
     val description = meetingJpaEntity.description
     val capacity = meetingJpaEntity.capacity
     val startAt = meetingJpaEntity.startAt

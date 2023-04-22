@@ -57,9 +57,8 @@ internal class MeetingRestControllerTest : BaseApi() {
 
         val sut = ofCreateMeetingDto(
             "모임1",
-            "111",
             "주소1",
-            "상세주소",
+            "스타벅스",
             "설명",
             30,
             time,
