@@ -1,6 +1,7 @@
 package io.keede.moinda.domains.meeting.usecase
 
 import io.keede.moinda.common.meeting.CreateMeeting
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.meeting.domain.Meeting
 
 
@@ -10,7 +11,7 @@ import io.keede.moinda.domains.meeting.domain.Meeting
  */
 interface MeetingCommandUseCase {
 
-    fun create(command: Command): Meeting
+    fun create(session: SessionResponse, command: Command): Meeting
 
     data class Command(
         val createMeeting: CreateMeeting
