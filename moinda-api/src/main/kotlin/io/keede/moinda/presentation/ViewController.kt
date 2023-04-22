@@ -24,6 +24,9 @@ class ViewController {
     @GetMapping("/meetings")
     fun meetings(): String = "meeting/meetings"
 
+    @GetMapping("/meeting/register")
+    fun meetingRegister(): String = "meeting/register"
+
     @GetMapping("/myMeetings")
     fun myMeetings(): String = "meeting/myMeetings"
 
