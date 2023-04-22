@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>모임생성</title>
+</head>
+<body>
+
+<h2>우리의 모각코를 만드세요!</h2>
+
+<div>
+    모각코 명칭 : <input id="name" type="text" name="name">
+</div>
+<div>
+    <button type="button" id="searchLocation">주소찾기</button>
+</div>
+<div>
+    우편번호 : <input id="postCode" type="text" name="postCode" value="2020" disabled>
+</div>
+<div>
+    기본 주소 : <input id="primaryAddress" type="text" name="primaryAddress" value="테스트주소" disabled>
+</div>
+<div>
+    상세 주소 : <input id="detailAddress" type="text" name="detailAddress">
+</div>
+<div>
+    모각코 설명 : <input id="description" type="text" name="description">
+</div>
+<div>
+    최대 인원 : <input id="capacity" type="text" name="capacity">
+</div>
+<div>
+    시작 시간: <input id="startAt" type="text" name="startAt">
+</div>
+<div>
+    종료 시간 : <input id="endAt" type="text" name="endAt">
+</div>
+
+<div>
+    <button type="button" id="create">만들어요</button>
+    <button type="button" id="cancel">만들지않아요</button>
+</div>
+
+<script th:inline="javascript">
+
+    window.onload = () => {
+        let httpRequest
+
+        const createButton = document.querySelector("#create")
+        const cancelButton = document.querySelector("#cancel")
+
+        const name = document.querySelector("input[id='name']")
+        const postCode = document.querySelector("input[id='postCode']")
+        const primaryAddress = document.querySelector("input[id='primaryAddress']")
+        const detailAddress = document.querySelector("input[id='detailAddress']")
+        const description = document.querySelector("input[id='description']")
+        const capacity = document.querySelector("input[id='capacity']")
+        const startAt = document.querySelector("input[id='startAt']")
+        const endAt = document.querySelector("input[id='endAt']")
+
+        createButton.addEventListener("click", createMeeting)
+        cancelButton.addEventListener("click", () => {
+            window.location.href = "/"
+        })
+
+        function createMeeting() {
+
+            const createMeetingRequest = {
+                "name" : name.value,
+                "postCode" : postCode.value,
+                "primaryAddress" : primaryAddress.value,
+                "detailAddress" : detailAddress.value,
+                "description" : description.value,
+                "capacity" : capacity.value,
+                "startAt" : startAt.value,
+                "endAt" : endAt.value,
+            }
+
+            callRestApi(createEvent, "POST", "/api/meeting", createMeetingRequest);
+        }
+
+        function getHttpInstance() {
+            if(!httpRequest) {
+                httpRequest = new XMLHttpRequest();
+            }
+
+            return httpRequest;
+        }
+
+        function callRestApi(e, type, url, data) {
+            const jsonParsedData = data ? JSON.stringify(data) : null;
+
+            httpRequest = getHttpInstance();
+
+            httpRequest.onreadystatechange = e;
+            httpRequest.open(type, url);
+            httpRequest.setRequestHeader("Content-Type", "application/json")
+            httpRequest.send(jsonParsedData);
+        }
+
+        function createEvent() {
+            try {
+                if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                    if (httpRequest.status === 200) {
+                        alert("모임이 생성되었습니다!")
+                        window.location.href = "/"
+                    } else {
+                        alert("모임 생성을 실패했습니다!")
+                        return;
+                    }
+                }
+            }
+            catch( e ) {
+                alert('Caught Exception: ' + e.description);
+            }
+        }
+
+    }
+
+
+</script>
+
+
+</body>
+</html>

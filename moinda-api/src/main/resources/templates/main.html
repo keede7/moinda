@@ -77,6 +77,37 @@
     <span class="button">내 모각코를 보자</span>
 </a>
 
+<a th:href="@{/meeting/register}">
+    <!-- 버튼 모양을 만들기 위한 CSS 스타일 -->
+    <style>
+        .button {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+        }
+    </style>
+    <!-- 버튼 텍스트 -->
+    <span class="button">모각코를 만들자</span>
+</a>
+
 <script th:inline="javascript">
 
     window.onload = function() {
