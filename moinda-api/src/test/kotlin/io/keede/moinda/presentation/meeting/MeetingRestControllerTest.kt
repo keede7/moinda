@@ -66,7 +66,7 @@ internal class MeetingRestControllerTest : BaseApi() {
             time,
         )
 
-        every { meetingCommandUseCase.create(any()) } returns mockk(relaxed = true)
+        every { meetingCommandUseCase.create(any(), any()) } returns mockk(relaxed = true)
 
         // When
         val perform = super.mockMvc

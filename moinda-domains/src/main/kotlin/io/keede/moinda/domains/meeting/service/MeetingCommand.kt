@@ -1,6 +1,8 @@
 package io.keede.moinda.domains.meeting.service
 
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.core.model.meeting.adapter.MeetingCommandAdapter
+import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import org.springframework.stereotype.Service
@@ -14,11 +16,18 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 internal class MeetingCommand(
-    private val meetingCommandAdapter: MeetingCommandAdapter
+    private val meetingCommandAdapter: MeetingCommandAdapter,
+    private val memberQueryAdapter: MemberQueryAdapter,
 ) : MeetingCommandUseCase {
     override fun create(
-        command: MeetingCommandUseCase.Command
-    ): Meeting =
-        meetingCommandAdapter.save(command.createMeeting)
-            .let(::Meeting)
+        session: SessionResponse,
+        command: MeetingCommandUseCase.Command,
+    ): Meeting {
+        val memberJpaEntity = memberQueryAdapter.findById(session.memberId)
+        val meetingJpaEntity = meetingCommandAdapter.save(command.createMeeting)
+
+        memberJpaEntity.participate(meetingJpaEntity)
+
+        return Meeting(meetingJpaEntity)
+    }
 }

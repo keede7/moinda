@@ -1,11 +1,13 @@
 package io.keede.moinda.presentation.meeting
 
+import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
+import io.keede.moinda.presentation.config.session.SessionUser
 import io.keede.moinda.presentation.member.MemberResponseDto
 import io.keede.moinda.presentation.member.toMemberResponseDto
 import io.keede.moinda.util.toResponseDtoList
@@ -27,12 +29,14 @@ class MeetingRestController(
 
     @PostMapping
     fun create(
-        @RequestBody @Valid createMeetingDto: CreateMeetingDto
+        @SessionUser session: SessionResponse,
+        @RequestBody @Valid createMeetingDto: CreateMeetingDto,
     ): MeetingResponseDto =
         meetingCommandUseCase.create(
+            session,
             MeetingCommandUseCase.Command(
                 createMeetingDto.toDomain()
-            )
+            ),
         ).toMeetingResponseDto()
 
     @GetMapping("/{meetingId}")
