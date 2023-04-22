@@ -52,6 +52,14 @@ class MeetingRestController(
         meetingQueryUseCase.getMeetings()
             .toResponseDtoList(Meeting::toMeetingResponseDto)
 
+    @GetMapping("/in-participating")
+    fun getInParticipateMeeting(
+        @SessionUser session: SessionResponse
+    ): List<MeetingResponseDto> =
+        meetingQueryUseCase.getInParticipatingMeetingsByMemberId(
+            session.memberId
+        ).toResponseDtoList(Meeting::toMeetingResponseDto)
+
     @GetMapping("/{meetingId}/participant")
     fun participate(
         @PathVariable meetingId: Long
@@ -72,6 +80,8 @@ class MeetingRestController(
         )
     )
 
+    // TODO : 한명당 하나의 모임에만 들어가기 떄문에, 본인 아이디만으로 충분하게 할 수는 있다.
+    // TODO : 하지만 이후에 meetingId 가 필요해 질 것.
     @PostMapping("/leave")
     fun leave(
         @RequestBody @Valid leaveMeetingRequestDto: LeaveMeetingRequestDto
