@@ -48,6 +48,9 @@ class ViewController {
             }
     }
 
+    @GetMapping("/maps")
+    fun maps(): String = "maps"
+
     @GetMapping("/signup")
     fun signup(): String = "signup"
 
