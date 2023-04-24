@@ -23,6 +23,9 @@ internal class MemberCommand(
 ) : MemberCommandUseCase {
 
     override fun signup(command: MemberCommandUseCase.Command): Member {
+
+        memberQueryAdapter.existMemberByEmail(command.createMember.email)
+
         val entity = memberCommandAdapter.save(command.createMember)
         return Member(entity)
     }

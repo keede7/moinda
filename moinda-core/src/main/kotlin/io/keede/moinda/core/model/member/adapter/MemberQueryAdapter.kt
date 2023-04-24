@@ -11,6 +11,8 @@ interface MemberQueryAdapter {
 
     fun findByEmail(email: String) : MemberJpaEntity
 
+    fun existMemberByEmail(email: String): Boolean
+
     fun findParticipateInMeetMembers(meetingId: Long) : List<MemberJpaEntity>
 
 }

@@ -47,14 +47,16 @@ internal class MemberCommandTest {
     @Test
     fun 사용자_회원가입_성공() {
 
-        val command = mockk<MemberCommandUseCase.Command>()
+        val command = mockk<MemberCommandUseCase.Command>(relaxed = true)
 
         // Model(createMember) 를 할당해서 사용시에 실패한다. 이유는?
+        every { memberQueryAdapter.existMemberByEmail(command.createMember.email) } returns mockk(relaxed = true)
         every { memberCommandAdapter.save(command.createMember) } returns mockk(relaxed = true)
 
         sut.signup(command)
 
         verify { memberCommandAdapter.save(command.createMember) }
+        verify { memberQueryAdapter.existMemberByEmail(command.createMember.email)  }
 
     }
 
