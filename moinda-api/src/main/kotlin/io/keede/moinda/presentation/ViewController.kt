@@ -48,6 +48,10 @@ class ViewController {
             }
     }
 
+    // TODO : Bootstrap Example
+    @GetMapping("/index")
+    fun index(): String = "index"
+    // TODO : kakao Map Test
     @GetMapping("/maps")
     fun maps(): String = "maps"
 
