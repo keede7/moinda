@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<!-- 해당 태그들을 조각으로 던진다.-->
+<th:block th:fragment="setBody(body)">
+  <head th:replace="fragment/header.html :: top">
+
+  </head>
+  <body>
+
+  <th:block th:replace="${body}">
+
+
+  </th:block>
+
+  <footer th:replace="fragment/footer.html :: footer"></footer>
+
+  </body>
+</th:block>
+</html>
