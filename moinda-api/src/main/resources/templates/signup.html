@@ -1,84 +1,122 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>회원가입</title>
-</head>
-<body>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
+    <th:block th:fragment="body">
 
-<div>
-    이메일 : <input type="text" id="email">
-</div>
-<div>
-    이름 : <input type="text" id="name">
-</div>
-<div>
-    패스워드 : <input type="password" id="password">
-</div>
-<div>
-    <button type="button" id="signup">가입</button>
-</div>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-75">
+                <div class="row gx-4 gx-lg-5 h-50 align-items-center justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h3 class="text-white font-weight-bold">Let's Sign Up!</h3>
+                        <hr class="divider" />
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div class="col-lg-6">
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
 
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="email" type="email" placeholder="Enter your email..." data-sb-validations="required" />
+                                <label for="email">Email</label>
+                                <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                            </div>
 
-<script th:inline="javascript">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="name">Name</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                            </div>
 
-    window.onload = () => {
-        var httpRequest
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="password" type="password" placeholder="name@example.com" data-sb-validations="required,email,name" />
+                                <label for="password">Password</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                            </div>
 
-        const email = document.querySelector("#email")
-        const name = document.querySelector("#name")
-        const password = document.querySelector("#password")
-        const signUpButton = document.querySelector("#signup")
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="introduce" type="text" placeholder="name@example.com" data-sb-validations="required,email" />
+                                <label for="introduce">introduce</label>
+                                <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
+                                <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
+                            </div>
 
-        signUpButton.addEventListener("click", () => {
+                            <div class="d-grid">
+                                <button class="btn btn-primary btn-xl" id="signup" type="button">가입하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-            const signUpRequest = {
-                "email" : email.value,
-                "name" : name.value,
-                "password" : password.value,
-            }
+        <script th:inline="javascript">
 
-            callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
-        })
+            window.onload = () => {
+                var httpRequest
 
-        function signupProcess() {
-            try {
-                if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if (httpRequest.status === 200) {
-                        alert("가입성공")
-                        window.location.href = "/login"
-                    } else {
-                        alert(httpRequest.responseText);
-                        return;
+                const email = document.querySelector("#email")
+                const name = document.querySelector("#name")
+                const password = document.querySelector("#password")
+                const introduce = document.querySelector("#introduce")
+                const signUpButton = document.querySelector("#signup")
+
+                signUpButton.addEventListener("click", () => {
+
+                    const signUpRequest = {
+                        "email" : email.value,
+                        "name" : name.value,
+                        "password" : password.value,
+                        "introduce": introduce.value,
+                    }
+
+                    callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
+                })
+
+                function signupProcess() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("가입성공")
+                                window.location.href = "/login"
+                            } else {
+                                alert(httpRequest.responseText);
+                                return;
+                            }
+                        }
+                    }
+                    catch( e ) {
+                        alert('Caught Exception: ' + e.description);
                     }
                 }
+
+                function getHttpInstance() {
+                    if(!httpRequest) {
+                        httpRequest = new XMLHttpRequest();
+                    }
+
+                    return httpRequest;
+                }
+
+                function callRestApi(e, type, url, data) {
+                    const jsonParsedData = data ? JSON.stringify(data) : null;
+
+                    httpRequest = getHttpInstance();
+
+                    httpRequest.onreadystatechange = e;
+                    httpRequest.open(type, url);
+                    httpRequest.setRequestHeader("Content-Type", "application/json")
+                    httpRequest.send(jsonParsedData);
+                }
+
             }
-            catch( e ) {
-                alert('Caught Exception: ' + e.description);
-            }
-        }
+        </script>
 
-        function getHttpInstance() {
-            if(!httpRequest) {
-                httpRequest = new XMLHttpRequest();
-            }
-
-            return httpRequest;
-        }
-
-        function callRestApi(e, type, url, data) {
-            const jsonParsedData = data ? JSON.stringify(data) : null;
-
-            httpRequest = getHttpInstance();
-
-            httpRequest.onreadystatechange = e;
-            httpRequest.open(type, url);
-            httpRequest.setRequestHeader("Content-Type", "application/json")
-            httpRequest.send(jsonParsedData);
-        }
-
-    }
-</script>
+    </th:block>
+</th:block>
 
 </body>
 </html>

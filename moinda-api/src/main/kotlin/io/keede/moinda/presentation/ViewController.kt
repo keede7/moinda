@@ -2,12 +2,9 @@ package io.keede.moinda.presentation
 
 import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
-import io.keede.moinda.domains.member.domain.Member
-import io.keede.moinda.presentation.member.toSessionResponse
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.ResponseBody
 import javax.servlet.http.Cookie
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -48,9 +45,19 @@ class ViewController {
             }
     }
 
+    @GetMapping("/sample")
+    fun maps2(): String = "thema-sample"
+
     // TODO : Bootstrap Example
     @GetMapping("/index")
-    fun index(): String = "index"
+    fun index(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+    ): String {
+//        createSession(request, response)
+
+        return "index"
+    }
     // TODO : kakao Map Test
     @GetMapping("/maps")
     fun maps(): String = "maps"
