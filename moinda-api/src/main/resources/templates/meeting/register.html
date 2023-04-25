@@ -1,115 +1,372 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>모임생성</title>
-</head>
-<body>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
+    <th:block th:fragment="body">
 
-<h2>우리의 모각코를 만드세요!</h2>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <div class="map_wrap">
+                    <div id="map">
 
-<div>
-    모각코 명칭 : <input id="name" type="text" name="name">
-</div>
-<div>
-    기본 주소 : <input id="primaryAddress" type="text" name="primaryAddress">
-</div>
-<div>
-    상세 주소 : <input id="placeName" type="text" name="placeName">
-</div>
-<div>
-    모각코 설명 : <input id="description" type="text" name="description">
-</div>
-<div>
-    최대 인원 : <input id="capacity" type="text" name="capacity">
-</div>
-<div>
-    시작 시간: <input id="startAt" type="text" name="startAt">
-</div>
-<div>
-    종료 시간 : <input id="endAt" type="text" name="endAt">
-</div>
+                    </div>
+                    <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                            <div>
+                                <form onsubmit="searchPlaces(); return false;">
+                                    키워드 : <input style="padding-left: 5px" type="text" id="keyword" size="20" placeholder="키워드를 입력해주세요.">
+                                    <button id="search" style="border: solid 1px gray;" type="submit">검색하기</button>
+                                </form>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul id="placesList">
+                            <li style="text-align: center">조회된 장소가 없습니다.</li>
+                        </ul>
+                        <div id="pagination"></div>
+                    </div>
+                    <div style="text-align: center" >
+                        <button class="btn btn-primary btn-xl"
+                                style="width: 30%;
+                                height: 35px;"
+                                id="closeSearchModal" type="button">
+                            닫기
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div>
-    <button type="button" id="create">만들어요</button>
-    <button type="button" id="cancel">만들지않아요</button>
-</div>
+        <!-- Masthead-->
+        <header class="masthead">
+            <div class="container px-4 px-lg-5 h-75">
+<!--                높이 변경 h-25 -->
+                <div class="row gx-4 gx-lg-5 h-25 align-items-center justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h3 class="text-white font-weight-bold">Let's Make Mo Gak Ko!</h3>
+                        <hr class="divider" />
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div class="col-lg-6">
+                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">
 
-<script th:inline="javascript">
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="name" type="text"  data-sb-validations="required,email" />
+                                <label for="name">모임명</label>
+                            </div>
 
-    window.onload = () => {
-        let httpRequest
+                            <div class="d-flex">
+                                <div class="form-floating mb-3" style="flex: 0.8;">
+                                    <input class="form-control" id="primaryAddress" type="email" data-sb-validations="required" />
+                                    <label for="primaryAddress">기본주소</label>
+                                </div>
+                                <button class="btn btn-primary"
+                                        id="searchPlace"
+                                        style="flex: 0.8;
+                                                height: 58px;
+                                                margin-left: 3px;
+                                                font-size: 0.85rem;
+                                                font-weight: 700;
+                                                text-transform: uppercase;
+                                                border: none;
+                                                border-radius: 10rem;" type="button">
+                                    위치잦기
+                                </button>
+                            </div>
 
-        const createButton = document.querySelector("#create")
-        const cancelButton = document.querySelector("#cancel")
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="placeName" type="text" data-sb-validations="required,email,name" />
+                                <label for="placeName">장소명</label>
+                            </div>
 
-        const name = document.querySelector("input[id='name']")
-        const primaryAddress = document.querySelector("input[id='primaryAddress']")
-        const placeName = document.querySelector("input[id='placeName']")
-        const description = document.querySelector("input[id='description']")
-        const capacity = document.querySelector("input[id='capacity']")
-        const startAt = document.querySelector("input[id='startAt']")
-        const endAt = document.querySelector("input[id='endAt']")
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="description" type="text" data-sb-validations="required,email" />
+                                <label for="description">설명</label>
+                            </div>
 
-        createButton.addEventListener("click", createMeeting)
-        cancelButton.addEventListener("click", () => {
-            window.location.href = "/"
-        })
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="capacity" type="text"  data-sb-validations="required,email" />
+                                <label for="capacity">최대인원</label>
+                            </div>
 
-        function createMeeting() {
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="startAt" type="text" data-sb-validations="required,email" value="2022-01-01 12:50" />
+                                <label for="startAt">시작시간</label>
+                            </div>
 
-            const createMeetingRequest = {
-                "name" : name.value,
-                "primaryAddress" : primaryAddress.value,
-                "placeName" : placeName.value,
-                "description" : description.value,
-                "capacity" : capacity.value,
-                "startAt" : startAt.value,
-                "endAt" : endAt.value,
-            }
+                            <div class="form-floating mb-3">
+                                <input class="form-control" id="endAt" type="text" data-sb-validations="required,email" value="2022-01-01 10:50" />
+                                <label for="endAt">종료시간</label>
+                            </div>
 
-            callRestApi(createEvent, "POST", "/api/meeting", createMeetingRequest);
-        }
+                            <!--  두 컴포넌트를 가로로 배치하고 비율만큼의 박스를 가진다. -->
+                            <div class="d-flex mb-3" >
+                                <button class="btn btn-primary btn-xl" style="flex: 0.8; margin-right: 3px;" id="create" type="button">만들어요</button>
+                                <button class="btn btn-primary btn-xl" style="flex: 0.8;" id="cancel" type="button">만들지않아요</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-        function getHttpInstance() {
-            if(!httpRequest) {
-                httpRequest = new XMLHttpRequest();
-            }
+        <script th:inline="javascript">
 
-            return httpRequest;
-        }
+            window.onload = () => {
+                let httpRequest
 
-        function callRestApi(e, type, url, data) {
-            const jsonParsedData = data ? JSON.stringify(data) : null;
+                const createButton = document.querySelector("#create")
+                const cancelButton = document.querySelector("#cancel")
 
-            httpRequest = getHttpInstance();
+                const name = document.querySelector("input[id='name']")
+                const primaryAddress = document.querySelector("input[id='primaryAddress']")
+                const placeName = document.querySelector("input[id='placeName']")
+                const description = document.querySelector("input[id='description']")
+                const capacity = document.querySelector("input[id='capacity']")
+                const startAt = document.querySelector("input[id='startAt']")
+                const endAt = document.querySelector("input[id='endAt']")
 
-            httpRequest.onreadystatechange = e;
-            httpRequest.open(type, url);
-            httpRequest.setRequestHeader("Content-Type", "application/json")
-            httpRequest.send(jsonParsedData);
-        }
+                createButton.addEventListener("click", createMeeting)
+                cancelButton.addEventListener("click", () => {
+                    window.location.href = "/"
+                })
 
-        function createEvent() {
-            try {
-                if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if (httpRequest.status === 200) {
-                        alert("모임이 생성되었습니다!")
-                        window.location.href = "/"
-                    } else {
-                        alert("모임 생성을 실패했습니다!")
-                        return;
+                function createMeeting() {
+
+                    const createMeetingRequest = {
+                        "name" : name.value,
+                        "primaryAddress" : primaryAddress.value,
+                        "placeName" : placeName.value,
+                        "description" : description.value,
+                        "capacity" : capacity.value,
+                        "startAt" : startAt.value,
+                        "endAt" : endAt.value,
+                    }
+
+                    callRestApi(createEvent, "POST", "/api/meeting", createMeetingRequest);
+                }
+
+                function getHttpInstance() {
+                    if(!httpRequest) {
+                        httpRequest = new XMLHttpRequest();
+                    }
+
+                    return httpRequest;
+                }
+
+                function callRestApi(e, type, url, data) {
+                    const jsonParsedData = data ? JSON.stringify(data) : null;
+
+                    httpRequest = getHttpInstance();
+
+                    httpRequest.onreadystatechange = e;
+                    httpRequest.open(type, url);
+                    httpRequest.setRequestHeader("Content-Type", "application/json")
+                    httpRequest.send(jsonParsedData);
+                }
+
+                function createEvent() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("모임이 생성되었습니다!")
+                                window.location.href = "/"
+                            } else {
+                                alert("모임 생성을 실패했습니다!")
+                                return;
+                            }
+                        }
+                    }
+                    catch( e ) {
+                        alert('Caught Exception: ' + e.description);
                     }
                 }
             }
-            catch( e ) {
-                alert('Caught Exception: ' + e.description);
+
+        </script>
+
+        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=4f0dae21f900df3142fba533f31b82b5&libraries=services"></script>
+        <script>
+            const modal = document.getElementById("myModal");
+            const openSearchPlaceModalButton = document.querySelector("#searchPlace");
+            const closeSearchPlaceModalButton = document.querySelector("#closeSearchModal")
+            const closeButton = document.getElementsByClassName("close")[0];
+
+            const placeName = document.querySelector("input[id='placeName']")
+            const primaryAddress = document.querySelector("input[id='primaryAddress']")
+
+            openSearchPlaceModalButton.addEventListener("click", () => {
+                modal.style.display = "block";
+            })
+
+            closeSearchPlaceModalButton.addEventListener("click", () => {
+                clearModal()
+            })
+
+            // 장소 검색 객체를 생성합니다
+            var ps = new kakao.maps.services.Places();
+
+            // searchPlaces();
+
+            const searchButton = document.querySelector("#search")
+
+            // 키워드로 장소를 검색합니다
+            searchButton.addEventListener("click", searchPlaces)
+
+            // 키워드 검색을 요청하는 함수입니다
+            function searchPlaces() {
+
+                var keyword = document.getElementById('keyword').value;
+
+                if (!keyword.replace(/^\s+|\s+$/g, '')) {
+                    alert('키워드를 입력해주세요!');
+                    return false;
+                }
+
+                // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+                ps.keywordSearch(keyword, placesSearchCB);
             }
-        }
 
-    }
+            // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+            function placesSearchCB(data, status, pagination) {
+                if (status === kakao.maps.services.Status.OK) {
 
-</script>
+                    // 정상적으로 검색이 완료됐으면
+                    // 검색 목록를 표출합니다
+                    displayPlaces(data);
 
-</body>
+                    addEventPlaceItems();
+
+                    // 페이지 번호를 표출합니다
+                    displayPagination(pagination);
+                } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+                    alert('검색 결과가 존재하지 않습니다.');
+
+                } else if (status === kakao.maps.services.Status.ERROR) {
+
+                    alert('검색 결과 중 오류가 발생했습니다.');
+                    return;
+
+                }
+            }
+
+            // 검색 결과 목록과 마커를 표출하는 함수입니다
+            function displayPlaces(places) {
+
+                var listEl = document.getElementById('placesList'),
+                    menuEl = document.getElementById('menu_wrap'),
+                    fragment = document.createDocumentFragment();
+
+                // 검색 결과 목록에 추가된 항목들을 제거합니다
+                removeAllChildNods(listEl);
+
+                for ( var i=0; i<places.length; i++ ) {
+
+                    var itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+                    fragment.appendChild(itemEl);
+                }
+
+                // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+                listEl.appendChild(fragment);
+                menuEl.scrollTop = 0;
+            }
+
+            // 검색결과 항목을 Element로 반환하는 함수입니다
+            function getListItem(index, places) {
+
+                var el = document.createElement('li'),
+                    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                        '<div class="info">' +
+                        '   <h5 name="placeName">' + places.place_name + '</h5>';
+
+                if (places.road_address_name) {
+                    itemStr += '    <span name="primaryAddress">' + places.road_address_name + '</span>' +
+                        '   <span class="jibun gray">' +  places.address_name  + '</span>';
+                } else {
+                    itemStr += '    <span name="primaryAddress">' +  places.address_name  + '</span>';
+                }
+
+                itemStr += '  <span class="tel">' + places.phone  + '</span>' +
+                    '</div>';
+
+                el.innerHTML = itemStr;
+                el.className = 'item';
+
+                return el;
+            }
+
+            // 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+            function displayPagination(pagination) {
+                var paginationEl = document.getElementById('pagination'),
+                    fragment = document.createDocumentFragment(),
+                    i;
+
+                // 기존에 추가된 페이지번호를 삭제합니다
+                while (paginationEl.hasChildNodes()) {
+                    paginationEl.removeChild (paginationEl.lastChild);
+                }
+
+                for (i=1; i<=pagination.last; i++) {
+                    var el = document.createElement('a');
+                    el.href = "#";
+                    el.innerHTML = i;
+
+                    if (i===pagination.current) {
+                        el.className = 'on';
+                    } else {
+                        el.onclick = (function(i) {
+                            return function() {
+                                pagination.gotoPage(i);
+                            }
+                        })(i);
+                    }
+
+                    fragment.appendChild(el);
+                }
+                paginationEl.appendChild(fragment);
+            }
+
+            // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+            function removeAllChildNods(el) {
+                while (el.hasChildNodes()) {
+                    el.removeChild (el.lastChild);
+                }
+            }
+
+            // 검색 목록에 클릭 이벤트를 추가해둔다.
+            const addEventPlaceItems = () => {
+
+                const infoElement = document.querySelectorAll('.info')
+
+                infoElement.forEach(item => {
+                    let placeNameEl = item.querySelector("h5[name='placeName']")
+                    let primaryAddressEl = item.querySelector("span[name='primaryAddress']")
+
+                    item.addEventListener("click", () => {
+
+                        alert(`"${placeNameEl.innerHTML}" 를 선택하셨습니다.`)
+
+                        placeName.value = placeNameEl.innerHTML
+                        primaryAddress.value = primaryAddressEl.innerHTML
+
+                        clearModal()
+                    })
+                })
+            }
+
+            const clearModal = () => {
+                modal.style.display = "none";
+
+                document.querySelector("#keyword").value = "";
+                // document.querySelector("#pagination").innerHTML = "";
+                // document.querySelector("#placesList").innerHTML = "";
+            }
+
+        </script>
+    </th:block>
+</th:block>
+
 </html>
