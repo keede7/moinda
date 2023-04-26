@@ -5,19 +5,19 @@
     <th:block th:fragment="body">
 
         <!-- Masthead-->
-        <header class="masthead">
+        <header class="masthead" style="height: 100%">
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-100 align-items-center justify-content-center text-center">
                     <div class="col-lg-8 align-self-end">
                         <th:block th:unless="${session.session == null}">
                             <h3 class="text-white font-weight-bold">
-                                안녕하세요, [[${session.session.name}]] 님 <br> 모각코 월드입니다
+                                안녕하세요, [[${session.session.name}]] 님 <br> 코딩 할 시간입니다.
                             </h3>
                             <hr class="divider" />
                         </th:block>
                         <th:block th:if="${session.session == null}">
                             <h3 class="text-white font-weight-bold">
-                                안녕하세요, 모각코 월드입니다
+                                안녕하세요, 코딩 할 시간입니다.
                             </h3>
                             <hr class="divider" />
                         </th:block>
