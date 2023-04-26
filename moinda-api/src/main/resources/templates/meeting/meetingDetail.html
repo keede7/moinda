@@ -1,54 +1,67 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>모각코 상세 보기</title>
-</head>
-<body>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
+    <th:block th:fragment="body">
 
-<h1> 모각코 상세 보기 </h1>
+        <!-- Masthead-->
+        <header class="masthead" style="min-height: 100vh; height: auto;">
+            <div class="container px-4 px-lg-5 h-75">
+                <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
+                        <hr class="divider" />
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div class="col-lg-6">
+                        <div class="meeting">
 
-<div class="meeting">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-</div>
 
-<script th:inline="javascript">
+        <script th:inline="javascript">
 
-    window.onload = () => {
+            window.onload = () => {
 
-        const session = [[${session.session}]]
+                const session = [[${session.session}]]
 
-        if(!session) {
-            alert("세션이 만료되어 다시 로그인을 해주세요.")
-            location.href = "/login"
-        }
+                if(!session) {
+                    alert("세션이 만료되어 다시 로그인을 해주세요.")
+                    location.href = "/login"
+                }
 
-        const meetingDetailDiv = document.querySelector(".meeting")
+                const meetingDetailDiv = document.querySelector(".meeting")
 
-        var parts = window.location.pathname.split('/');
-        var meetingId = parts[parts.length - 1];
+                var parts = window.location.pathname.split('/');
+                var meetingId = parts[parts.length - 1];
 
-        // REST API 호출 및 응답 처리
-        fetch(`/api/meeting/${meetingId}`)
-            .then(response => response.json())
-            .then(meeting => {
-                // 응답 데이터를 처리하는 코드 작성
-                const body = `
-                    ${makeBody("모임 이름", meeting.name)}
-                    ${makeBody("주소", meeting.primaryAddress)}
-                    ${makeBody("장소명",  meeting.placeName)}
-                    ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
-                 `
+                // REST API 호출 및 응답 처리
+                fetch(`/api/meeting/${meetingId}`)
+                    .then(response => response.json())
+                    .then(meeting => {
+                        // 응답 데이터를 처리하는 코드 작성
+                        const body = `
+                            ${makeBody("모임 이름", meeting.name)}
+                            ${makeBody("주소", meeting.primaryAddress)}
+                            ${makeBody("장소명",  meeting.placeName)}
+                            ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                         `
 
-                meetingDetailDiv.innerHTML += `<div style="margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}"> ${body} </div>`
-            })
-            .catch(error => console.error(error));
+                        meetingDetailDiv.innerHTML += `<div style="margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}"> ${body} </div>`
+                    })
+                    .catch(error => console.error(error));
 
-        // Function
-        const makeBody = (text, ...data) => `<div> ${text} : ${data.join(" ")} </div>`
-    }
+                // Function
+                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
+            }
 
-</script>
+        </script>
 
-</body>
+    </th:block>
+</th:block>
 </html>

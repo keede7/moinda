@@ -1,118 +1,142 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>내 모각코</title>
-</head>
-<body>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
+    <th:block th:fragment="body">
 
-<h1> 내가 참여한 모각코들 보여줘라 </h1>
-
-<div class="inParticipatingMeetings"></div>
-
-<script th:inline="javascript">
-
-    window.onload = () => {
-        var httpRequest = getHttpInstance();
-
-        const meetingsDiv = document.querySelector(".inParticipatingMeetings")
-
-        fetch('/api/meeting/in-participating')
-            .then(response => response.json())
-            .then(meetings => {
-
-                meetings.forEach(meeting => {
-                    const body = `
-                        <div style="margin: 10px 0px 10px 10px" name="meeting">
-                            <div name="meetingInfo" value="${meeting.meetingId}">
-                                ${makeBody("모임 이름", meeting.name)}
-                                ${makeBody("주소", meeting.primaryAddress)}
-                                ${makeBody("장소명",  meeting.placeName)}
-                                ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
-                            </div>
-                            <button type="button" name='leave'> 참여취소 </button>
+        <!-- Masthead-->
+        <header class="masthead" style="min-height: 100vh; height: auto;">
+            <div class="container px-4 px-lg-5 h-75">
+                <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
+                    <div class="col-lg-8 col-xl-6 text-center">
+                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
+                        <hr class="divider" />
+                    </div>
+                </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div class="col-lg-6">
+                        <div class="inParticipatingMeetings">
+<!--                            TODO : 최초로 데이터가 없을경우 태그를 넣어둘 필요?-->
                         </div>
-                     `
+                    </div>
+                </div>
+            </div>
+        </header>
 
-                    meetingsDiv.innerHTML += body
-                })
+        <script th:inline="javascript">
 
-                const participateButton = document.querySelectorAll('button[name="leave"]');
+            window.onload = () => {
+                var httpRequest = getHttpInstance();
 
-                participateButton.forEach( button => {
-                    const meetingId = button.closest('div[name="meeting"]')
-                        .querySelector('div[name="meetingInfo"]')
-                        .getAttribute(`value`)
+                const meetingsDiv = document.querySelector(".inParticipatingMeetings")
 
-                    button.addEventListener("click", () => leave(meetingId))
-                })
+                fetch('/api/meeting/in-participating')
+                    .then(response => response.json())
+                    .then(meetings => {
+                        if(!meetings) {
+                            return;
+                        }
 
-                const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
+                        meetings.forEach(meeting => {
+                            const body = `
+                                <div name="meeting"
+                                style=" display: flex;
+                                padding: 5px 5px 10px 5px;
+                                /*border: solid 1px #f4623a;*/
+                                align-items: center;
+                                font-size: smaller;
+                                ">
+                                    <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
+                                        ${makeBody("모임 이름", meeting.name)}
+                                        ${makeBody("주소", meeting.primaryAddress)}
+                                        ${makeBody("장소명",  meeting.placeName)}
+                                        ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                                    </div>
+                                    <button class="btn btn-primary btn-xl"
+                                    style="height: 50px; padding: 10px 36px 10px 36px;"
+                                    type="button" name='leave'> 참여취소 </button>
+                                </div>
+                             `
 
-                meetingElements
-                    .forEach(element => element.addEventListener(
-                        "click",
-                        () => {
-                            const meetingId = element.getAttribute("value")
-                            location.href = `/meeting-detail/${meetingId}`
+                            meetingsDiv.innerHTML += body
                         })
-                    )
-            })
-            .catch(error => {
-                console.error(error)
-                alert(error)
-            });
 
-        // Function
-        const makeBody = (text, ...data) => `<div> ${text} : ${data.join(" ")} </div>`
+                        const participateButton = document.querySelectorAll('button[name="leave"]');
 
-        // TODO : 한명당 하나의 모임에만 들어가기 떄문에, 본인 아이디만으로 충분하게 할 수는 있다.
-        // TODO : 하지만 이후에 meetingId 가 필요해 질 것이므로 meeting를 보내기만 한다.
-        const leave = meetingId => {
-            const leaveRequestDto = {
-                "meetingId" : meetingId,
-                "memberId": 1,
-            }
+                        participateButton.forEach( button => {
+                            const meetingId = button.closest('div[name="meeting"]')
+                                .querySelector('div[name="meetingInfo"]')
+                                .getAttribute(`value`)
 
-            callRestApi(() => leaveEvent(meetingId), "POST", "/api/meeting/leave", leaveRequestDto)
-        }
+                            button.addEventListener("click", () => leave(meetingId))
+                        })
 
-        function getHttpInstance() {
-            if(!httpRequest) {
-                httpRequest = new XMLHttpRequest();
-            }
+                        const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
 
-            return httpRequest;
-        }
+                        meetingElements
+                            .forEach(element => element.addEventListener(
+                                "click",
+                                () => {
+                                    const meetingId = element.getAttribute("value")
+                                    location.href = `/meeting-detail/${meetingId}`
+                                })
+                            )
+                    })
+                    .catch(error => {
+                        console.error(error)
+                        alert(error)
+                    });
 
-        function callRestApi(e, type, url, data) {
-            const jsonParsedData = data ? JSON.stringify(data) : null;
+                // Function
+                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
 
-            httpRequest.onreadystatechange = e;
-            httpRequest.open(type, url);
-            httpRequest.setRequestHeader("Content-Type", "application/json")
-            httpRequest.send(jsonParsedData);
-        }
+                // TODO : 한명당 하나의 모임에만 들어가기 떄문에, 본인 아이디만으로 충분하게 할 수는 있다.
+                // TODO : 하지만 이후에 meetingId 가 필요해 질 것이므로 meeting를 보내기만 한다.
+                const leave = meetingId => {
+                    const leaveRequestDto = {
+                        "meetingId" : meetingId,
+                        "memberId": 1,
+                    }
+                    // TODO : Check Function
+                    callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
+                }
 
-        function leaveEvent(meetingId) {
-            try {
-                if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                    if (httpRequest.status === 200) {
-                        alert("모임 참여를 취소했습니다.")
-                        window.location.href = `/myMeetings`
-                    } else {
-                        alert("모임 참여 취소를 실패했습니다.");
-                        return;
+                function getHttpInstance() {
+                    if(!httpRequest) {
+                        httpRequest = new XMLHttpRequest();
+                    }
+
+                    return httpRequest;
+                }
+
+                function callRestApi(e, type, url, data) {
+                    const jsonParsedData = data ? JSON.stringify(data) : null;
+
+                    httpRequest.onreadystatechange = e;
+                    httpRequest.open(type, url);
+                    httpRequest.setRequestHeader("Content-Type", "application/json")
+                    httpRequest.send(jsonParsedData);
+                }
+
+                function leaveEvent() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("모임 참여를 취소했습니다.")
+                                window.location.href = `/myMeetings`
+                            } else {
+                                alert("모임 참여 취소를 실패했습니다.");
+                                return;
+                            }
+                        }
+                    }
+                    catch( e ) {
+                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
                     }
                 }
             }
-            catch( e ) {
-                alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
-            }
-        }
-    }
 
-</script>
-
-</body>
+        </script>
+    </th:block>
+</th:block>
 </html>
