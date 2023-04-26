@@ -123,6 +123,36 @@ internal class MeetingRestControllerTest : BaseApi() {
     }
 
     @Test
+    fun 페이징된_전체_모임_조회를_성공한다() {
+
+        // Given
+        val pagePaginatedMeetingRequestDto = mockk<PaginatedMeetingRequestDto>(relaxed = true)
+
+        every {
+            meetingQueryUseCase.getMeetings(
+                MeetingQueryUseCase.PageQuery(
+                    pagePaginatedMeetingRequestDto.page,
+                    pagePaginatedMeetingRequestDto.size
+                )
+            )
+        } returns mockk(relaxed = true)
+
+        // When
+        val perform = super.mockMvc
+            .perform(
+                get(UriMaker.toMeetingApiUri("paginated"))
+                    .param("page", pagePaginatedMeetingRequestDto.page.toString())
+                    .param("size", pagePaginatedMeetingRequestDto.size.toString())
+                    .session(super.session)
+                    .cookie(super.cookie)
+            )
+
+        // Then
+        perform
+            .andExpect(status().is2xxSuccessful)
+    }
+
+    @Test
     fun 모임에_참가한다() {
 
         // Given

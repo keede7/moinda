@@ -1,12 +1,16 @@
 package io.keede.moinda.presentation.meeting
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import io.keede.moinda.common.PageResponse
 import io.keede.moinda.common.meeting.CreateMeeting
 import io.keede.moinda.domains.meeting.domain.Meeting
+import io.keede.moinda.mapper.Paginator
 import io.keede.moinda.util.toFullPattern
+import io.keede.moinda.util.toResponseDtoList
 import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.Positive
 
 /**
  * @author keede
@@ -40,6 +44,13 @@ data class LeaveMeetingRequestDto(
     val memberId: Long,
 )
 
+data class PaginatedMeetingRequestDto(
+    @field:NotNull(message = "페이지 번호가 필요합니다.")
+    @field:Positive(message = "1 이상 입력해주세요.")
+    val page: Int,
+    val size: Int?,
+)
+
 data class MeetingResponseDto(
     val meetingId: Long,
     val name: String,
@@ -70,4 +81,11 @@ internal fun Meeting.toMeetingResponseDto() = MeetingResponseDto(
     capacity,
     startAt.toFullPattern(),
     endAt.toFullPattern(),
+)
+
+internal fun Paginator<Meeting>.toPageResponse() = PageResponse<MeetingResponseDto>(
+    pageSize = this.pageSize,
+    totalCount = this.totalCount,
+    domains = this.domains.toResponseDtoList(Meeting::toMeetingResponseDto),
+    keyword = this.keyword,
 )

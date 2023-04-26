@@ -1,5 +1,6 @@
 package io.keede.moinda.presentation.meeting
 
+import io.keede.moinda.common.PageResponse
 import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingCommandUseCase
@@ -51,6 +52,17 @@ class MeetingRestController(
     fun getList(): List<MeetingResponseDto> =
         meetingQueryUseCase.getMeetings()
             .toResponseDtoList(Meeting::toMeetingResponseDto)
+
+    @GetMapping("/paginated")
+    fun getPaginatedList(
+        paginatedMeetingRequestDto: PaginatedMeetingRequestDto
+    ): PageResponse<MeetingResponseDto> =
+        meetingQueryUseCase.getMeetings(
+            MeetingQueryUseCase.PageQuery(
+                paginatedMeetingRequestDto.page,
+                paginatedMeetingRequestDto.size,
+            )
+        ).toPageResponse()
 
     @GetMapping("/in-participating")
     fun getInParticipateMeeting(
