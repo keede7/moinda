@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Controller
 class ViewController {
-    @GetMapping("/")
+    @GetMapping("/main")
     fun main(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -46,10 +46,10 @@ class ViewController {
     }
 
     @GetMapping("/sample")
-    fun maps2(): String = "thema-sample"
+    fun maps2(): String = "sample/thema-sample"
 
     // TODO : Bootstrap Example
-    @GetMapping("/index")
+    @GetMapping("/")
     fun index(
         request: HttpServletRequest,
         response: HttpServletResponse,
@@ -60,7 +60,7 @@ class ViewController {
     }
     // TODO : kakao Map Test
     @GetMapping("/maps")
-    fun maps(): String = "maps"
+    fun maps(): String = "sample/maps"
 
     @GetMapping("/signup")
     fun signup(): String = "signup"

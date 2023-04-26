@@ -10927,6 +10927,7 @@ hr.divider-light {
   }
 }
 
+/* TODO : 나중에 min-height: 100vh; height: auto; 를 공통적으로 변경시켜보자. */
 header.masthead {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 4.5rem);
@@ -10944,7 +10945,7 @@ header.masthead h1, header.masthead .h1 {
     height: 100vh;
     min-height: 40rem;
     padding-top: 4.5rem;
-    padding-bottom: 0;
+    padding-bottom: 4.5rem;
   }
   header.masthead p {
     font-size: 1.15rem;
