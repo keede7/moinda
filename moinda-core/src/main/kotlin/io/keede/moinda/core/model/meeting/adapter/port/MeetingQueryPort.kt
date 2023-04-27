@@ -5,6 +5,10 @@ import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity.meetingJpaEntity
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Service
 
@@ -32,5 +36,22 @@ internal class MeetingQueryPort(
             .selectFrom(meetingJpaEntity)
             .where(meetingJpaEntity.deleteStatus.isFalse)
             .fetch()
+    }
+
+    override fun findMeetingByPaging(pageable: Pageable): Page<MeetingJpaEntity> {
+        val entities = jpaQueryFactory
+            .selectFrom(meetingJpaEntity)
+            .where(
+                meetingJpaEntity.deleteStatus.isFalse
+            )
+
+        val count = entities.fetch().size.toLong()
+
+        val limitEntities = entities.offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
+            .orderBy(meetingJpaEntity.id.desc())
+            .fetch()
+
+        return PageImpl(limitEntities, pageable, count)
     }
 }
