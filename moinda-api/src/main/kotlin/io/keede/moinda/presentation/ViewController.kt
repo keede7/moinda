@@ -68,6 +68,7 @@ class ViewController {
     @GetMapping("/login")
     fun login(): String = "login"
 
+    // TODO : 페이징 처리에 대한 쿼리파라미터 처리가 필요하다.
     @GetMapping("/meetings")
     fun meetings(): String = "meeting/meetings"
 

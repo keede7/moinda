@@ -55,7 +55,7 @@ class MeetingRestController(
 
     @GetMapping("/paginated")
     fun getPaginatedList(
-        paginatedMeetingRequestDto: PaginatedMeetingRequestDto
+       @ModelAttribute @Valid paginatedMeetingRequestDto: PaginatedMeetingRequestDto
     ): PageResponse<MeetingResponseDto> =
         meetingQueryUseCase.getMeetings(
             MeetingQueryUseCase.PageQuery(

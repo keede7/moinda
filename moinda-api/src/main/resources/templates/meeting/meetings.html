@@ -30,9 +30,12 @@
 
                 const meetingsDiv = document.querySelector(".meetings")
 
-                fetch('/api/meeting')
+                // TODO : 직접 QueryParameter를 가지고 붙여서 처리하도록 수정 필요.
+                fetch(`/api/meeting/paginated?&page=1`)
                     .then(response => response.json())
-                    .then(meetings => {
+                    .then(meeting => {
+
+                        const meetings = meeting.domains
 
                         meetings.forEach(meeting => {
                             const body = `
