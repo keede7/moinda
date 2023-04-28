@@ -56,8 +56,6 @@
         <script th:inline="javascript">
 
             window.onload = () => {
-                var httpRequest
-
                 const email = document.querySelector("#email")
                 const name = document.querySelector("#name")
                 const password = document.querySelector("#password")
@@ -92,26 +90,6 @@
                         alert('Caught Exception: ' + e.description);
                     }
                 }
-
-                function getHttpInstance() {
-                    if(!httpRequest) {
-                        httpRequest = new XMLHttpRequest();
-                    }
-
-                    return httpRequest;
-                }
-
-                function callRestApi(e, type, url, data) {
-                    const jsonParsedData = data ? JSON.stringify(data) : null;
-
-                    httpRequest = getHttpInstance();
-
-                    httpRequest.onreadystatechange = e;
-                    httpRequest.open(type, url);
-                    httpRequest.setRequestHeader("Content-Type", "application/json")
-                    httpRequest.send(jsonParsedData);
-                }
-
             }
         </script>
 

@@ -44,8 +44,6 @@
         <script th:inline="javascript">
 
             window.onload = () => {
-                var httpRequest;
-
                 const loginButton = document.querySelector("#loginButton")
                 const signUpButton = document.querySelector("#signUpButton")
 
@@ -64,25 +62,6 @@
                     }
 
                     callRestApi(loginEvent, "POST", "/api/member/login", loginInputs);
-                }
-
-                function getHttpInstance() {
-                    if(!httpRequest) {
-                        httpRequest = new XMLHttpRequest();
-                    }
-
-                    return httpRequest;
-                }
-
-                function callRestApi(e, type, url, data) {
-                    const jsonParsedData = data ? JSON.stringify(data) : null;
-
-                    httpRequest = getHttpInstance();
-
-                    httpRequest.onreadystatechange = e;
-                    httpRequest.open(type, url);
-                    httpRequest.setRequestHeader("Content-Type", "application/json")
-                    httpRequest.send(jsonParsedData);
                 }
 
                 function loginEvent() {
