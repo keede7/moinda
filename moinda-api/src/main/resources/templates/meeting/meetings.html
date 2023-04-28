@@ -5,12 +5,12 @@
     <th:block th:fragment="body">
 
         <!-- Masthead-->
-        <header class="masthead" style="height: auto;">
+        <header class="masthead" style="height: auto; min-height: 100vh;">
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
                     <div class="col-lg-8 col-xl-6 text-center">
                         <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider" />
+                        <hr class="divider"/>
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -20,19 +20,33 @@
                         </div>
                     </div>
                 </div>
+                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
+                    <div
+                            class="pagination col-lg-6 text-white font-weight-bold"
+                            style="display: flex; justify-content: center;">
+                    </div>
+                </div>
             </div>
         </header>
         <script th:inline="javascript">
 
             window.onload = () => {
+                let href = window.location.href
+
+                const isUri = href.includes("?page")
+
+                if (!isUri) {
+                    href = "?page=1&size=10"
+                } else {
+                    href = href.substring(href.indexOf("?"))
+                }
+
                 const meetingsDiv = document.querySelector(".meetings")
 
-                // TODO : 직접 QueryParameter를 가지고 붙여서 처리하도록 수정 필요.
-                fetch(`/api/meeting/paginated?&page=1`)
+                fetch(`/api/meeting/paginated${href}`)
                     .then(response => response.json())
                     .then(meeting => {
-
-                        const meetings = meeting.domains
+                        let meetings = meeting.domains
 
                         meetings.forEach(meeting => {
                             const body = `
@@ -46,7 +60,7 @@
                                     <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
                                         ${makeBody("모임 이름", meeting.name)}
                                         ${makeBody("주소", meeting.primaryAddress)}
-                                        ${makeBody("장소명",  meeting.placeName)}
+                                        ${makeBody("장소명", meeting.placeName)}
                                         ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
                                     </div>
                                     <button class="btn btn-primary btn-xl"
@@ -58,9 +72,10 @@
                             meetingsDiv.innerHTML += body
                         })
 
+                        // 모임 참가 이벤트 생성
                         const participateButton = document.querySelectorAll('button[name="participate"]');
 
-                        participateButton.forEach( button => {
+                        participateButton.forEach(button => {
                             const meetingId = button.closest('div[name="meeting"]')
                                 .querySelector('div[name="meetingInfo"]')
                                 .getAttribute(`value`)
@@ -68,6 +83,7 @@
                             button.addEventListener("click", () => participate(meetingId))
                         })
 
+                        // 모임 상세조회 이벤트 생성
                         const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
 
                         meetingElements
@@ -78,6 +94,34 @@
                                     location.href = `/meeting-detail/${meetingId}`
                                 })
                             )
+
+                        // 페이지 버튼 생성 이벤트
+                        const pagination = document.querySelector(".pagination")
+                        let paginationInnerHtml = ""
+
+                        const size = meeting.size
+                        const paginations = meeting.pagination
+
+                        const start = meeting.start
+                        const end = meeting.end
+
+                        if (meeting.prev) {
+                            paginationInnerHtml +=
+                                `<a href="/meetings?page=${start - 1}&size=${size}" style="margin: 0px 10px 0px 10px">이전</a>`
+                        }
+
+                        paginations.forEach(page => {
+                            // TODO : 어떤 번호의 페이지가 활성화되었는지 표시하기 위해 색상에 대한 분기처리 필요
+                            paginationInnerHtml +=
+                                `<a href="/meetings?page=${page}&size=${size}" style="margin: 0px 10px 0px 10px;">${page}</a>`
+                        })
+
+                        if (meeting.next) {
+                            paginationInnerHtml +=
+                                `<a href="/meetings?page=${end + 1}&size=${size}" style="margin: 0px 10px 0px 10px">다음</a>`
+                        }
+
+                        pagination.innerHTML += paginationInnerHtml
                     })
                     .catch(error => {
                         console.error(error)
@@ -88,13 +132,23 @@
                 const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
 
                 const participate = meetingId => {
+
                     const participateMeetingRequestDto = {
-                        "meetingId" : meetingId,
-                        // TODO : 변경필요
-                        "memberId": 1,
+                        "meetingId": meetingId,
+                        "memberId": getSession(),
                     }
 
                     callRestApi(() => participateEvent(meetingId), "POST", "/api/meeting/participate", participateMeetingRequestDto)
+                }
+
+                const getSession = () => {
+                    const session = [[${session.session}]]
+                    // TODO : 변경필요
+                    if(!session) {
+                        return 1;
+                    }
+
+                    return session.memberId
                 }
 
                 function participateEvent(meetingId) {
@@ -106,10 +160,9 @@
                             } else {
                                 alert("모임 참가에 실패했습니다.");
                                 return;
-                             }
+                            }
                         }
-                    }
-                    catch( e ) {
+                    } catch (e) {
                         alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
                     }
                 }
