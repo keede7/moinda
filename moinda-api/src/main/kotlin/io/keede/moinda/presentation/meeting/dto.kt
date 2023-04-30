@@ -84,8 +84,15 @@ internal fun Meeting.toMeetingResponseDto() = MeetingResponseDto(
 )
 
 internal fun Paginator<Meeting>.toPageResponse() = PageResponse<MeetingResponseDto>(
-    pageSize = this.pageSize,
+    page = this.page,
+    size = this.size,
+    totalPage = this.totalPage,
     totalCount = this.totalCount,
-    domains = this.domains.toResponseDtoList(Meeting::toMeetingResponseDto),
     keyword = this.keyword,
+    start = this.start,
+    end = this.end,
+    prev = this.prev,
+    next = this.next,
+    domains = this.domains.toResponseDtoList(Meeting::toMeetingResponseDto),
+    pagination = this.pagination,
 )
