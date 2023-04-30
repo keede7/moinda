@@ -18,6 +18,9 @@
                         <div class="meeting">
 
                         </div>
+                        <div class="participants" style="padding: 0px 15px;">
+
+                        </div>
                     </div>
                 </div>
             </div>
@@ -36,7 +39,8 @@
                 // }
 
                 const meetingDetailDiv = document.querySelector(".meeting")
-
+                const participantsDiv = document.querySelector(".participants")
+                let capacity = 0;
                 var parts = window.location.pathname.split('/');
                 var meetingId = parts[parts.length - 1];
 
@@ -44,14 +48,16 @@
                 fetch(`/api/meeting/${meetingId}`)
                     .then(response => response.json())
                     .then(meeting => {
+                        console.log(meeting)
+
                         // 응답 데이터를 처리하는 코드 작성
                         const body = `
-                        <div name="meetingForm"
+                        <div name="meetingBody"
                                 style=" display: flex;
                                 padding: 5px 5px 10px 5px;
                                 align-items: center;
                                 ">
-                                <div style="flex: 1; margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}">
+                                <div style="flex: 1; margin: 10px 0px 10px 10px" id="meeting" value="${meeting.meetingId}">
                                     ${makeBody("모임 이름", meeting.name)}
                                     ${makeBody("주소", meeting.primaryAddress)}
                                     ${makeBody("장소명", meeting.placeName)}
@@ -60,13 +66,16 @@
                                 <button class="btn btn-primary btn-xl"
                                             style="height: 50px; padding: 10px 36px 10px 36px;"
                                             type="button" name='participate'> 참가하기 </button>
-                                <button class="btn btn-primary btn-xl"
-                                            style="height: 50px; padding: 10px 36px 10px 36px;"
-                                            type="button" name='leave'> 참가취소 </button>
+<!--                                <button class="btn btn-primary btn-xl"-->
+<!--                                            style="height: 50px; padding: 10px 36px 10px 36px;"-->
+<!--                                            type="button" name='leave'> 참가취소 </button>-->
                         </div>
                          `
-
+                        capacity = meeting.capacity
                         meetingDetailDiv.innerHTML += body
+
+                        // 현재 모임의 참여자 목록 생성
+                        makeParticipants(participantsDiv, meetingId)
                     })
                     .catch(error => console.error(error));
 
@@ -74,8 +83,37 @@
 
                 // Function
                 const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
-            }
 
+                const makeParticipants = (component, meetingId) => {
+
+                    fetch(`/api/meeting/${meetingId}/participant`)
+                        .then(response => response.json())
+                        .then(members => {
+                            console.log(members)
+                            const participantsCount = members.length
+
+                            const subTitle = `<div style='
+                                text-align: center;
+                                color: white;
+                                font-size: larger;
+                                opacity: 0.7;'
+                                class="participantTitle">전체참여 목록 (${participantsCount}/${capacity}명)</div>`
+
+                            component.innerHTML += subTitle
+
+                            members.forEach(member => {
+                                const participants =
+                                    `<div name="participant" style="margin: 10px 0px;" value="${member.memberId}">
+                                        <div class="text-white font-weight-bold">${member.name}</div>
+                                        <div class="text-white font-weight-bold" style="opacity: 0.7;">${member.introduce}</div>
+                                    </div>`
+
+                                component.innerHTML += participants
+                            })
+                        })
+                        .catch(error => console.error(error));
+                }
+            }
         </script>
 
     </th:block>

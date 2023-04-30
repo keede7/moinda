@@ -46,7 +46,6 @@ data class LeaveMeetingRequestDto(
 
 data class PaginatedMeetingRequestDto(
     @field:NotNull(message = "페이지 번호가 필요합니다.")
-    @field:Positive(message = "1 이상 입력해주세요.")
     val page: Int,
     val size: Int?,
 )
