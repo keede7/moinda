@@ -10,7 +10,7 @@
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
                     <div class="col-lg-8 col-xl-6 text-center">
                         <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider" />
+                        <hr class="divider"/>
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -28,12 +28,12 @@
 
             window.onload = () => {
 
-                const session = [[${session.session}]]
-
-                if(!session) {
-                    alert("세션이 만료되어 다시 로그인을 해주세요.")
-                    location.href = "/login"
-                }
+                // const session = [[${session.session}]]
+                //
+                // if(!session) {
+                //     alert("세션이 만료되어 다시 로그인을 해주세요.")
+                //     location.href = "/login"
+                // }
 
                 const meetingDetailDiv = document.querySelector(".meeting")
 
@@ -46,15 +46,31 @@
                     .then(meeting => {
                         // 응답 데이터를 처리하는 코드 작성
                         const body = `
-                            ${makeBody("모임 이름", meeting.name)}
-                            ${makeBody("주소", meeting.primaryAddress)}
-                            ${makeBody("장소명",  meeting.placeName)}
-                            ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                        <div name="meetingForm"
+                                style=" display: flex;
+                                padding: 5px 5px 10px 5px;
+                                align-items: center;
+                                ">
+                                <div style="flex: 1; margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}">
+                                    ${makeBody("모임 이름", meeting.name)}
+                                    ${makeBody("주소", meeting.primaryAddress)}
+                                    ${makeBody("장소명", meeting.placeName)}
+                                    ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                                </div>
+                                <button class="btn btn-primary btn-xl"
+                                            style="height: 50px; padding: 10px 36px 10px 36px;"
+                                            type="button" name='participate'> 참가하기 </button>
+                                <button class="btn btn-primary btn-xl"
+                                            style="height: 50px; padding: 10px 36px 10px 36px;"
+                                            type="button" name='leave'> 참가취소 </button>
+                        </div>
                          `
 
-                        meetingDetailDiv.innerHTML += `<div style="margin: 10px 0px 10px 10px" name="meeting" value="${meeting.meetingId}"> ${body} </div>`
+                        meetingDetailDiv.innerHTML += body
                     })
                     .catch(error => console.error(error));
+
+                // TODO: 현재 해당 모임에 참여하고 있는 여부에 따라서 참가 또는 참여취소 버튼을 보이지 않게 선언한다.
 
                 // Function
                 const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`

@@ -15,4 +15,5 @@ interface MemberQueryAdapter {
 
     fun findParticipateInMeetMembers(meetingId: Long) : List<MemberJpaEntity>
 
+    fun findWithFetch(memberId: Long) : MemberJpaEntity
 }

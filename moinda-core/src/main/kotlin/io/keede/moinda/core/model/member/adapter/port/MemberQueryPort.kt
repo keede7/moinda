@@ -25,7 +25,19 @@ internal class MemberQueryPort(
                 memberJpaEntity.id.eq(memberId)
                     .and(memberJpaEntity.deleteStatus.isFalse)
             )
-            .fetchOne() ?: throw RuntimeException()
+            .fetchOne() ?: throw RuntimeException("존재하지 않는 사용자입니다.")
+    }
+
+    // 연관관계 정보를 가져와서 사용할떄 쓴다.
+    override fun findWithFetch(memberId: Long): MemberJpaEntity {
+        return jpaQueryFactory
+            .selectFrom(memberJpaEntity)
+            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
+            .where(
+                memberJpaEntity.id.eq(memberId)
+                    .and(memberJpaEntity.deleteStatus.isFalse)
+            )
+            .fetchOne() ?: throw RuntimeException("존재하지 않는 사용자입니다.")
     }
 
     // TODO : 용도에 따라서 비슷한 메서드를 만들 수 도 있다.
@@ -41,6 +53,7 @@ internal class MemberQueryPort(
             .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
     }
 
+    // 회원 가입 시 이메일 중복검증에 사용한다.
     override fun existMemberByEmail(email: String): Boolean {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
@@ -55,10 +68,11 @@ internal class MemberQueryPort(
             }
     }
 
+    // 특정 모임에 참여하고 있는 참여자들을 조회할 때 사용한다.
     override fun findParticipateInMeetMembers(meetingId: Long): List<MemberJpaEntity> {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
-//            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
+            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
             .where(
                 memberJpaEntity.meetingJpaEntity.id.eq(meetingId)
                     .and(memberJpaEntity.deleteStatus.isFalse)
