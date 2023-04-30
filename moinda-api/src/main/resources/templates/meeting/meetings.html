@@ -48,80 +48,16 @@
                     .then(meeting => {
                         let meetings = meeting.domains
 
-                        meetings.forEach(meeting => {
-                            const body = `
-                                <div name="meeting"
-                                style=" display: flex;
-                                padding: 5px 5px 10px 5px;
-                                /*border: solid 1px #f4623a;*/
-                                align-items: center;
-                                font-size: smaller;
-                                ">
-                                    <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
-                                        ${makeBody("모임 이름", meeting.name)}
-                                        ${makeBody("주소", meeting.primaryAddress)}
-                                        ${makeBody("장소명", meeting.placeName)}
-                                        ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
-                                    </div>
-                                    <button class="btn btn-primary btn-xl"
-                                    style="height: 50px; padding: 10px 36px 10px 36px;"
-                                    type="button" name='participate'> 참가하기 </button>
-                                </div>
-                             `
-
-                            meetingsDiv.innerHTML += body
-                        })
+                        makeMeetingsComponent(meetingsDiv, meetings)
 
                         // 모임 참가 이벤트 생성
-                        const participateButton = document.querySelectorAll('button[name="participate"]');
-
-                        participateButton.forEach(button => {
-                            const meetingId = button.closest('div[name="meeting"]')
-                                .querySelector('div[name="meetingInfo"]')
-                                .getAttribute(`value`)
-
-                            button.addEventListener("click", () => participate(meetingId))
-                        })
+                        makeParticipateEvent()
 
                         // 모임 상세조회 이벤트 생성
-                        const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
+                        makeToGetMeetingDetailEvent()
 
-                        meetingElements
-                            .forEach(element => element.addEventListener(
-                                "click",
-                                () => {
-                                    const meetingId = element.getAttribute("value")
-                                    location.href = `/meeting-detail/${meetingId}`
-                                })
-                            )
-
-                        // 페이지 버튼 생성 이벤트
-                        const pagination = document.querySelector(".pagination")
-                        let paginationInnerHtml = ""
-
-                        const size = meeting.size
-                        const paginations = meeting.pagination
-
-                        const start = meeting.start
-                        const end = meeting.end
-
-                        if (meeting.prev) {
-                            paginationInnerHtml +=
-                                `<a href="/meetings?page=${start - 1}&size=${size}" style="margin: 0px 10px 0px 10px">이전</a>`
-                        }
-
-                        paginations.forEach(page => {
-                            // TODO : 어떤 번호의 페이지가 활성화되었는지 표시하기 위해 색상에 대한 분기처리 필요
-                            paginationInnerHtml +=
-                                `<a href="/meetings?page=${page}&size=${size}" style="margin: 0px 10px 0px 10px;">${page}</a>`
-                        })
-
-                        if (meeting.next) {
-                            paginationInnerHtml +=
-                                `<a href="/meetings?page=${end + 1}&size=${size}" style="margin: 0px 10px 0px 10px">다음</a>`
-                        }
-
-                        pagination.innerHTML += paginationInnerHtml
+                        // 페이지 버튼 생성
+                        makePagination(meeting)
                     })
                     .catch(error => {
                         console.error(error)
@@ -165,6 +101,87 @@
                     } catch (e) {
                         alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
                     }
+                }
+
+                const makeMeetingsComponent = (component, meetings) => {
+
+                    meetings.forEach(meeting => {
+                        const body = `
+                                <div name="meeting"
+                                style=" display: flex;
+                                padding: 5px 5px 10px 5px;
+                                align-items: center;
+                                font-size: smaller;
+                                ">
+                                    <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
+                                        ${makeBody("모임 이름", meeting.name)}
+                                        ${makeBody("주소", meeting.primaryAddress)}
+                                        ${makeBody("장소명", meeting.placeName)}
+                                        ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                                    </div>
+                                    <button class="btn btn-primary btn-xl"
+                                    style="height: 50px; padding: 10px 36px 10px 36px;"
+                                    type="button" name='participate'> 참가하기 </button>
+                                </div>
+                             `
+
+                        component.innerHTML += body
+                    })
+                }
+
+                const makeParticipateEvent = () => {
+                    const participateButton = document.querySelectorAll('button[name="participate"]');
+
+                    participateButton.forEach(button => {
+                        const meetingId = button.closest('div[name="meeting"]')
+                            .querySelector('div[name="meetingInfo"]')
+                            .getAttribute(`value`)
+
+                        button.addEventListener("click", () => participate(meetingId))
+                    })
+                }
+
+                const makeToGetMeetingDetailEvent = () => {
+                    const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
+
+                    meetingElements
+                        .forEach(element => element.addEventListener(
+                                "click",
+                                () => {
+                                    const meetingId = element.getAttribute("value")
+                                    location.href = `/meeting-detail/${meetingId}`
+                                }
+                            )
+                        )
+                }
+
+                const makePagination = (meeting) => {
+                    const pagination = document.querySelector(".pagination")
+                    let paginationInnerHtml = ""
+
+                    const size = meeting.size
+                    const paginations = meeting.pagination
+
+                    const start = meeting.start
+                    const end = meeting.end
+
+                    if (meeting.prev) {
+                        paginationInnerHtml +=
+                            `<a href="/meetings?page=${start - 1}&size=${size}" style="margin: 0px 10px 0px 10px">이전</a>`
+                    }
+
+                    paginations.forEach(page => {
+                        // TODO : 어떤 번호의 페이지가 활성화되었는지 표시하기 위해 색상에 대한 분기처리 필요
+                        paginationInnerHtml +=
+                            `<a href="/meetings?page=${page}&size=${size}" style="margin: 0px 10px 0px 10px;">${page}</a>`
+                    })
+
+                    if (meeting.next) {
+                        paginationInnerHtml +=
+                            `<a href="/meetings?page=${end + 1}&size=${size}" style="margin: 0px 10px 0px 10px">다음</a>`
+                    }
+
+                    pagination.innerHTML += paginationInnerHtml
                 }
             }
 
