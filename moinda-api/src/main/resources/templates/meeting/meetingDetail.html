@@ -44,11 +44,21 @@
                 var parts = window.location.pathname.split('/');
                 var meetingId = parts[parts.length - 1];
 
+                let formattedStartAt = "";
+
                 // REST API 호출 및 응답 처리
                 fetch(`/api/meeting/${meetingId}`)
                     .then(response => response.json())
                     .then(meeting => {
                         console.log(meeting)
+
+                        const startAt = new Date(meeting.startAt)
+                        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+                        const dayOfWeek = daysOfWeek[startAt.getDay()];
+
+                        formattedStartAt =
+                            `${startAt.getMonth() + 1}월 ${startAt.getDate()}일 (${dayOfWeek})
+                            ${startAt.getHours()}:${startAt.getMinutes() < 10 ? '0' + startAt.getMinutes(): startAt.getMinutes()}`;
 
                         // 응답 데이터를 처리하는 코드 작성
                         const body = `
@@ -61,7 +71,7 @@
                                     ${makeBody("모임 이름", meeting.name)}
                                     ${makeBody("주소", meeting.primaryAddress)}
                                     ${makeBody("장소명", meeting.placeName)}
-                                    ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                                    ${makeBody("날짜", formattedStartAt)}
                                 </div>
                                 <button class="btn btn-primary btn-xl"
                                             style="height: 50px; padding: 10px 36px 10px 36px;"
@@ -99,7 +109,13 @@
                                 opacity: 0.7;'
                                 class="participantTitle">전체참여 목록 (${participantsCount}/${capacity}명)</div>`
 
-                            component.innerHTML += subTitle
+                            const meetingDateTitle =
+                                `<div class="text-white font-weight-bold"
+                                    style="margin: 5px 0px; font-size: large;">
+                                    ${formattedStartAt} 일정 참석자 (${participantsCount}명)
+                                </div>`
+
+                            component.innerHTML += subTitle + meetingDateTitle
 
                             members.forEach(member => {
                                 const participants =

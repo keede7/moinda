@@ -103,9 +103,18 @@
                     }
                 }
 
+
                 const makeMeetingsComponent = (component, meetings) => {
 
                     meetings.forEach(meeting => {
+                        const startAt = new Date(meeting.startAt)
+                        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+                        const dayOfWeek = daysOfWeek[startAt.getDay()];
+
+                        const formattedStartAt =
+                            `${startAt.getMonth() + 1}월 ${startAt.getDate()}일 (${dayOfWeek})
+                            ${startAt.getHours()}:${startAt.getMinutes() < 10 ? '0' + startAt.getMinutes(): startAt.getMinutes()}`;
+
                         const body = `
                                 <div name="meeting"
                                 style=" display: flex;
@@ -117,7 +126,7 @@
                                         ${makeBody("모임 이름", meeting.name)}
                                         ${makeBody("주소", meeting.primaryAddress)}
                                         ${makeBody("장소명", meeting.placeName)}
-                                        ${makeBody("날짜", meeting.startAt, "~", meeting.endAt)}
+                                        ${makeBody("날짜", formattedStartAt)}
                                     </div>
                                     <button class="btn btn-primary btn-xl"
                                     style="height: 50px; padding: 10px 36px 10px 36px;"
