@@ -22,6 +22,7 @@ internal class MemberQuery(
         return Member(memberJpaEntity)
     }
 
+    // 모임 상세 조회시 참여한 사용자 목록을 표시할때 사용한다.
     override fun getParticipateInMeetMembers(participateMemberByMeetingId: MemberQueryUseCase.ParticipateMemberByMeetingId): List<Member> {
 
         val entities = memberQueryAdapter.findParticipateInMeetMembers(

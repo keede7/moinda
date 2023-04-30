@@ -60,11 +60,11 @@ internal class MeetingQueryTest {
 
         val memberId = 1L
 
-        every { memberQueryAdapter.findById(any())} returns mockk(relaxed = true)
+        every { memberQueryAdapter.findWithFetch(any())} returns mockk(relaxed = true)
 
         this.sut.getInParticipatingMeetingsByMemberId(memberId)
 
-        verify(exactly = 1) { memberQueryAdapter.findById(memberId) }
+        verify(exactly = 1) { memberQueryAdapter.findWithFetch(memberId) }
 
     }
 
