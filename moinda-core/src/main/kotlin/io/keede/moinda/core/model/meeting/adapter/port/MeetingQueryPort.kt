@@ -3,12 +3,13 @@ package io.keede.moinda.core.model.meeting.adapter.port
 import com.querydsl.jpa.impl.JPAQueryFactory
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
+import io.keede.moinda.core.model.meeting.entity.MeetingProjection
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity.meetingJpaEntity
+import io.keede.moinda.core.model.meeting.entity.QMeetingProjection
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 import org.springframework.stereotype.Service
 
@@ -24,6 +25,7 @@ internal class MeetingQueryPort(
     override fun findById(meetingId: Long): MeetingJpaEntity {
         return jpaQueryFactory
             .selectFrom(meetingJpaEntity)
+            .leftJoin(meetingJpaEntity.members).fetchJoin()
             .where(
                 meetingJpaEntity.id.eq(meetingId)
                     .and(meetingJpaEntity.deleteStatus.isFalse)
@@ -31,6 +33,7 @@ internal class MeetingQueryPort(
             .fetchOne() ?: throw RuntimeException("존재하지 않는 모임입니다.")
     }
 
+    // TODO : 페이징처리용 목록조회를 사용하고 있어 미사용 중이다.
     override fun findMeetings(): List<MeetingJpaEntity> {
         return jpaQueryFactory
             .selectFrom(meetingJpaEntity)
@@ -38,9 +41,22 @@ internal class MeetingQueryPort(
             .fetch()
     }
 
-    override fun findMeetingByPaging(pageable: Pageable): Page<MeetingJpaEntity> {
+    override fun findMeetingByPaging(pageable: Pageable): Page<MeetingProjection> {
         val entities = jpaQueryFactory
-            .selectFrom(meetingJpaEntity)
+            .select(
+                QMeetingProjection(
+                    meetingJpaEntity.id,
+                    meetingJpaEntity.name,
+                    meetingJpaEntity.location.primaryAddress,
+                    meetingJpaEntity.location.placeName,
+                    meetingJpaEntity.description,
+                    meetingJpaEntity.capacity,
+                    meetingJpaEntity.startAt.stringValue(),
+                    meetingJpaEntity.endAt.stringValue(),
+                    meetingJpaEntity.members.size(),
+                )
+            )
+            .from(meetingJpaEntity)
             .where(
                 meetingJpaEntity.deleteStatus.isFalse
             )

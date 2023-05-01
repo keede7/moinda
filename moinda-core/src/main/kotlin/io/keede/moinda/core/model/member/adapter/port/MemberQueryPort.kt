@@ -20,7 +20,6 @@ internal class MemberQueryPort(
     override fun findById(memberId: Long): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
-//            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
             .where(
                 memberJpaEntity.id.eq(memberId)
                     .and(memberJpaEntity.deleteStatus.isFalse)
@@ -44,7 +43,6 @@ internal class MemberQueryPort(
     override fun findByEmail(email: String): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
-//            .leftJoin(memberJpaEntity.groupEntity).fetchJoin()
             .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
             .where(
                 memberJpaEntity.email.eq(email)
@@ -68,7 +66,7 @@ internal class MemberQueryPort(
             }
     }
 
-    // 특정 모임에 참여하고 있는 참여자들을 조회할 때 사용한다.
+    // 특정 모임에 참여하고 있는 참여자들 목록 조회할 때 사용한다. (상세 모임 조회 하단)
     override fun findParticipateInMeetMembers(meetingId: Long): List<MemberJpaEntity> {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
