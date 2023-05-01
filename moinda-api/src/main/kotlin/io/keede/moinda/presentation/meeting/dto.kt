@@ -5,12 +5,10 @@ import io.keede.moinda.common.PageResponse
 import io.keede.moinda.common.meeting.CreateMeeting
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.mapper.Paginator
-import io.keede.moinda.util.toFullPattern
 import io.keede.moinda.util.toResponseDtoList
 import java.time.LocalDateTime
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
-import javax.validation.constraints.Positive
 
 /**
  * @author keede
@@ -59,6 +57,7 @@ data class MeetingResponseDto(
     val capacity: Int,
     val startAt: String,
     val endAt: String,
+    val numOfParticipants: Int,
 )
 
 internal fun CreateMeetingDto.toDomain() = CreateMeeting(
@@ -78,8 +77,9 @@ internal fun Meeting.toMeetingResponseDto() = MeetingResponseDto(
     placeName,
     description,
     capacity,
-    startAt.toFullPattern(),
-    endAt.toFullPattern(),
+    startAt,
+    endAt,
+    numOfParticipants,
 )
 
 internal fun Paginator<Meeting>.toPageResponse() = PageResponse<MeetingResponseDto>(

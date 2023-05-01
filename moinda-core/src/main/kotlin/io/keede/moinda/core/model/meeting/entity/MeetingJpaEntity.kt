@@ -1,13 +1,12 @@
 package io.keede.moinda.core.model.meeting.entity
 
 import io.keede.moinda.core.config.BaseEntity
+import io.keede.moinda.core.model.member.entity.MemberJpaEntity
+import org.hibernate.annotations.BatchSize
 import org.hibernate.annotations.Comment
 import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
-import javax.persistence.Column
-import javax.persistence.Embedded
-import javax.persistence.Entity
-import javax.persistence.Table
+import javax.persistence.*
 
 /**
  * @author keede
@@ -42,6 +41,10 @@ class MeetingJpaEntity(
     var endAt: LocalDateTime,
 
 ) : BaseEntity() {
+
+    // TODO : 모임 참여자 수를 구하기 위해서 사용, 다른 방법이 있다면 다른 것을 사용.
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "meetingJpaEntity")
+    val members : Set<MemberJpaEntity> = HashSet()
 
     override fun prePersist() {
         super.prePersist()

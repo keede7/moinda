@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.meeting.service
 
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
-import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
+import io.keede.moinda.core.model.meeting.entity.MeetingProjection
 import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
@@ -39,7 +39,7 @@ internal class MeetingQuery(
 
     // 모임의 전체 목록을 표시할떄 사용한다. ( 페이징 처리 )
     override fun getMeetings(pageQuery: MeetingQueryUseCase.PageQuery) : Paginator<Meeting> {
-        val entitiesByPaging: Page<MeetingJpaEntity> = meetingQueryAdapter.findMeetingByPaging(pageQuery.ofPageable())
+        val entitiesByPaging: Page<MeetingProjection> = meetingQueryAdapter.findMeetingByPaging(pageQuery.ofPageable())
 
 //        val paginator: Paginator<Meeting> = PaginatedDomain(findMeetingByPaging, { Meeting(it) } )
         // 보통 인자로 받을 때는 (..) 안에 선언하는데 조금 특이하다. Kotlin의 고유 문법인듯하다.

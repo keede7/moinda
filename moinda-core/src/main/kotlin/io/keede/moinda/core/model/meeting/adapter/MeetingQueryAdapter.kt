@@ -1,6 +1,7 @@
 package io.keede.moinda.core.model.meeting.adapter
 
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
+import io.keede.moinda.core.model.meeting.entity.MeetingProjection
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -14,5 +15,5 @@ interface MeetingQueryAdapter {
 
     fun findMeetings() : List<MeetingJpaEntity>
 
-    fun findMeetingByPaging(pageable: Pageable) : Page<MeetingJpaEntity>
+    fun findMeetingByPaging(pageable: Pageable) : Page<MeetingProjection>
 }
