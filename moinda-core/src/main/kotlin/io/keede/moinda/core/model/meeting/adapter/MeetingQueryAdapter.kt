@@ -13,7 +13,5 @@ interface MeetingQueryAdapter {
 
     fun findById(meetingId: Long) : MeetingJpaEntity
 
-    fun findMeetings() : List<MeetingJpaEntity>
-
     fun findMeetingByPaging(pageable: Pageable) : Page<MeetingProjection>
 }

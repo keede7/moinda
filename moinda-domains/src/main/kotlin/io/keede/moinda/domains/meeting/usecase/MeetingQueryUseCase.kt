@@ -14,8 +14,6 @@ interface MeetingQueryUseCase {
 
     fun getById(query: Query): Meeting
 
-    fun getMeetings(): List<Meeting>
-
     fun getMeetings(pageQuery: PageQuery): Paginator<Meeting>
 
     fun getInParticipatingMeetingsByMemberId(memberId: Long): List<Meeting>

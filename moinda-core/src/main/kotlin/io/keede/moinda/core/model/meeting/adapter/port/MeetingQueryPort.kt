@@ -33,14 +33,6 @@ internal class MeetingQueryPort(
             .fetchOne() ?: throw RuntimeException("존재하지 않는 모임입니다.")
     }
 
-    // TODO : 페이징처리용 목록조회를 사용하고 있어 미사용 중이다.
-    override fun findMeetings(): List<MeetingJpaEntity> {
-        return jpaQueryFactory
-            .selectFrom(meetingJpaEntity)
-            .where(meetingJpaEntity.deleteStatus.isFalse)
-            .fetch()
-    }
-
     override fun findMeetingByPaging(pageable: Pageable): Page<MeetingProjection> {
         val entities = jpaQueryFactory
             .select(

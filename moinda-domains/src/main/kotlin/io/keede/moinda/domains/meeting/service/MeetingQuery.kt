@@ -28,15 +28,6 @@ internal class MeetingQuery(
         return Meeting(meetingJpaEntity)
     }
 
-    // 페이징 처리 없이 모임의 전체 목록을 표시한다.
-    override fun getMeetings(): List<Meeting> {
-        val entities = meetingQueryAdapter.findMeetings()
-
-        return entities
-            .map { Meeting(it) }
-            .toList()
-    }
-
     // 모임의 전체 목록을 표시할떄 사용한다. ( 페이징 처리 )
     override fun getMeetings(pageQuery: MeetingQueryUseCase.PageQuery) : Paginator<Meeting> {
         val entitiesByPaging: Page<MeetingProjection> = meetingQueryAdapter.findMeetingByPaging(pageQuery.ofPageable())

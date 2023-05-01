@@ -104,25 +104,6 @@ internal class MeetingRestControllerTest : BaseApi() {
     }
 
     @Test
-    fun 전체_모임_조회를_성공한다() {
-
-        // Given
-        every { meetingQueryUseCase.getMeetings() } returns mockk(relaxed = true)
-
-        // When
-        val perform = super.mockMvc
-            .perform(
-                get(UriMaker.MEETING_API)
-                    .session(super.session)
-                    .cookie(super.cookie)
-            )
-
-        // Then
-        perform
-            .andExpect(status().is2xxSuccessful)
-    }
-
-    @Test
     fun 페이징된_전체_모임_조회를_성공한다() {
 
         // Given

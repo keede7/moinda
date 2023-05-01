@@ -10,7 +10,6 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.data.domain.Pageable
 
 @UseCaseTest
 internal class MeetingQueryTest {
@@ -41,17 +40,6 @@ internal class MeetingQueryTest {
         this.sut.getById(query)
 
         verify(exactly = 1) { meetingQueryAdapter.findById(query.meetingId) }
-
-    }
-
-    @Test
-    fun 전체_모임_조회를_성공한다() {
-
-        every { meetingQueryAdapter.findMeetings() } returns mockk(relaxed = true)
-
-        this.sut.getMeetings()
-
-        verify(exactly = 1) { meetingQueryAdapter.findMeetings() }
 
     }
 
