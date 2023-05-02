@@ -52,13 +52,13 @@
                         <form id="contactForm" data-sb-form-api-token="API_TOKEN">
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="name" type="text"  data-sb-validations="required,email" />
+                                <input class="form-control" id="name" type="text" />
                                 <label for="name">모임명</label>
                             </div>
 
                             <div class="d-flex">
                                 <div class="form-floating mb-3" style="flex: 0.8;">
-                                    <input class="form-control" id="primaryAddress" type="email" data-sb-validations="required" />
+                                    <input class="form-control" id="primaryAddress" type="text" readonly />
                                     <label for="primaryAddress">기본주소</label>
                                 </div>
                                 <button class="btn btn-primary"
@@ -76,34 +76,44 @@
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="placeName" type="text" data-sb-validations="required,email,name" />
+                                <input class="form-control" id="placeName" type="text" />
                                 <label for="placeName">장소명</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="description" type="text" data-sb-validations="required,email" />
+                                <input class="form-control" id="description" type="text" />
                                 <label for="description">설명</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="capacity" type="text"  data-sb-validations="required,email" />
+                                <input class="form-control" id="capacity" type="number" />
                                 <label for="capacity">최대인원</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="startAt" type="text" data-sb-validations="required,email" value="2022-01-01 12:50" />
-                                <label for="startAt">시작시간</label>
+                                <input class="form-control" id="startDate" type="date" />
+                                <input class="form-control" id="startTime" type="time" />
+                                <label for="startDate">시작시간</label>
                             </div>
 
                             <div class="form-floating mb-3">
-                                <input class="form-control" id="endAt" type="text" data-sb-validations="required,email" value="2022-01-01 10:50" />
-                                <label for="endAt">종료시간</label>
+                                <input class="form-control" id="endDate" type="date" />
+                                <input class="form-control" id="endTime" type="time" />
+                                <label for="endDate">종료시간</label>
                             </div>
 
                             <!--  두 컴포넌트를 가로로 배치하고 비율만큼의 박스를 가진다. -->
-                            <div class="d-flex mb-3" >
-                                <button class="btn btn-primary btn-xl" style="flex: 0.8; margin-right: 3px;" id="create" type="button">만들어요</button>
-                                <button class="btn btn-primary btn-xl" style="flex: 0.8;" id="cancel" type="button">만들지않아요</button>
+                            <div class="d-flex mb-3">
+                                <button class="btn btn-primary btn-xl"
+                                        style="flex: 0.8; margin-right: 3px;"
+                                        id="create" type="button">
+                                    만들어요
+                                </button>
+                                <button class="btn btn-primary btn-xl"
+                                        style="flex: 0.8;"
+                                        id="cancel" type="button">
+                                    만들지않아요
+                                </button>
                             </div>
                         </form>
                     </div>
@@ -122,8 +132,11 @@
                 const placeName = document.querySelector("input[id='placeName']")
                 const description = document.querySelector("input[id='description']")
                 const capacity = document.querySelector("input[id='capacity']")
-                const startAt = document.querySelector("input[id='startAt']")
-                const endAt = document.querySelector("input[id='endAt']")
+
+                const startDate = document.querySelector("input[id='startDate']")
+                const startTime = document.querySelector("input[id='startTime']")
+                const endDate = document.querySelector("input[id='endDate']")
+                const endTime = document.querySelector("input[id='endTime']")
 
                 createButton.addEventListener("click", createMeeting)
                 cancelButton.addEventListener("click", () => {
@@ -132,14 +145,15 @@
 
                 function createMeeting() {
 
+                    // TODO : 각 Value Validation
                     const createMeetingRequest = {
                         "name" : name.value,
                         "primaryAddress" : primaryAddress.value,
                         "placeName" : placeName.value,
                         "description" : description.value,
                         "capacity" : capacity.value,
-                        "startAt" : startAt.value,
-                        "endAt" : endAt.value,
+                        "startAt" : `${startDate.value} ${startTime.value}`,
+                        "endAt" : `${endDate.value} ${endTime.value}`,
                     }
 
                     callRestApi(createEvent, "POST", "/api/meeting", createMeetingRequest);
