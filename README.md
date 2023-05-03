@@ -1,10 +1,7 @@
 # Moinda Kotlin Ver.
 
 ### 작업 사항
-- [x] 멀티 모듈 설정
-- [x] 개발 환경 분리
-- [x] Docker 환경 설정
-- [x] 도메인 계층 분리
+- [Moinda 프로젝트 기획정리](https://jumpy-cylinder-eb2.notion.site/Moinda-Mo-Gak-Ko-bbf965c56d094a9aabe44810025c1fc9)
 
 ### 멀티 모듈 설정
 - **api** : `Presentation` 모듈
