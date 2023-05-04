@@ -55,6 +55,7 @@ class MemberJpaEntity(
     var meetingJpaEntity: MeetingJpaEntity? = null
 
     fun participate(meetingJpaEntity: MeetingJpaEntity) {
+        this.isParticipateInMeeting()
         this.meetingJpaEntity = meetingJpaEntity
     }
 
@@ -65,6 +66,12 @@ class MemberJpaEntity(
     fun isMatchPassword(password: String) {
         if (this.password != password) {
             throw RuntimeException("패스워드가 일치하지 않습니다.")
+        }
+    }
+
+    private fun isParticipateInMeeting() {
+        if(this.meetingJpaEntity != null) {
+            throw RuntimeException("1개의 모임만 참여할 수 있습니다.")
         }
     }
 
