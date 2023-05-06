@@ -68,6 +68,7 @@
 
                     const participateMeetingRequestDto = {
                         "meetingId": meetingId,
+                        // TODO : 버튼 display 옵션을 변경하면서 같이 수정 한다.
                         "memberId": getSession(),
                     }
 
@@ -91,7 +92,7 @@
                                 alert("모임 참가에 성공했습니다.")
                                 window.location.href = `/meeting-detail/${meetingId}`
                             } else {
-                                alert("모임 참가에 실패했습니다.");
+                                alert(httpRequest.response);
                                 return;
                             }
                         }

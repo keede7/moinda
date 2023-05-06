@@ -69,6 +69,11 @@ class MemberJpaEntity(
         }
     }
 
+    // TODO : 참여중인 아이디 하나를 제공한다. 2차 개발시 여러값으로 변환 될 수 있음,
+    fun participatingMeetingId() : Long? {
+        return this.meetingJpaEntity?.id
+    }
+
     private fun isParticipateInMeeting() {
         if(this.meetingJpaEntity != null) {
             throw RuntimeException("1개의 모임만 참여할 수 있습니다.")
@@ -76,6 +81,6 @@ class MemberJpaEntity(
     }
 
     override fun toString(): String {
-        return "MemberJpaEntity: id: $id, name: $name"
+        return "MemberJpaEntity: id: $id, name: $name , meetingId: ${participatingMeetingId()}"
     }
 }
