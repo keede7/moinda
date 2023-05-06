@@ -41,6 +41,8 @@
                     href = href.substring(href.indexOf("?"))
                 }
 
+                const session = [[${session.session}]]
+
                 const meetingsDiv = document.querySelector(".meetings")
 
                 fetch(`/api/meeting/paginated${href}`)
@@ -48,14 +50,16 @@
                     .then(meeting => {
                         let meetings = meeting.domains
 
+                        // 전체 모임 목록 생성
                         makeMeetingsComponent(meetingsDiv, meetings)
-
+                        // 사용자에 따라 버튼을 활성화
+                        activeRenderingButton()
                         // 모임 참가 이벤트 생성
                         makeParticipateEvent()
-
+                        // 모임 참여 취소 이벤트 생성
+                        makeLeaveButtonEvent()
                         // 모임 상세조회 이벤트 생성
                         makeToGetMeetingDetailEvent()
-
                         // 페이지 버튼 생성
                         makePagination(meeting)
                     })
@@ -64,27 +68,133 @@
                         alert(error)
                     });
 
+                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
+
+                // 전체 모임 목록 생성
+                const makeMeetingsComponent = (component, meetings) => {
+
+                    console.log(meetings)
+
+                    meetings.forEach(meeting => {
+
+                        const startAt = new Date(meeting.startAt)
+                        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+                        const dayOfWeek = daysOfWeek[startAt.getDay()];
+
+                        const formattedStartAt =
+                            `${startAt.getMonth() + 1}월 ${startAt.getDate()}일 (${dayOfWeek})
+                            ${startAt.getHours()}:${startAt.getMinutes() < 10 ? '0' + startAt.getMinutes() : startAt.getMinutes()}`;
+
+                        const body = `
+                                <div name="meeting"
+                                style=" display: flex;
+                                padding: 5px 5px 10px 5px;
+                                align-items: center;
+                                font-size: smaller;">
+                                    <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
+                                        ${makeBody("모임 이름", meeting.name)}
+                                        ${makeBody("주소", meeting.primaryAddress)}
+                                        ${makeBody("장소명", meeting.placeName)}
+                                        ${makeBody("날짜", formattedStartAt)}
+                                        <div class="text-white font-weight-bold"
+                                        style="opacity: 0.8;"> 참여 인원 ( ${meeting.numOfParticipants} / ${meeting.capacity} )  </div>
+                                    </div>
+                                    <button class="btn btn-primary btn-xl participate"
+                                    style="height: 50px;
+                                            padding: 10px 36px;
+                                            display: none;"
+                                    type="button" name='participate'> 참가하기 </button>
+                                    <button class="btn btn-primary btn-xl leave"
+                                    style="height: 50px;
+                                            padding: 10px 36px;
+                                            display: none;"
+                                    type="button" name="leave"> 참여취소 </button>
+                                    <!-- TODO : 화면의 빈 부분을 채우기 위해 선언-->
+                                    <button class="btn btn-primary btn-xl leave"
+                                    style="height: 50px;
+                                            padding: 10px 36px;
+                                            display: none;"
+                                    type="button" name="look"> 보기 </button>
+                                </div>
+                             `
+
+                        component.innerHTML += body
+                    })
+                }
+                // 각 버튼 활성화 여부 및 표시 여부
+                const activeRenderingButton = () => {
+
+                    const meetings = document.querySelectorAll("div[name='meeting']")
+                    const lookButtons = document.querySelectorAll('button[name="look"]');
+                    // 로그인을 하지 않았다면 나머지 버튼을 숨겨놓는다.
+                    if (!session) {
+                        renderingLookButtons(lookButtons)
+                        return;
+                    }
+
+                    fetch(`/api/member/${session.memberId}`)
+                        .then(response => response.json())
+                        .then(member => {
+                            console.log(member)
+
+                            let participatingMeetingId = member.participatingMeetingId;
+
+                            meetings.forEach(meeting => {
+
+                                const meetingId = meeting.querySelector('div[name="meetingInfo"]')
+                                    .getAttribute(`value`)
+
+                                const participateBtn = meeting.querySelector(".participate")
+                                const leaveBtn = meeting.querySelector(".leave")
+
+                                if (participatingMeetingId === parseInt(meetingId)) {
+                                    displayButton(leaveBtn)
+                                } else {
+                                    displayButton(participateBtn)
+                                }
+                            })
+                        })
+                }
+
+                const renderingLookButtons = (lookButtons) => {
+                    lookButtons.forEach(button => {
+                        displayButton(button)
+                        button.addEventListener(
+                            "click",
+                            () => {
+                                const meetingId = button.closest('div[name="meeting"]')
+                                    .querySelector('div[name="meetingInfo"]')
+                                    .getAttribute(`value`)
+
+                                console.log(meetingId)
+                                location.href = `/meeting-detail/${meetingId}`
+                            }
+                        )
+                    })
+                }
+                // 참여 이벤트
                 const participate = meetingId => {
 
                     const participateMeetingRequestDto = {
                         "meetingId": meetingId,
-                        // TODO : 버튼 display 옵션을 변경하면서 같이 수정 한다.
-                        "memberId": getSession(),
+                        "memberId": session.memberId,
                     }
 
                     callRestApi(() => participateEvent(meetingId), "POST", "/api/meeting/participate", participateMeetingRequestDto)
                 }
+                // 참여 이벤트 적용
+                const makeParticipateEvent = () => {
+                    const participateButton = document.querySelectorAll('button[name="participate"]');
 
-                const getSession = () => {
-                    const session = [[${session.session}]]
-                    // TODO : 변경필요
-                    if(!session) {
-                        return 1;
-                    }
+                    participateButton.forEach(button => {
+                        const meetingId = button.closest('div[name="meeting"]')
+                            .querySelector('div[name="meetingInfo"]')
+                            .getAttribute(`value`)
 
-                    return session.memberId
+                        button.addEventListener("click", () => participate(meetingId))
+                    })
                 }
-
+                // 참여 이벤트 결과처리
                 function participateEvent(meetingId) {
                     try {
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
@@ -101,59 +211,7 @@
                     }
                 }
 
-                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
-
-                const makeMeetingsComponent = (component, meetings) => {
-
-                    console.log(meetings)
-
-                    meetings.forEach(meeting => {
-
-                        const startAt = new Date(meeting.startAt)
-                        const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
-                        const dayOfWeek = daysOfWeek[startAt.getDay()];
-
-                        const formattedStartAt =
-                            `${startAt.getMonth() + 1}월 ${startAt.getDate()}일 (${dayOfWeek})
-                            ${startAt.getHours()}:${startAt.getMinutes() < 10 ? '0' + startAt.getMinutes(): startAt.getMinutes()}`;
-
-                        const body = `
-                                <div name="meeting"
-                                style=" display: flex;
-                                padding: 5px 5px 10px 5px;
-                                align-items: center;
-                                font-size: smaller;
-                                ">
-                                    <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">
-                                        ${makeBody("모임 이름", meeting.name)}
-                                        ${makeBody("주소", meeting.primaryAddress)}
-                                        ${makeBody("장소명", meeting.placeName)}
-                                        ${makeBody("날짜", formattedStartAt)}
-                                        <div class="text-white font-weight-bold"
-                                        style="opacity: 0.8;"> 참여 인원 ( ${meeting.numOfParticipants} / ${meeting.capacity} )  </div>
-                                    </div>
-                                    <button class="btn btn-primary btn-xl"
-                                    style="height: 50px; padding: 10px 36px 10px 36px;"
-                                    type="button" name='participate'> 참가하기 </button>
-                                </div>
-                             `
-
-                        component.innerHTML += body
-                    })
-                }
-
-                const makeParticipateEvent = () => {
-                    const participateButton = document.querySelectorAll('button[name="participate"]');
-
-                    participateButton.forEach(button => {
-                        const meetingId = button.closest('div[name="meeting"]')
-                            .querySelector('div[name="meetingInfo"]')
-                            .getAttribute(`value`)
-
-                        button.addEventListener("click", () => participate(meetingId))
-                    })
-                }
-
+                // 상세 보기 이벤트
                 const makeToGetMeetingDetailEvent = () => {
                     const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
 
@@ -167,7 +225,41 @@
                             )
                         )
                 }
+                // 참여 취소 이벤트
+                const leave = () => {
+                    const leaveRequestDto = {
+                        "memberId": session.memberId,
+                    }
 
+                    callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
+                }
+                // 참여 취소 이벤트 적용
+                const makeLeaveButtonEvent = () => {
+
+                    const leaveButtons = document.querySelectorAll('button[name="leave"]');
+
+                    leaveButtons
+                        .forEach(leaveButton => {
+                            leaveButton.addEventListener("click", leave)
+                        })
+                }
+                // 참여 취소 이벤트 결과 처리
+                function leaveEvent() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("참여 취소를 성공했습니다.")
+                                window.location.reload()
+                            } else {
+                                alert(httpRequest.response);
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
+                    }
+                }
+                // 페이징 처리
                 const makePagination = (meeting) => {
                     const pagination = document.querySelector(".pagination")
                     let paginationInnerHtml = ""

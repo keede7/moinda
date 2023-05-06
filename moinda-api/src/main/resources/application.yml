@@ -10,3 +10,10 @@ spring:
   # 수동 & 자동 빈 이름 충돌 방지 설정
   main:
     allow-bean-definition-overriding: true
+
+# remove to jSession
+server:
+  servlet:
+    session:
+      timeout: 30m
+      tracking-modes: cookie

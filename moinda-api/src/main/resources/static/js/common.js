@@ -8,3 +8,7 @@ function callRestApi(e, type, url, data) {
     httpRequest.setRequestHeader("Content-Type", "application/json")
     httpRequest.send(jsonParsedData);
 }
+
+const displayButton = (button) => {
+    button.style.display = "block"
+}
