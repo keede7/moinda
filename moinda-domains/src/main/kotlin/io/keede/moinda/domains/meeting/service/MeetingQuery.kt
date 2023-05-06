@@ -40,7 +40,7 @@ internal class MeetingQuery(
     }
 
     // 내 모임을 조회할 떄 사용한다
-    override fun getInParticipatingMeetingsByMemberId(memberId: Long): List<Meeting> {
+    override fun getInParticipatingMeetingsByMemberId(memberId: Long?): List<Meeting> {
         val memberJpaEntity = memberQueryAdapter.findWithFetch(memberId)
         val meetingJpaEntity = memberJpaEntity.meetingJpaEntity
 

@@ -17,7 +17,7 @@ internal class MemberQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
 ) : MemberQueryAdapter, QuerydslRepositorySupport(QMemberJpaEntity::class.java) {
 
-    override fun findById(memberId: Long): MemberJpaEntity {
+    override fun findById(memberId: Long?): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
             .where(
@@ -28,7 +28,7 @@ internal class MemberQueryPort(
     }
 
     // 연관관계 정보를 가져와서 사용할떄 쓴다.
-    override fun findWithFetch(memberId: Long): MemberJpaEntity {
+    override fun findWithFetch(memberId: Long?): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
             .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()

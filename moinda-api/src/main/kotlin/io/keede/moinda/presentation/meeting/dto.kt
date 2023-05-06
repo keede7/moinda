@@ -49,7 +49,7 @@ data class PaginatedMeetingRequestDto(
 )
 
 data class MeetingResponseDto(
-    val meetingId: Long,
+    val meetingId: Long?,
     val name: String,
     val primaryAddress: String,
     val placeName: String,

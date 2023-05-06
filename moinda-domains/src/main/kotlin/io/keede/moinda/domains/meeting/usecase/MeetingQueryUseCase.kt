@@ -16,7 +16,7 @@ interface MeetingQueryUseCase {
 
     fun getMeetings(pageQuery: PageQuery): Paginator<Meeting>
 
-    fun getInParticipatingMeetingsByMemberId(memberId: Long): List<Meeting>
+    fun getInParticipatingMeetingsByMemberId(memberId: Long?): List<Meeting>
 
     data class Query(
         val meetingId: Long

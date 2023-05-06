@@ -9,7 +9,7 @@ import io.keede.moinda.core.model.group.entity.GroupJpaEntity
 data class Group(
     val entity: GroupJpaEntity
 ) {
-    val groupId: Long = entity.id
+    val groupId: Long? = entity.id
     val name: String = entity.name
     val description: String? = entity.description
     val capacity: Int = entity.capacity

@@ -7,7 +7,7 @@ import io.keede.moinda.core.model.member.entity.MemberJpaEntity
  */
 interface MemberQueryAdapter {
 
-    fun findById(memberId: Long) : MemberJpaEntity
+    fun findById(memberId: Long?) : MemberJpaEntity
 
     fun findByEmail(email: String) : MemberJpaEntity
 
@@ -15,5 +15,5 @@ interface MemberQueryAdapter {
 
     fun findParticipateInMeetMembers(meetingId: Long) : List<MemberJpaEntity>
 
-    fun findWithFetch(memberId: Long) : MemberJpaEntity
+    fun findWithFetch(memberId: Long?) : MemberJpaEntity
 }

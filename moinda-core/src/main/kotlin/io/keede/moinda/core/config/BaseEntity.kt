@@ -8,7 +8,7 @@ abstract class BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long = 0
+    var id: Long? = null
 
     @Column(name = "is_delete", nullable = false)
     var deleteStatus : Boolean = false

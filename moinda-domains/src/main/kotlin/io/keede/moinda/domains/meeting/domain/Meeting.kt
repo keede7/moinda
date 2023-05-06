@@ -9,7 +9,7 @@ import io.keede.moinda.util.toFullPattern
  * Created on 2023-04-18
  */
 class Meeting(
-    val meetingId: Long,
+    val meetingId: Long?,
     val name: String,
     val primaryAddress: String,
     val placeName : String,

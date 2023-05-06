@@ -25,7 +25,7 @@ data class SignUpMemberDto(
 )
 
 data class MemberResponseDto(
-    val memberId: Long,
+    val memberId: Long?,
     val name: String,
     val email: String,
     val introduce: String?

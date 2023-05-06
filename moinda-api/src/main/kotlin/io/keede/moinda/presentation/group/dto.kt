@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull
  * Created on 2023-03-25
  */
 data class GroupResponseDto(
-    val groupId: Long,
+    val groupId: Long?,
     val name: String,
     val description: String?,
     val capacity: Int
