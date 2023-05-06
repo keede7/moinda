@@ -201,7 +201,7 @@
                         if (httpRequest.readyState === XMLHttpRequest.DONE) {
                             if (httpRequest.status === 200) {
                                 alert("모임 참가에 성공했습니다.")
-                                window.location.href = `/meeting-detail/${meetingId}`
+                                window.location.href = `/meeting-detail/${meetingId}${href}`
                             } else {
                                 alert(httpRequest.response);
                                 return;
@@ -221,7 +221,7 @@
                                 "click",
                                 () => {
                                     const meetingId = element.getAttribute("value")
-                                    location.href = `/meeting-detail/${meetingId}`
+                                    location.href = `/meeting-detail/${meetingId}${href}`
                                 }
                             )
                         )

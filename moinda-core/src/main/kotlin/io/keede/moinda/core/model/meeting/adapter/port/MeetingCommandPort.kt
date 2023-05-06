@@ -37,9 +37,10 @@ internal class MeetingCommandPort(
         return meetingJpaRepository.save(meetingJpaEntity)
     }
 
+    // TODO : 추후 삭제
     @PostConstruct
     fun init() {
-        for (index in 1..10) {
+        for (index in 1..15) {
             val entity = MeetingJpaEntity(
                 "오늘의 모임 $index",
                 Location(
