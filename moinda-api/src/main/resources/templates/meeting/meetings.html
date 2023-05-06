@@ -68,7 +68,10 @@
                         alert(error)
                     });
 
-                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
+                const makeBody = (text, ...data) =>
+                    `<div class="text-white font-weight-bold active-ellipisis-max-width175px">
+                        ${text} : ${data.join(" ")}
+                    </div>`
 
                 // 전체 모임 목록 생성
                 const makeMeetingsComponent = (component, meetings) => {
@@ -88,7 +91,7 @@
                         const body = `
                                 <div name="meeting"
                                 style=" display: flex;
-                                padding: 5px 5px 10px 5px;
+                                padding: 10px 0px;
                                 align-items: center;
                                 font-size: smaller;">
                                     <div style="flex: 1" name="meetingInfo" value="${meeting.meetingId}">

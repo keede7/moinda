@@ -10,5 +10,6 @@ function callRestApi(e, type, url, data) {
 }
 
 const displayButton = (button) => {
-    button.style.display = "block"
+    // block을 할 경우 상단의 text-align: center; 가 깨진다.
+    button.style.display = ""
 }

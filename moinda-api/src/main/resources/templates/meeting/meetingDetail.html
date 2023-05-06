@@ -60,11 +60,13 @@
                         // 응답 데이터를 처리하는 코드 작성
                         const body = `
                         <div name="meetingBody"
-                                style=" display: flex;
-                                padding: 5px 5px 10px 5px;
+                                style="
+                                /*display: flex;*/
+                                padding: 10px 5px;
                                 align-items: center;
+                                font-size: smaller;
                                 ">
-                                <div style="flex: 1; margin: 10px 0px 10px 10px" id="meeting" value="${meeting.meetingId}">
+                                <div style="margin: 10px 0px;" id="meeting" value="${meeting.meetingId}">
                                     ${makeBody("모임 이름", meeting.name)}
                                     ${makeBody("주소", meeting.primaryAddress)}
                                     ${makeBody("장소명", meeting.placeName)}
@@ -72,16 +74,18 @@
                                     <div class="text-white font-weight-bold"
                                         style="opacity: 0.8;"> 참여 인원 ( ${meeting.numOfParticipants} / ${meeting.capacity} )  </div>
                                 </div>
-                                <button class="btn btn-primary btn-xl"
-                                            style="height: 50px;
-                                                    padding: 10px 36px 10px 36px;
-                                                    display: none;"
-                                            type="button" id='participate'> 참가하기 </button>
-                                <button class="btn btn-primary btn-xl"
-                                            style="height: 50px;
-                                                    padding: 10px 36px 10px 36px;
-                                                    display: none;"
-                                            type="button" id='leave'> 참가취소 </button>
+                                <div style="text-align: center;">
+                                    <button class="btn btn-primary btn-xl"
+                                                style="height: 50px;
+                                                        padding: 10px 36px 10px 36px;
+                                                        display: none;"
+                                                type="button" id='participate'> 참가하기 </button>
+                                    <button class="btn btn-primary btn-xl"
+                                                style="height: 50px;
+                                                        padding: 10px 36px 10px 36px;
+                                                        display: none;"
+                                                type="button" id='leave'> 참가취소 </button>
+                                </div>
                         </div>
                          `
                         meetingDetailDiv.innerHTML += body
@@ -95,10 +99,11 @@
                     })
                     .catch(error => console.error(error));
 
-                // TODO: 현재 해당 모임에 참여하고 있는 여부에 따라서 참가 또는 참여취소 버튼을 보이지 않게 선언한다.
-
-                // Function
-                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
+                const makeBody = (text, ...data) =>
+                    // 플렉스하게 바꿀꺼면  style 제거
+                    `<div class="text-white font-weight-bold active-ellipisis-max-width100vh">
+                        ${text} : ${data.join(" ")}
+                    </div>`
                 // 참여자 목록 생성
                 const makeParticipants = (component, meetingId) => {
 
@@ -136,8 +141,13 @@
                                         </div>
                                         <div style="padding: 3px;" name="userDetail">
                                             <!-- TODO : 본인일 경우 표시를 할 수 도 있다.-->
-                                            <div class="text-white font-weight-bold">${member.name}</div>
-                                            <div class="text-white font-weight-bold" style="opacity: 0.7;">${member.introduce}</div>
+                                            <div class="text-white font-weight-bold active-ellipisis-max-width30vh">
+                                                ${member.name}
+                                            </div>
+                                            <div class="text-white font-weight-bold active-ellipisis-max-width30vh"
+                                                    style="opacity: 0.7;">
+                                                ${member.introduce}
+                                            </div>
                                         </div>
                                     </div>`
 
