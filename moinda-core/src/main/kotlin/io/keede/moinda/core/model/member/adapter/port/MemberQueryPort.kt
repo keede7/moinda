@@ -20,6 +20,7 @@ internal class MemberQueryPort(
     override fun findById(memberId: Long?): MemberJpaEntity {
         return jpaQueryFactory
             .selectFrom(memberJpaEntity)
+            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
             .where(
                 memberJpaEntity.id.eq(memberId)
                     .and(memberJpaEntity.deleteStatus.isFalse)

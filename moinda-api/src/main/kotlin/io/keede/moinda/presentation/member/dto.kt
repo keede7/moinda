@@ -28,7 +28,8 @@ data class MemberResponseDto(
     val memberId: Long?,
     val name: String,
     val email: String,
-    val introduce: String?
+    val introduce: String?,
+    val participatingMeetingId: Long?,
 )
 
 data class LoginRequestDto(
@@ -51,7 +52,8 @@ internal fun Member.toMemberResponseDto() = MemberResponseDto(
     memberId,
     name,
     email,
-    introduce
+    introduce,
+    participatingMeetingId,
 )
 
 internal fun Member.toSessionResponse() = SessionResponse(

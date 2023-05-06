@@ -16,15 +16,7 @@ import javax.servlet.http.HttpServletResponse
  */
 @Controller
 class ViewController {
-    @GetMapping("/main")
-    fun main(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-    ): String {
-        createSession(request, response)
 
-        return "main"
-    }
     // TODO : 테스트 세션
     private fun createSession(
         request: HttpServletRequest,
@@ -54,10 +46,11 @@ class ViewController {
         request: HttpServletRequest,
         response: HttpServletResponse,
     ): String {
-//        createSession(request, response)
+        createSession(request, response)
 
         return "index"
     }
+
     // TODO : kakao Map Test
     @GetMapping("/maps")
     fun maps(): String = "sample/maps"
