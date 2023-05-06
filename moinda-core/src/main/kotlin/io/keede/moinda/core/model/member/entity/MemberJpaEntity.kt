@@ -81,6 +81,6 @@ class MemberJpaEntity(
     }
 
     override fun toString(): String {
-        return "MemberJpaEntity: id: $id, name: $name , meetingId: ${participatingMeetingId()}"
+        return "MemberJpaEntity: id: $id, name: $name"
     }
 }

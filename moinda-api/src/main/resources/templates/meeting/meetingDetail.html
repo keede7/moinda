@@ -85,11 +85,10 @@
                         </div>
                          `
                         meetingDetailDiv.innerHTML += body
-
                         // 사용자에 따라 버튼을 활성화
-                        activeRenderingButton(session)
+                        activeRenderingButton()
                         // 각 버튼의 이벤트 추가
-                        makeParticipateButtonEvent()
+                        makeParticipateEvent()
                         makeLeaveButtonEvent()
                         // 현재 모임의 참여자 목록 생성
                         makeParticipants(participantsDiv, meetingId)
@@ -100,96 +99,7 @@
 
                 // Function
                 const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
-
-                const activeRenderingButton = (session) => {
-
-                    const participateBtn = document.querySelector("#participate")
-                    const leaveBtn = document.querySelector("#leave")
-
-                    // 사용자가 없을때는 아무것도 보이지 않게 한다.
-                    if(!session) {
-                        return;
-                    }
-
-                    fetch(`/api/member/${session.memberId}`)
-                        .then(response => response.json())
-                        .then(member => {
-                            console.log(member)
-
-                            let participatingMeetingId = member.participatingMeetingId;
-
-                            if(participatingMeetingId === parseInt(meetingId)) {
-                                displayButton(leaveBtn)
-                            } else {
-                                displayButton(participateBtn)
-                            }
-                        })
-                }
-
-                const displayButton = (button) => {
-                    button.style.display = "block"
-                }
-
-                const makeParticipateButtonEvent = () => {
-                    const participateButton = document.querySelector("#participate")
-                    participateButton.addEventListener("click", () => participate(meetingId))
-                }
-
-                const participate = meetingId => {
-
-                    const participateMeetingRequestDto = {
-                        "meetingId": meetingId,
-                        "memberId": session.memberId,
-                    }
-
-                    callRestApi(participateEvent, "POST", "/api/meeting/participate", participateMeetingRequestDto)
-                }
-
-                function participateEvent() {
-                    try {
-                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                            if (httpRequest.status === 200) {
-                                alert("모임 참가에 성공했습니다.")
-                                window.location.reload()
-                            } else {
-                                alert(httpRequest.response);
-                                return;
-                            }
-                        }
-                    } catch (e) {
-                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
-                    }
-                }
-
-                const makeLeaveButtonEvent = () => {
-                    const leaveButton = document.querySelector("#leave")
-                    leaveButton.addEventListener("click", leave)
-                }
-
-                const leave = () => {
-                    const leaveRequestDto = {
-                        "memberId" : session.memberId,
-                    }
-
-                    callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
-                }
-
-                function leaveEvent() {
-                    try {
-                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                            if (httpRequest.status === 200) {
-                                alert("모임 참가에 성공했습니다.")
-                                window.location.reload()
-                            } else {
-                                alert(httpRequest.response);
-                                return;
-                            }
-                        }
-                    } catch (e) {
-                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
-                    }
-                }
-
+                // 참여자 목록 생성
                 const makeParticipants = (component, meetingId) => {
 
                     fetch(`/api/meeting/${meetingId}/participant`)
@@ -235,6 +145,91 @@
                             })
                         })
                         .catch(error => console.error(error));
+                }
+                // 각 버튼 활성화 여부 및 표시 여부
+                const activeRenderingButton = () => {
+
+                    const participateBtn = document.querySelector("#participate")
+                    const leaveBtn = document.querySelector("#leave")
+
+                    // 로그인을 하지 않았다면 버튼을 숨겨놓는다.
+                    if(!session) {
+                        return;
+                    }
+
+                    fetch(`/api/member/${session.memberId}`)
+                        .then(response => response.json())
+                        .then(member => {
+                            console.log(member)
+
+                            let participatingMeetingId = member.participatingMeetingId;
+
+                            if(participatingMeetingId === parseInt(meetingId)) {
+                                displayButton(leaveBtn)
+                            } else {
+                                displayButton(participateBtn)
+                            }
+                        })
+                }
+                // 참여 이벤트
+                const participate = meetingId => {
+
+                    const participateMeetingRequestDto = {
+                        "meetingId": meetingId,
+                        "memberId": session.memberId,
+                    }
+
+                    callRestApi(participateEvent, "POST", "/api/meeting/participate", participateMeetingRequestDto)
+                }
+                // 참여 이벤트 적용
+                const makeParticipateEvent = () => {
+                    const participateButton = document.querySelector("#participate")
+                    participateButton.addEventListener("click", () => participate(meetingId))
+                }
+                // 참여 이벤트 결과처리
+                function participateEvent() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("모임 참가에 성공했습니다.")
+                                window.location.reload()
+                            } else {
+                                alert(httpRequest.response);
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
+                    }
+                }
+                // 참여 취소 이벤트
+                const leave = () => {
+                    const leaveRequestDto = {
+                        "memberId" : session.memberId,
+                    }
+
+                    callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
+                }
+                // 참여 취소 이벤트 적용
+                const makeLeaveButtonEvent = () => {
+                    const leaveButton = document.querySelector("#leave")
+                    leaveButton.addEventListener("click", leave)
+                }
+                // 참여 취소 이벤트 결과 처리
+                function leaveEvent() {
+                    try {
+                        if (httpRequest.readyState === XMLHttpRequest.DONE) {
+                            if (httpRequest.status === 200) {
+                                alert("참여 취소를 성공했습니다.")
+                                window.location.reload()
+                            } else {
+                                alert(httpRequest.response);
+                                return;
+                            }
+                        }
+                    } catch (e) {
+                        alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
+                    }
                 }
             }
         </script>
