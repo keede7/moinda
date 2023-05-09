@@ -1,5 +1,6 @@
 package io.keede.moinda.core.model.chat.adapter
 
+import io.keede.moinda.common.chat.CreateMeetingChat
 import io.keede.moinda.core.model.chat.entity.MeetingChatJpaEntity
 
 /**
@@ -8,7 +9,6 @@ import io.keede.moinda.core.model.chat.entity.MeetingChatJpaEntity
  */
 interface MeetingChatCommandAdapter {
 
-    // TODO : 특정 모델을 받아서 변환하여 등록한다.
-    fun save(): MeetingChatJpaEntity
+    fun save(createMeetingChat: CreateMeetingChat): MeetingChatJpaEntity
 
 }

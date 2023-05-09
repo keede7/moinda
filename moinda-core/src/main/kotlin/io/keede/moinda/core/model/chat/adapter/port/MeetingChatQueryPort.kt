@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
  * @author keede
  * Created on 2023-05-08
  */
-class MeetingChatQueryPort(
+internal class MeetingChatQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
 ) : MeetingChatQueryAdapter, QuerydslRepositorySupport(QMeetingChatJpaEntity::class.java) {
 
