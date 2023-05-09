@@ -7,6 +7,10 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer
 
 
+/**
+ * @author keede
+ * Created on 2023-05-09
+ */
 /*
 ※ Stomp
     Stomp는 Websocket 연결 시, 메시지의 형태(텍스트 또는 바이너리)를 HTTP 통신 프로토콜과 비슷하게 가공해주는 라이브러리입니다.
