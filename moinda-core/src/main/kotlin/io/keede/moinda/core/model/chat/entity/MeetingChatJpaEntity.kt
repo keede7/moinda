@@ -12,19 +12,16 @@ import javax.persistence.*
  * Created on 2023-05-08
  */
 @Entity
-@Table(name = "meeting_chat_t",
-    indexes = [
-        Index(name = "idx__context", columnList = "context")
-    ]
-)
+@Table(name = "meeting_chat_t")
 class MeetingChatJpaEntity(
 
+    // Lob은 인덱스 불가능
     @Lob
-    @Column(name = "context", nullable = false)
+    @Column(name = "chat_context", nullable = false)
     val context : String,
 
     // nano 단위로 정렬의 기준이 될 수 있으므로,,
-    @Column(name = "write_at", nullable = false)
+    @Column(name = "chat_write_at", nullable = false)
     val writeAt: LocalDateTime,
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
