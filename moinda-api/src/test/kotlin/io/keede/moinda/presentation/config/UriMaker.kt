@@ -10,6 +10,7 @@ object UriMaker {
     const val GROUP_API = "/api/group"
     const val MEMBER_API = "/api/member"
     const val MEETING_API = "/api/meeting"
+    const val MEETING_CHAT_API = "/api/chat"
 }
 
 fun UriMaker.toGroupApiUri(vararg resources: String): String {
@@ -33,4 +34,9 @@ fun UriMaker.toMeetingApiUri(vararg resources: String): String {
 
 fun UriMaker.toMeetingApiUri(resource: Long): String {
     return "$MEETING_API/$resource"
+}
+
+fun UriMaker.toMeetingChatApiUri(vararg resources: String): String {
+    return Arrays.stream(resources)
+        .reduce(MEETING_CHAT_API) { prefix: String, resource: String -> "$prefix/$resource" }
 }
