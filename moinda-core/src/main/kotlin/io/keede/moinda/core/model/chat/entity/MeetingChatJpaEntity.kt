@@ -23,12 +23,24 @@ class MeetingChatJpaEntity(
     @Column(name = "chat_write_at", nullable = false)
     val writeAt: LocalDateTime,
 
+
+) : BaseEntity() {
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "meeting_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
-    val meetingJpaEntity: MeetingJpaEntity,
+    var meetingJpaEntity: MeetingJpaEntity? = null
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
     @JoinColumn(name = "member_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
-    val memberJpaEntity: MemberJpaEntity,
+    var memberJpaEntity: MemberJpaEntity? = null
 
-) : BaseEntity()
+    // NOTE : 최초 채팅시 해당 엔티티를 참조 시킬 때 사용
+    fun initMeeting(meetingJpaEntity: MeetingJpaEntity) {
+        this.meetingJpaEntity = meetingJpaEntity
+    }
+    // NOTE : 최초 채팅시 해당 엔티티를 참조 시킬 때 사용
+    fun initMember(memberJpaEntity: MemberJpaEntity) {
+        this.memberJpaEntity = memberJpaEntity
+    }
+
+}
