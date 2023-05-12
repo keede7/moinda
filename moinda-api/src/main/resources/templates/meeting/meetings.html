@@ -4,34 +4,8 @@
 <th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
     <th:block th:fragment="body">
 
-        <div id="chat-page"
-             style="display: none;
-             background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(/assets/img/bg-masthead.jpg);">
-            <div class="chat-container"
-                    style="margin-top: 75px;">
-                <div class="chat-header">
-                    <h2>채팅방</h2>
-                </div>
-                <div class="connecting">
-                    연결중...
-                </div>
-                <ul id="messageArea">
-
-                </ul>
-                <form id="messageForm" name="messageForm">
-                    <div class="form-group">
-                        <div class="input-group clearfix">
-                            <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
-                            <button type="submit" class="primary">보내기</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <!-- Masthead-->
         <header class="masthead" style="height: auto; min-height: 100vh;">
-            <button id="testBttn">모달창 열기</button>
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
                     <div class="col-lg-8 col-xl-6 text-center">
@@ -52,6 +26,7 @@
                 </div>
             </div>
         </header>
+
         <script th:inline="javascript">
 
             window.onload = () => {
@@ -66,13 +41,6 @@
                 }
 
                 const session = [[${session.session}]]
-
-                const testBtn = document.querySelector("#testBttn")
-
-                testBtn.addEventListener("click", () => {
-                    document.querySelector("#chat-page").style.display = "block"
-                    document.querySelector(".masthead").style.display = "none"
-                })
 
                 const meetingsDiv = document.querySelector(".meetings")
 
@@ -228,6 +196,7 @@
                         button.addEventListener("click", () => participate(meetingId))
                     })
                 }
+
                 // 참여 이벤트 결과처리
                 function participateEvent(meetingId) {
                     try {
@@ -323,7 +292,6 @@
                     pagination.innerHTML += paginationInnerHtml
                 }
             }
-
         </script>
 
     </th:block>

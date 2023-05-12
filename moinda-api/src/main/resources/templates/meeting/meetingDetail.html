@@ -4,6 +4,30 @@
 <th:block th:replace="~{fragment/fragment :: setBody(~{ :: body})}">
     <th:block th:fragment="body">
 
+        <div id="chat-page"
+             style="display: none;
+             background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(/assets/img/bg-masthead.jpg);">
+            <div class="chat-container"
+                 style="margin-top: 75px;">
+                <div class="chat-header">
+                    <h2>채팅방</h2>
+                </div>
+                <div class="connecting">
+                    연결중...
+                </div>
+                <ul id="messageArea">
+                </ul>
+                <form id="messageForm" name="messageForm">
+                    <div class="form-group">
+                        <div class="input-group clearfix">
+                            <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                            <button type="submit" class="primary">보내기</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Masthead-->
         <header class="masthead" style="min-height: 100vh; height: auto;">
             <div class="container px-4 px-lg-5 h-75">
@@ -26,6 +50,9 @@
             </div>
         </header>
 
+        <!--  WebSocket, STOMP   -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 
         <script th:inline="javascript">
 
@@ -77,14 +104,25 @@
                                 <div style="text-align: center;">
                                     <button class="btn btn-primary btn-xl"
                                                 style="height: 50px;
-                                                        padding: 10px 36px 10px 36px;
-                                                        display: none;"
+                                                        padding: 10px 36px;
+                                                        display: none;
+                                                        width: auto;
+                                                        min-width: 125px;"
                                                 type="button" id='participate'> 참가하기 </button>
                                     <button class="btn btn-primary btn-xl"
                                                 style="height: 50px;
-                                                        padding: 10px 36px 10px 36px;
-                                                        display: none;"
+                                                        padding: 10px 36px;
+                                                        display: none;
+                                                        width: auto;
+                                                        min-width: 125px;"
                                                 type="button" id='leave'> 참가취소 </button>
+                                    <button class="btn btn-primary btn-xl"
+                                                style="height: 50px;
+                                                        padding: 10px 36px;
+                                                        display: none;
+                                                        width: auto;
+                                                        min-width: 125px;"
+                                                type="button" id='chatting'> 채팅방 </button>
                                 </div>
                         </div>
                          `
@@ -94,6 +132,7 @@
                         // 각 버튼의 이벤트 추가
                         makeParticipateEvent()
                         makeLeaveButtonEvent()
+                        makeChattingButtonEvent()
                         // 현재 모임의 참여자 목록 생성
                         makeParticipants(participantsDiv, meetingId)
                     })
@@ -104,6 +143,7 @@
                     `<div class="text-white font-weight-bold active-ellipisis-max-width100vh">
                         ${text} : ${data.join(" ")}
                     </div>`
+
                 // 참여자 목록 생성
                 const makeParticipants = (component, meetingId) => {
 
@@ -161,6 +201,7 @@
 
                     const participateBtn = document.querySelector("#participate")
                     const leaveBtn = document.querySelector("#leave")
+                    const chattingBtn = document.querySelector("#chatting")
 
                     // 로그인을 하지 않았다면 버튼을 숨겨놓는다.
                     if(!session) {
@@ -176,6 +217,7 @@
 
                             if(participatingMeetingId === parseInt(meetingId)) {
                                 displayButton(leaveBtn)
+                                displayButton(chattingBtn)
                             } else {
                                 displayButton(participateBtn)
                             }
@@ -240,6 +282,157 @@
                     } catch (e) {
                         alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
                     }
+                }
+
+                // 채팅 관련 DOM
+                const chatPage = document.querySelector('#chat-page');
+                const messageForm = document.querySelector('#messageForm');
+                const messageInput = document.querySelector('#message');
+                const messageArea = document.querySelector('#messageArea');
+                const connectingElement = document.querySelector('.connecting');
+
+                // 채팅방 모달 활성화시 이외 화면 클릭하면 hidden
+                window.onclick = (e) => {
+                    if (e.target == chatPage) {
+                        chatPage.style.display = "none"
+                        document.querySelector(".masthead").style.display = "block"
+                    }
+                }
+
+                // 채팅방 버튼 이벤트 생성
+                const makeChattingButtonEvent = () => {
+                    const chattingBtn = document.querySelector("#chatting")
+                    chattingBtn.addEventListener("click", connect)
+                }
+
+                messageForm.addEventListener('submit', sendMessage, true)
+
+                let stompClient = null;
+
+                const username = session ? session.name : null;
+
+                function connect(event) {
+
+                    if (username) {
+                        // 연결이 됐으면 기본창 대신에 채팅창을 띄운다.
+                        chatPage.style.display = "block";
+                        document.querySelector(".masthead").style.display = "none"
+
+                        /*
+                        WebSocket Connection을 위한 EndPoint를 입력해준다.
+                     */
+                        var socket = new SockJS('/ws');
+                        stompClient = Stomp.over(socket);
+
+                        // STOMP 프로토콜에 함수를 적용시킨다.
+                        stompClient.connect({}, onConnected, onError);
+                        //~ (void) connect(headers, connectCallback, errorCallback)
+                        // onConnected - connect 콜백 함수
+                        // onError - error 콜백 함수
+                    }
+                    event.preventDefault();
+                }
+
+                // 성공적으로 연결되었다면 connectCallBack함수로 작성한 onConnected() 함수에서 동작합니다.
+                function onConnected() {
+                    // Subscribe to the Public Topic
+                    // 토픽을 구독 시킵니다.
+                    stompClient.subscribe('/topic/public', onMessageReceived);
+                    //(Object) subscribe(destination, callback, headers = {})
+                    //명명된 목적지"/topic/public"을 구독합니다.
+
+                    //(void) send(destination, headers = {}, body = '')
+                    //명명된 목적지 "/app/chat.adduser"로 메세지를 보냅니다.
+                    //
+                    stompClient.send(
+                        "/app/chat.addUser",
+                        {},
+                        JSON.stringify(
+                            {
+                                sender: username,
+                                type: 'JOIN',
+                            }
+                        )
+                    )
+
+                    // 기본적으로 쓰여있는 컴포넌트를 감춘다.
+                    connectingElement.style.display = "none"
+                }
+
+                // 메세지 전달
+                function sendMessage(event) {
+                    const messageContent = messageInput.value.trim();
+                    if (messageContent && stompClient) {
+
+                        const chatMessage = {
+                            sender: username,
+                            content: messageInput.value,
+                            type: 'CHAT'
+                        };
+
+                        stompClient.send(
+                            "/app/chat.sendMessage",
+                            {},
+                            JSON.stringify(chatMessage)
+                        );
+
+                        messageInput.value = '';
+                    }
+                    event.preventDefault();
+                }
+
+                // 사용자 접속관련 메세지 + 채팅 관련 메세지 태그작성
+                function onMessageReceived(payload) {
+                    let message = JSON.parse(payload.body);
+
+                    const messageElement = document.createElement('li');
+
+                    if (message.type === 'JOIN') {
+                        messageElement.classList.add('event-message');
+                        message.content = message.sender + '님이 접속하셨습니다.';
+                    } else if (message.type === 'LEAVE') {
+                        messageElement.classList.add('event-message');
+                        message.content = message.sender + '님이 떠났습니다.';
+                    } else {
+                        messageElement.classList.add('chat-message');
+
+                        const avatarElement = document.createElement('i');
+                        const avatarText = document.createTextNode(message.sender[0]);
+                        avatarElement.appendChild(avatarText);
+                        avatarElement.style['background-color'] = getAvatarColor(message.sender);
+
+                        messageElement.appendChild(avatarElement);
+
+                        const usernameElement = document.createElement('span');
+                        const usernameText = document.createTextNode(message.sender);
+                        usernameElement.appendChild(usernameText);
+                        messageElement.appendChild(usernameElement);
+                    }
+
+                    const textElement = document.createElement('p');
+                    const messageText = document.createTextNode(message.content);
+
+                    textElement.appendChild(messageText);
+
+                    messageElement.appendChild(textElement);
+
+                    messageArea.appendChild(messageElement);
+                    messageArea.scrollTop = messageArea.scrollHeight;
+                }
+
+                // WebSocket 중 에러 발생시.
+                function onError(error) {
+                    connectingElement.textContent = '서버와 연결이 종료되었습니다.';
+                    connectingElement.style.color = 'red';
+                }
+
+                function getAvatarColor(messageSender) {
+                    let hash = 0;
+                    for (let i = 0; i < messageSender.length; i++) {
+                        hash = 31 * hash + messageSender.charCodeAt(i);
+                    }
+                    const index = Math.abs(hash % colors.length);
+                    return colors[index];
                 }
             }
         </script>
