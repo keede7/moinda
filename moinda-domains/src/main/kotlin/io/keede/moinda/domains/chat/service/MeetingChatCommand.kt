@@ -6,12 +6,14 @@ import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
 import io.keede.moinda.domains.chat.domain.MeetingChat
 import io.keede.moinda.domains.chat.usecase.MeetingChatCommandUseCase
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /**
  * @author keede
  * Created on 2023-05-09
  */
 @Service
+@Transactional
 class MeetingChatCommand(
     private val meetingChatCommandAdapter: MeetingChatCommandAdapter,
     private val memberQueryAdapter: MemberQueryAdapter,

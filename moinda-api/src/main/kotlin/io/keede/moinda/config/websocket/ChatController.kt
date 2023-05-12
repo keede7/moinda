@@ -1,4 +1,4 @@
-package io.keede.moinda.presentation.websocket
+package io.keede.moinda.config.websocket
 
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
@@ -7,10 +7,10 @@ import org.springframework.messaging.simp.SimpMessageHeaderAccessor
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
-import org.springframework.web.bind.annotation.RestController
 
 
 /**
+ * TODO : 추후 삭제
  * @author keede
  * Created on 2023-05-09
  */

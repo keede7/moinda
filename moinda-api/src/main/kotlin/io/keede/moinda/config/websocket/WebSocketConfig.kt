@@ -1,4 +1,4 @@
-package io.keede.moinda.presentation.websocket
+package io.keede.moinda.config.websocket
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.messaging.simp.config.MessageBrokerRegistry

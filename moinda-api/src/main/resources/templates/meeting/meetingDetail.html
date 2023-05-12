@@ -344,16 +344,16 @@
                     //(void) send(destination, headers = {}, body = '')
                     //명명된 목적지 "/app/chat.adduser"로 메세지를 보냅니다.
                     //
-                    stompClient.send(
-                        "/app/chat.addUser",
-                        {},
-                        JSON.stringify(
-                            {
-                                sender: username,
-                                type: 'JOIN',
-                            }
-                        )
-                    )
+                    // stompClient.send(
+                    //     "/app/chat.addUser",
+                    //     {},
+                    //     JSON.stringify(
+                    //         {
+                    //             sender: username,
+                    //             type: 'JOIN',
+                    //         }
+                    //     )
+                    // )
 
                     // 기본적으로 쓰여있는 컴포넌트를 감춘다.
                     connectingElement.style.display = "none"
@@ -365,13 +365,14 @@
                     if (messageContent && stompClient) {
 
                         const chatMessage = {
-                            sender: username,
-                            content: messageInput.value,
-                            type: 'CHAT'
+                            context: messageInput.value,
+                            writeAt: "2020-01-10 10:20:30",
+                            memberId: session.memberId,
+                            meetingId: meetingId,
                         };
 
                         stompClient.send(
-                            "/app/chat.sendMessage",
+                            "/app/send",
                             {},
                             JSON.stringify(chatMessage)
                         );
@@ -383,34 +384,39 @@
 
                 // 사용자 접속관련 메세지 + 채팅 관련 메세지 태그작성
                 function onMessageReceived(payload) {
+                    console.log("payload....")
+                    console.log(payload)
                     let message = JSON.parse(payload.body);
 
                     const messageElement = document.createElement('li');
 
                     if (message.type === 'JOIN') {
                         messageElement.classList.add('event-message');
-                        message.content = message.sender + '님이 접속하셨습니다.';
+                        message.content = message.writer + '님이 접속하셨습니다.';
                     } else if (message.type === 'LEAVE') {
                         messageElement.classList.add('event-message');
-                        message.content = message.sender + '님이 떠났습니다.';
+                        message.content = message.writer + '님이 떠났습니다.';
                     } else {
                         messageElement.classList.add('chat-message');
 
+                        // 작성자 랜덤 프로필 아이콘
                         const avatarElement = document.createElement('i');
-                        const avatarText = document.createTextNode(message.sender[0]);
+                        const avatarText = document.createTextNode(message.writer[0]);
                         avatarElement.appendChild(avatarText);
-                        avatarElement.style['background-color'] = getAvatarColor(message.sender);
+                        avatarElement.style['background-color'] = getAvatarColor(message.writer);
 
                         messageElement.appendChild(avatarElement);
 
+                        // 작성자 라인
                         const usernameElement = document.createElement('span');
-                        const usernameText = document.createTextNode(message.sender);
+                        const usernameText = document.createTextNode(message.writer);
                         usernameElement.appendChild(usernameText);
                         messageElement.appendChild(usernameElement);
                     }
 
+                    // 대화 내용라인.
                     const textElement = document.createElement('p');
-                    const messageText = document.createTextNode(message.content);
+                    const messageText = document.createTextNode(message.context);
 
                     textElement.appendChild(messageText);
 

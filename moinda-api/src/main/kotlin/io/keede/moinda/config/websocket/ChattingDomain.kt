@@ -1,6 +1,7 @@
-package io.keede.moinda.presentation.websocket
+package io.keede.moinda.config.websocket
 
 /**
+ * TODO : 추후 삭제
  * @author keede
  * Created on 2023-05-09
  */

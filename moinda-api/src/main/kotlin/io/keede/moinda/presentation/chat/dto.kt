@@ -1,5 +1,6 @@
 package io.keede.moinda.presentation.chat
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import io.keede.moinda.common.chat.CreateMeetingChat
 import io.keede.moinda.domains.chat.domain.MeetingChat
 import java.time.LocalDateTime
@@ -11,6 +12,7 @@ import java.time.LocalDateTime
 
 data class CreateMeetingChatDto(
     val context: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "Asia/Seoul")
     val writeAt: LocalDateTime,
     val meetingId: Long,
     val memberId: Long,
@@ -20,6 +22,7 @@ data class MeetingChatResponseDto(
     val chattingId: Long?,
     val writer: String?,
     val context: String,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "Asia/Seoul")
     val writeAt: LocalDateTime,
 )
 

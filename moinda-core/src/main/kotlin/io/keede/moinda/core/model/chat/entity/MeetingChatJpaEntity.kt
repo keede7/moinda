@@ -3,6 +3,8 @@ package io.keede.moinda.core.model.chat.entity
 import io.keede.moinda.core.config.BaseEntity
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
+import org.hibernate.annotations.DynamicInsert
+import org.hibernate.annotations.DynamicUpdate
 import java.time.LocalDateTime
 import javax.persistence.*
 
@@ -13,6 +15,8 @@ import javax.persistence.*
  */
 @Entity
 @Table(name = "meeting_chat_t")
+@DynamicUpdate
+@DynamicInsert
 class MeetingChatJpaEntity(
 
     @Lob

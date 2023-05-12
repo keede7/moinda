@@ -1,4 +1,4 @@
-package io.keede.moinda.presentation.websocket
+package io.keede.moinda.config.websocket
 
 import org.springframework.context.event.EventListener
 import org.springframework.messaging.simp.SimpMessageSendingOperations
