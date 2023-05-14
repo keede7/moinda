@@ -27,7 +27,6 @@ class MeetingChatJpaEntity(
     @Column(name = "chat_write_at", nullable = false)
     val writeAt: LocalDateTime,
 
-
 ) : BaseEntity() {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
