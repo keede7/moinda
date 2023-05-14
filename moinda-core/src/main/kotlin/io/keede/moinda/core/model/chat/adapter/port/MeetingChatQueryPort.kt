@@ -7,11 +7,13 @@ import io.keede.moinda.core.model.chat.entity.QMeetingChatJpaEntity
 import io.keede.moinda.core.model.chat.entity.QMeetingChatJpaEntity.meetingChatJpaEntity
 import io.keede.moinda.core.model.chat.entity.QMeetingChatProjection
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
+import org.springframework.stereotype.Service
 
 /**
  * @author keede
  * Created on 2023-05-08
  */
+@Service
 internal class MeetingChatQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
 ) : MeetingChatQueryAdapter, QuerydslRepositorySupport(QMeetingChatJpaEntity::class.java) {

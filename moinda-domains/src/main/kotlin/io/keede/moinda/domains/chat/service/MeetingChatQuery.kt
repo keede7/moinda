@@ -1,7 +1,6 @@
 package io.keede.moinda.domains.chat.service
 
 import io.keede.moinda.core.model.chat.adapter.MeetingChatQueryAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
 import io.keede.moinda.domains.chat.domain.MeetingChat
 import io.keede.moinda.domains.chat.usecase.MeetingChatQueryUseCase
 import org.springframework.stereotype.Service

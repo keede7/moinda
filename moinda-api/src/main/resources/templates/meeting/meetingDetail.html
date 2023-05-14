@@ -326,9 +326,7 @@
                         chatPage.style.display = "block";
                         mainDisplayContainer.style.display = "none"
 
-                        /*
-                        WebSocket Connection을 위한 EndPoint를 입력해준다.
-                     */
+                        // WebSocket Connection을 위한 EndPoint를 입력해준다.
                         var socket = new SockJS('/ws');
                         stompClient = Stomp.over(socket);
 
@@ -340,7 +338,6 @@
                     }
                     event.preventDefault();
                 }
-
                 // 성공적으로 연결되었다면 connectCallBack함수로 작성한 onConnected() 함수에서 동작합니다.
                 function onConnected() {
                     // Subscribe to the Public Topic
@@ -362,18 +359,68 @@
                         )
                     )
 
+                    // 채팅 목록을 불러와서 로드시킨다.
+                    onloadChattingEvent()
+
                     // 기본적으로 쓰여있는 컴포넌트를 감춘다.
                     connectingElement.style.display = "none"
+                }
+                // 채팅 목록 로드 이벤트
+                function onloadChattingEvent() {
+
+                    fetch(`/api/chat/message/${meetingId}`)
+                        .then(response => response.json())
+                        .then(chatting => {
+                            if(chatting.length === 0) {
+                                return;
+                            }
+                            // TODO : 추후 삭제
+                            console.log(chatting)
+
+                            chatting.forEach(chat => {
+                                const messageElement = document.createElement('li');
+
+                                messageElement.classList.add('chat-message');
+
+                                // 작성자 랜덤 프로필 아이콘
+                                const avatarElement = document.createElement('i');
+                                const avatarText = document.createTextNode(chat.writer);
+                                avatarElement.appendChild(avatarText);
+                                avatarElement.style['background-color'] = getAvatarColor(chat.writer);
+
+                                messageElement.appendChild(avatarElement);
+
+                                // 작성자 라인
+                                const usernameElement = document.createElement('span');
+                                const usernameText = document.createTextNode(chat.writer);
+                                usernameElement.appendChild(usernameText);
+                                messageElement.appendChild(usernameElement);
+
+                                // 대화 내용라인.
+                                const textElement = document.createElement('p');
+                                const messageText = document.createTextNode(chat.context);
+
+                                textElement.appendChild(messageText);
+
+                                messageElement.appendChild(textElement);
+
+                                messageArea.appendChild(messageElement);
+                            })
+                        })
+
+                    messageArea.scrollTop = messageArea.scrollHeight;
                 }
 
                 // 메세지 전달
                 function sendMessage(event) {
                     const messageContent = messageInput.value.trim();
+                    const writeAt = toKRDate(new Date())
+
                     if (messageContent && stompClient) {
 
                         const chatMessage = {
                             context: messageInput.value,
-                            writeAt: "2020-01-10 10:20:30",
+                            writeAt: writeAt,
                             memberId: session.memberId,
                             meetingId: meetingId,
                         };
@@ -446,6 +493,33 @@
                     const index = Math.abs(hash % colors.length);
                     return colors[index];
                 }
+
+                // 작성시간의 형식을 변경하는 함수,
+                function toKRDate(date) {
+                    let year = date.getFullYear();
+                    let month = date.getMonth() + 1;
+                    let day = date.getDate();
+                    let hours = date.getHours();
+                    let minutes = date.getMinutes();
+                    let seconds = date.getSeconds();
+
+                    // 한자리수 월/일 앞에 0 추가
+                    month = month < 10 ? '0' + month : month;
+                    day = day < 10 ? '0' + day : day;
+
+                    // 한국 표준시(UTC+9)에 맞게 변환
+                    let krHours = hours;
+                    if (krHours >= 24) {
+                        krHours -= 24;
+                        day += 1;
+                    }
+                    krHours = krHours < 10 ? '0' + krHours : krHours;
+                    const krMinutes = minutes < 10 ? '0' + minutes : minutes;
+                    const krSeconds = seconds < 10 ? '0' + seconds : seconds;
+
+                    return year + '-' + month + '-' + day + ' ' + krHours + ':' + krMinutes + ':' + krSeconds;
+                }
+
             }
         </script>
 
