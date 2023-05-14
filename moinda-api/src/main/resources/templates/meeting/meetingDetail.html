@@ -290,12 +290,20 @@
                 const messageInput = document.querySelector('#message');
                 const messageArea = document.querySelector('#messageArea');
                 const connectingElement = document.querySelector('.connecting');
+                const mainDisplayContainer = document.querySelector(".masthead")
 
                 // 채팅방 모달 활성화시 이외 화면 클릭하면 hidden
                 window.onclick = (e) => {
                     if (e.target == chatPage) {
+                        // 메세지내용 제거
+                        messageArea.innerHTML = ""
+                        // STOMP 연결 해제
+                        if(stompClient !== null) {
+                            stompClient.disconnect()
+                        }
+
                         chatPage.style.display = "none"
-                        document.querySelector(".masthead").style.display = "block"
+                        mainDisplayContainer.style.display = "block"
                     }
                 }
 
@@ -316,7 +324,7 @@
                     if (username) {
                         // 연결이 됐으면 기본창 대신에 채팅창을 띄운다.
                         chatPage.style.display = "block";
-                        document.querySelector(".masthead").style.display = "none"
+                        mainDisplayContainer.style.display = "none"
 
                         /*
                         WebSocket Connection을 위한 EndPoint를 입력해준다.
@@ -343,17 +351,16 @@
 
                     //(void) send(destination, headers = {}, body = '')
                     //명명된 목적지 "/app/chat.adduser"로 메세지를 보냅니다.
-                    //
-                    // stompClient.send(
-                    //     "/app/chat.addUser",
-                    //     {},
-                    //     JSON.stringify(
-                    //         {
-                    //             sender: username,
-                    //             type: 'JOIN',
-                    //         }
-                    //     )
-                    // )
+                    stompClient.send(
+                        "/app/join",
+                        {},
+                        JSON.stringify(
+                            {
+                                writer: username,
+                                status: 'JOIN',
+                            }
+                        )
+                    )
 
                     // 기본적으로 쓰여있는 컴포넌트를 감춘다.
                     connectingElement.style.display = "none"
@@ -384,18 +391,17 @@
 
                 // 사용자 접속관련 메세지 + 채팅 관련 메세지 태그작성
                 function onMessageReceived(payload) {
-                    console.log("payload....")
-                    console.log(payload)
+
                     let message = JSON.parse(payload.body);
 
                     const messageElement = document.createElement('li');
 
-                    if (message.type === 'JOIN') {
+                    if (message.status === 'JOIN') {
                         messageElement.classList.add('event-message');
-                        message.content = message.writer + '님이 접속하셨습니다.';
-                    } else if (message.type === 'LEAVE') {
+                        message.context = message.writer + '님이 채팅방을 접속하셨습니다.';
+                    } else if (message.status === 'LEAVE') {
                         messageElement.classList.add('event-message');
-                        message.content = message.writer + '님이 떠났습니다.';
+                        message.context = message.writer + '님이 채팅방을 떠났습니다.';
                     } else {
                         messageElement.classList.add('chat-message');
 
