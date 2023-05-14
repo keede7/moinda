@@ -35,8 +35,7 @@ data class MeetingChatResponseDto(
     val chattingId: Long?,
     val writer: String?,
     val context: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "Asia/Seoul")
-    val writeAt: LocalDateTime,
+    val writeAt: String,
 )
 
 internal fun CreateMeetingChatDto.toDomain() = CreateMeetingChat(

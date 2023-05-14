@@ -1,6 +1,8 @@
 package io.keede.moinda.domains.chat.domain
 
 import io.keede.moinda.core.model.chat.entity.MeetingChatJpaEntity
+import io.keede.moinda.core.model.chat.entity.MeetingChatProjection
+import io.keede.moinda.util.toFullPattern
 import java.time.LocalDateTime
 
 /**
@@ -8,10 +10,24 @@ import java.time.LocalDateTime
  * Created on 2023-05-09
  */
 data class MeetingChat(
-    private val meetingChatJpaEntity: MeetingChatJpaEntity
+    val chattingId: Long?,
+    val writer: String?,
+    val context: String,
+    val writeAt: String,
 ) {
-    val chattingId: Long? = meetingChatJpaEntity.id
-    val writer: String? = meetingChatJpaEntity.memberJpaEntity?.name
-    val context: String = meetingChatJpaEntity.context
-    val writeAt: LocalDateTime = meetingChatJpaEntity.writeAt
+
+    constructor(meetingChatJpaEntity: MeetingChatJpaEntity) : this(
+        chattingId = meetingChatJpaEntity.id,
+        writer = meetingChatJpaEntity.memberJpaEntity?.name,
+        context = meetingChatJpaEntity.context,
+        writeAt = meetingChatJpaEntity.writeAt.toFullPattern(),
+    )
+
+    constructor(meetingChatProjection: MeetingChatProjection) : this(
+        chattingId = meetingChatProjection.chattingId,
+        writer = meetingChatProjection.writer,
+        context = meetingChatProjection.context,
+        writeAt = meetingChatProjection.writeAt,
+    )
+
 }
