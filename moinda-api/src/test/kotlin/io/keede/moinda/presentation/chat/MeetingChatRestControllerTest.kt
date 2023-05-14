@@ -3,8 +3,7 @@ package io.keede.moinda.presentation.chat
 import com.ninjasquad.springmockk.MockkBean
 import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
-import io.keede.moinda.domains.chat.usecase.MeetingChatCommandUseCase
-import io.keede.moinda.presentation.chat.fixture.ofCreateMeetingChatDto
+import io.keede.moinda.domains.chat.usecase.MeetingChatQueryUseCase
 import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
 import io.keede.moinda.presentation.config.toMeetingChatApiUri
@@ -20,7 +19,6 @@ import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import java.time.LocalDateTime
 
 
 /**
@@ -32,7 +30,7 @@ import java.time.LocalDateTime
 internal class MeetingChatRestControllerTest : BaseApi() {
 
     @MockkBean
-    private lateinit var meetingChatCommandUseCase: MeetingChatCommandUseCase
+    private lateinit var meetingChatQueryUseCase: MeetingChatQueryUseCase
 
     @BeforeEach
     fun init() {
@@ -41,23 +39,17 @@ internal class MeetingChatRestControllerTest : BaseApi() {
     }
 
     @Test
-    fun 채팅_전송을_성공한다() {
+    fun 특정모임의_채팅_메세지_조회를_성공한다() {
 
         // Given
-        val createDto = ofCreateMeetingChatDto(
-            "안녕하세요?",
-            LocalDateTime.now().withNano(0),
-            1,
-            1,
-        )
+        val meetingId = 1L
 
-        every { meetingChatCommandUseCase.create(any()) } returns mockk(relaxed = true)
+        every { meetingChatQueryUseCase.getChatting(any()) } returns mockk(relaxed = true)
+
         // When
-
         val perform = super.mockMvc
             .perform(
-                post(UriMaker.toMeetingChatApiUri("send"))
-                    .content(toJson(createDto))
+                get(UriMaker.toMeetingChatApiUri("message", meetingId.toString()))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
                     .cookie(super.cookie)

@@ -1,4 +1,4 @@
-package io.keede.moinda.config.websocket
+package io.keede.moinda.presentation.config.websocket
 
 import io.keede.moinda.presentation.chat.MeetingChatEventSubscriber
 import io.keede.moinda.presentation.chat.MessageType

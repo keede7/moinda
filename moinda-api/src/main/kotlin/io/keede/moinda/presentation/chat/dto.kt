@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import io.keede.moinda.common.chat.CreateMeetingChat
 import io.keede.moinda.domains.chat.domain.MeetingChat
 import java.time.LocalDateTime
-import javax.validation.constraints.NotEmpty
 
 /**
  * @author keede
@@ -35,8 +34,7 @@ data class MeetingChatResponseDto(
     val chattingId: Long?,
     val writer: String?,
     val context: String,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", locale = "Asia/Seoul")
-    val writeAt: LocalDateTime,
+    val writeAt: String,
 )
 
 internal fun CreateMeetingChatDto.toDomain() = CreateMeetingChat(

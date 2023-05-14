@@ -1,4 +1,4 @@
-package io.keede.moinda.config.websocket
+package io.keede.moinda.presentation.config.websocket
 
 import org.springframework.messaging.handler.annotation.MessageMapping
 import org.springframework.messaging.handler.annotation.Payload
