@@ -9,18 +9,21 @@
              background: linear-gradient(to bottom, rgba(92, 77, 66, 0.8) 0%, rgba(92, 77, 66, 0.8) 100%), url(/assets/img/bg-masthead.jpg);">
             <div class="chat-container"
                  style="margin-top: 75px;">
-                <div class="chat-header">
-                    <h2>채팅방</h2>
+                <div class="chat-header" style="display: flex;">
+                    <div id="closeChatting" style="padding: 0px 10px; font-size: larger;" >
+                        <i class="bi bi-box-arrow-left"></i>
+                    </div>
                 </div>
                 <div class="connecting">
                     연결중...
                 </div>
                 <ul id="messageArea">
                 </ul>
+<!--                클릭으로 변경-->
                 <form id="messageForm" name="messageForm">
                     <div class="form-group">
                         <div class="input-group clearfix">
-                            <input type="text" id="message" placeholder="Type a message..." autocomplete="off" class="form-control"/>
+                            <input type="text" id="message" autocomplete="off" class="form-control"/>
                             <button type="submit" class="primary">보내기</button>
                         </div>
                     </div>
@@ -28,13 +31,51 @@
             </div>
         </div>
 
+        <!--   기존 컴포넌트     -->
         <!-- Masthead-->
+<!--        <header class="masthead" style="min-height: 100vh; height: auto;">-->
+<!--            <div class="container px-4 px-lg-5 h-75">-->
+<!--                <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">-->
+<!--                    <div class="col-lg-8 col-xl-6 text-center">-->
+<!--                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>-->
+<!--                        <hr class="divider"/>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div class="row gx-4 gx-lg-5 justify-content-center mb-5">-->
+<!--                    <div class="col-lg-6">-->
+<!--                        <div class="meeting">-->
+
+<!--                        </div>-->
+<!--                        <div class="participants" style="padding: 0px 15px;">-->
+
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </header>-->
+
         <header class="masthead" style="min-height: 100vh; height: auto;">
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider"/>
+                    <div class="col-lg-8 col-xl-6 text-center"
+                         style="display: flex;
+                                font-size: x-large;
+                                color: white;
+                                align-items: center;">
+                        <div style="text-align: left;
+                                    padding: 0px 10px;"
+                                id="toList">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </div>
+                        <h3 class="text-white font-weight-bold"
+                            style="flex: 1;
+                                    padding-right: 30px;
+                                    margin-bottom: 0px;">
+                            Let's Mo Gak Ko !
+                        </h3>
+                    </div>
+                    <div style="display: block;">
+                        <hr class="divider">
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -63,11 +104,18 @@
 
                 const meetingDetailDiv = document.querySelector(".meeting")
                 const participantsDiv = document.querySelector(".participants")
+                const toListBtn = document.querySelector("#toList")
 
                 const parts = window.location.pathname.split('/');
                 const meetingId = parts[parts.length - 1];
                 // NOTE : 모임 상세 & 참여자 목록에 쓰기 위해 전역으로 선언헀음,
                 let formattedStartAt = "";
+
+                toListBtn.addEventListener("click", () => {
+
+                    // TODO : 페이징 파라미터를 붙여서 뒤로가기를 해야 한다.
+                    console.log("click..")
+                })
 
                 // REST API 호출 및 응답 처리
                 fetch(`/api/meeting/${meetingId}`)
@@ -291,28 +339,24 @@
                 const messageArea = document.querySelector('#messageArea');
                 const connectingElement = document.querySelector('.connecting');
                 const mainDisplayContainer = document.querySelector(".masthead")
+                const closeChattingBtn = document.querySelector("#closeChatting")
 
                 // 채팅방 모달 활성화시 이외 화면 클릭하면 hidden
                 window.onclick = (e) => {
                     if (e.target == chatPage) {
-                        // 메세지내용 제거
-                        messageArea.innerHTML = ""
-                        // STOMP 연결 해제
-                        if(stompClient !== null) {
-                            stompClient.disconnect()
-                        }
-
-                        chatPage.style.display = "none"
-                        mainDisplayContainer.style.display = "block"
+                        closeChatting()
                     }
                 }
+                // 채팅방 닫기 이벤트 적용
+                closeChattingBtn.addEventListener("click", closeChatting)
 
                 // 채팅방 버튼 이벤트 생성
                 const makeChattingButtonEvent = () => {
                     const chattingBtn = document.querySelector("#chatting")
                     chattingBtn.addEventListener("click", connect)
                 }
-
+                // 메세지 전송 이벤트 적용
+                // TODO : submit 대신 다른 타입으로 변경해서 사용하게 변경.
                 messageForm.addEventListener('submit', sendMessage, true)
 
                 let stompClient = null;
@@ -325,6 +369,9 @@
                         // 연결이 됐으면 기본창 대신에 채팅창을 띄운다.
                         chatPage.style.display = "block";
                         mainDisplayContainer.style.display = "none"
+
+                        // 상단에 시간을 적어둔다.
+                        messageArea.innerHTML += formatDateToChattingTitle()
 
                         // WebSocket Connection을 위한 EndPoint를 입력해준다.
                         var socket = new SockJS('/ws');
@@ -371,40 +418,18 @@
                     fetch(`/api/chat/message/${meetingId}`)
                         .then(response => response.json())
                         .then(chatting => {
-                            if(chatting.length === 0) {
-                                return;
-                            }
                             // TODO : 추후 삭제
                             console.log(chatting)
 
+                            if(chatting.length === 0) {
+                                return;
+                            }
+
                             chatting.forEach(chat => {
-                                const messageElement = document.createElement('li');
 
-                                messageElement.classList.add('chat-message');
+                                const message = makeChattingMessage(chat)
 
-                                // 작성자 랜덤 프로필 아이콘
-                                const avatarElement = document.createElement('i');
-                                const avatarText = document.createTextNode(chat.writer);
-                                avatarElement.appendChild(avatarText);
-                                avatarElement.style['background-color'] = getAvatarColor(chat.writer);
-
-                                messageElement.appendChild(avatarElement);
-
-                                // 작성자 라인
-                                const usernameElement = document.createElement('span');
-                                const usernameText = document.createTextNode(chat.writer);
-                                usernameElement.appendChild(usernameText);
-                                messageElement.appendChild(usernameElement);
-
-                                // 대화 내용라인.
-                                const textElement = document.createElement('p');
-                                const messageText = document.createTextNode(chat.context);
-
-                                textElement.appendChild(messageText);
-
-                                messageElement.appendChild(textElement);
-
-                                messageArea.appendChild(messageElement);
+                                messageArea.innerHTML += message
                             })
                         })
 
@@ -439,48 +464,79 @@
                 // 사용자 접속관련 메세지 + 채팅 관련 메세지 태그작성
                 function onMessageReceived(payload) {
 
-                    let message = JSON.parse(payload.body);
+                    let chat = JSON.parse(payload.body);
 
-                    const messageElement = document.createElement('li');
+                    // TODO : 입장 및 퇴장 메세지를 삭제 하는게 나을 수 있음,
+                    if (chat.status === 'JOIN') {
 
-                    if (message.status === 'JOIN') {
-                        messageElement.classList.add('event-message');
-                        message.context = message.writer + '님이 채팅방을 접속하셨습니다.';
-                    } else if (message.status === 'LEAVE') {
-                        messageElement.classList.add('event-message');
-                        message.context = message.writer + '님이 채팅방을 떠났습니다.';
+                        const message =
+                            `
+                            <li class="event-message">
+                                <p name="alert">${chat.writer} 님이 채팅방을 접속하셨습니다.</p>
+                            </li>
+                            `
+
+                        messageArea.innerHTML += message
+
+                    } else if (chat.status === 'LEAVE') {
+
+                        const message =
+                            `
+                            <li class="event-message">
+                                <p name="alert">${chat.writer} 님이 채팅방을 떠났습니다.</p>
+                            </li>
+                            `
+
+                        messageArea.innerHTML += message
+
                     } else {
-                        messageElement.classList.add('chat-message');
+                        const message = makeChattingMessage(chat)
 
-                        // 작성자 랜덤 프로필 아이콘
-                        const avatarElement = document.createElement('i');
-                        const avatarText = document.createTextNode(message.writer[0]);
-                        avatarElement.appendChild(avatarText);
-                        avatarElement.style['background-color'] = getAvatarColor(message.writer);
-
-                        messageElement.appendChild(avatarElement);
-
-                        // 작성자 라인
-                        const usernameElement = document.createElement('span');
-                        const usernameText = document.createTextNode(message.writer);
-                        usernameElement.appendChild(usernameText);
-                        messageElement.appendChild(usernameElement);
+                        messageArea.innerHTML += message
                     }
 
-                    // 대화 내용라인.
-                    const textElement = document.createElement('p');
-                    const messageText = document.createTextNode(message.context);
-
-                    textElement.appendChild(messageText);
-
-                    messageElement.appendChild(textElement);
-
-                    messageArea.appendChild(messageElement);
                     messageArea.scrollTop = messageArea.scrollHeight;
+                }
+
+                // 채팅방 닫기
+                function closeChatting() {
+                    // 메세지내용 제거
+                    messageArea.innerHTML = ""
+                    // STOMP 연결 해제
+                    if(stompClient !== null) {
+                        stompClient.disconnect()
+                    }
+
+                    chatPage.style.display = "none"
+                    mainDisplayContainer.style.display = "block"
+                }
+
+                // 채팅 메세지 컴포넌트를 만드는 함수
+                function makeChattingMessage(chat) {
+                    return `
+                            <li class="chat-message">
+                                <i style="background-color: ${getAvatarColor(chat.writer)}">
+                                    ${chat.writer[0]}
+                                </i>
+                                <span name="writer">
+                                    ${chat.writer}
+                                </span>
+                                <div name="messageDetail" style="display: flex; flex-wrap: wrap;">
+                                    <div name="context" style="flex: 1;">
+                                        ${chat.context}
+                                    </div>
+                                    <div name="writeAt" style="align-self: self-end;
+                                                            opacity: 0.7;">
+                                        ${formatDateToMessage(chat.writeAt)}
+                                    </div>
+                                </div>
+                            </li>
+                            `
                 }
 
                 // WebSocket 중 에러 발생시.
                 function onError(error) {
+                    connectingElement.style.display = "block"
                     connectingElement.textContent = '서버와 연결이 종료되었습니다.';
                     connectingElement.style.color = 'red';
                 }
@@ -520,6 +576,29 @@
                     return year + '-' + month + '-' + day + ' ' + krHours + ':' + krMinutes + ':' + krSeconds;
                 }
 
+                // 제일 상단의 현재 날짜의 포맷으로 변경
+                function formatDateToChattingTitle() {
+                    const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = now.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+                    const date = now.getDate();
+                    const day = daysOfWeek[now.getDay()];
+
+                    return `
+                            <li class="event-message">
+                                <p name="alert">${year}년 ${month}월 ${date}일 ${day}요일</p>
+                            </li>
+                            `
+                }
+
+                // 메세지 내용이 전송된 시간의 포맷으로 변경
+                function formatDateToMessage(dateString) {
+                    // "10:30:45"
+                    const timeString = dateString.split(' ')[1];
+                    // "10:30"
+                    return timeString.split(':').slice(0, 2).join(':');
+                }
             }
         </script>
 
