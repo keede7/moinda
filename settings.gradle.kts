@@ -4,5 +4,6 @@ include(
     "moinda-api",
     "moinda-core",
     "moinda-domains",
-    "moinda-commons"
+    "moinda-commons",
+    "moinda-batch",
 )
