@@ -17,39 +17,11 @@ import javax.servlet.http.HttpServletResponse
 @Controller
 class ViewController {
 
-    // TODO : 테스트 세션
-    private fun createSession(
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ) {
-        val session = request.getSession(true)
-
-        val toSessionResponse = SessionResponse(1, "테스터")
-
-        session.setAttribute(Constants.SESSION_KEY, toSessionResponse)
-        session.maxInactiveInterval = Constants.MAX_IN_ACTIVE_INTERVAL
-
-        Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
-            .also {
-                it.maxAge = Constants.MAX_IN_ACTIVE_INTERVAL
-                it.path = "/"
-                response.addCookie(it)
-            }
-    }
-
     @GetMapping("/sample")
     fun maps2(): String = "sample/thema-sample"
 
-    // TODO : Bootstrap Example
     @GetMapping("/")
-    fun index(
-        request: HttpServletRequest,
-        response: HttpServletResponse,
-    ): String {
-        createSession(request, response)
-
-        return "index"
-    }
+    fun index(): String = "index"
 
     // TODO : kakao Map Test
     @GetMapping("/maps")
