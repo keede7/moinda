@@ -30,6 +30,10 @@ abstract class BaseEntity {
         lastModifiedAt = getNow()
     }
 
+    fun remove() {
+        this.deleteStatus = true
+    }
+
     private fun getNow(): LocalDateTime {
         return LocalDateTime.now().withNano(0)
     }

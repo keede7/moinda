@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.ir.backend.js.compile
+
 tasks.getByName("bootJar") {
     enabled = true
 }
@@ -9,6 +11,8 @@ tasks.getByName("jar") {
 dependencies {
     implementation(project(":moinda-domains"))
     implementation(project(":moinda-commons"))
+    runtimeOnly(project(":moinda-batch"))
+
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
