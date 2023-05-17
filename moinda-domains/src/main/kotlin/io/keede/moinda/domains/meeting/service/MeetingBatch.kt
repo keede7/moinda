@@ -18,7 +18,6 @@ internal class MeetingBatch(
 ) : MeetingBatchUseCase {
 
     // 당일 기준 종료날짜가 지났으면 삭제
-    // TODO : Test Code
     override fun cleanUpExpiredMeetings(today: LocalDateTime) {
         meetingBatchAdapter.findExpiredMeetings(today)
             .forEach(MeetingJpaEntity::remove)
