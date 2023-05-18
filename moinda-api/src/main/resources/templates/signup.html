@@ -61,7 +61,7 @@
                 </div>
             </div>
         </header>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
         <script th:inline="javascript">
 
             window.onload = () => {
@@ -76,14 +76,27 @@
 
                 signUpButton.addEventListener("click", () => {
 
-                    const signUpRequest = {
-                        "email" : email.value,
-                        "name" : name.value,
-                        "password" : password.value,
-                        "introduce": introduce.value,
-                    }
+                    // TODO : 수정 필요
+                    var key = "This is a secret key";
+                    console.log(password.value)
+                    // encrypt
+                    var ciphertext = CryptoJS.AES.encrypt(password.value, key).toString();
 
-                    callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
+                    console.log(ciphertext);
+
+                    var bytes = CryptoJS.AES.decrypt(ciphertext, key);
+                    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+
+                    console.log(plaintext);
+
+                    // const signUpRequest = {
+                    //     "email" : email.value,
+                    //     "name" : name.value,
+                    //     "password" : password.value,
+                    //     "introduce": introduce.value,
+                    // }
+                    //
+                    // callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
                 })
 
                 function signupProcess() {
