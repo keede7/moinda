@@ -77,10 +77,11 @@
                 signUpButton.addEventListener("click", () => {
 
                     // TODO : 수정 필요
-                    var key = "This is a secret key";
+                    var key = "letsMoGakKoKeedeGS3G7KS3F1U6S2A1";
                     console.log(password.value)
+                    const iv = CryptoJS.enc.Hex.parse("letsMoGakKoKeede");
                     // encrypt
-                    var ciphertext = CryptoJS.AES.encrypt(password.value, key).toString();
+                    var ciphertext = CryptoJS.AES.encrypt(password.value, key, iv).toString();
 
                     console.log(ciphertext);
 
@@ -89,14 +90,14 @@
 
                     console.log(plaintext);
 
-                    // const signUpRequest = {
-                    //     "email" : email.value,
-                    //     "name" : name.value,
-                    //     "password" : password.value,
-                    //     "introduce": introduce.value,
-                    // }
-                    //
-                    // callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
+                    const signUpRequest = {
+                        "email" : email.value,
+                        "name" : name.value,
+                        "password" : ciphertext,
+                        "introduce": introduce.value,
+                    }
+
+                    callRestApi(signupProcess, "POST", "/api/member/signup", signUpRequest)
                 })
 
                 function signupProcess() {

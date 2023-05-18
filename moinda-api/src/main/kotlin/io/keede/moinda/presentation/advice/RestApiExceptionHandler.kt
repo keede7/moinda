@@ -15,7 +15,7 @@ class RestApiExceptionHandler {
     @ExceptionHandler(value = [RuntimeException::class])
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     fun handleRuntimeException(exception: RuntimeException): String? {
-        println("exception !!! : ${exception.message}")
+        println("exception !!! : ${exception}")
         return exception.message
     }
 

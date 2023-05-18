@@ -1,5 +1,6 @@
 package io.keede.moinda.domains.member.service
 
+import io.keede.moinda.common.Encryption
 import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
 import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter

@@ -1,5 +1,6 @@
 package io.keede.moinda.presentation.member
 
+import io.keede.moinda.common.Encryption
 import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.LoginUseCase
@@ -24,13 +25,22 @@ class MemberRestController(
     private val loginUseCase: LoginUseCase
 ) {
 
+//    @PostMapping("/signup")
+//    fun signup(
+//        @RequestBody @Valid signUpMemberDto: SignUpMemberDto
+//    ): MemberResponseDto =
+//        memberCommandUseCase.signup(
+//            MemberCommandUseCase.Command(signUpMemberDto.toDomain())
+//        ).let(Member::toMemberResponseDto)
+
     @PostMapping("/signup")
     fun signup(
         @RequestBody @Valid signUpMemberDto: SignUpMemberDto
-    ): MemberResponseDto =
-        memberCommandUseCase.signup(
-            MemberCommandUseCase.Command(signUpMemberDto.toDomain())
-        ).let(Member::toMemberResponseDto)
+    ) {
+        println("signUpMemberDto.password : ${signUpMemberDto.password}")
+        val decrypt = Encryption.decrypt(signUpMemberDto.password)
+        println("decrypt , $decrypt")
+    }
 
     @PostMapping("/login")
     fun login(
