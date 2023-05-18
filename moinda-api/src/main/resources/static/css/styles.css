@@ -11087,6 +11087,10 @@ header.masthead h1, header.masthead .h1 {
 #pagination a {display:inline-block;margin-right:10px;}
 #pagination .on {font-weight: bold; cursor: default; color:#f4623a;}
 
+.meetingPagination {
+  margin: 0px 5px;
+}
+
 .active-ellipisis-max-width100vh {
   overflow: hidden;
   text-overflow: ellipsis;

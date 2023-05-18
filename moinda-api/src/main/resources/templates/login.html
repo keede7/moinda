@@ -7,10 +7,26 @@
         <!-- Masthead-->
         <header class="masthead" style="height: 100%">
             <div class="container px-4 px-lg-5 h-75">
-                <div class="row gx-4 gx-lg-5 h-50 align-items-center justify-content-center">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider" />
+                <div class="row gx-4 gx-lg-5 justify-content-center" style="height: 40%;">
+                    <div class="col-lg-8 col-xl-6 text-center"
+                         style="display: flex;
+                                font-size: x-large;
+                                color: white;
+                                align-items: center;">
+                        <div style="text-align: left;
+                                    padding: 0px 10px;"
+                             id="toBack">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </div>
+                        <h3 class="text-white font-weight-bold"
+                            style="flex: 1;
+                                    padding-right: 30px;
+                                    margin-bottom: 0px;">
+                            Let's Mo Gak Ko!
+                        </h3>
+                    </div>
+                    <div style="display: block;">
+                        <hr class="divider">
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
@@ -43,6 +59,9 @@
             window.onload = () => {
                 const loginButton = document.querySelector("#loginButton")
                 const signUpButton = document.querySelector("#signUpButton")
+
+                const backBtn = document.querySelector("#toBack")
+                backBtn.addEventListener("click", toBack)
 
                 loginButton.addEventListener("click", login)
                 signUpButton.addEventListener("click", () => {

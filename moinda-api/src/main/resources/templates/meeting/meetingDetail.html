@@ -64,7 +64,7 @@
                                 align-items: center;">
                         <div style="text-align: left;
                                     padding: 0px 10px;"
-                                id="toList">
+                                id="toBack">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </div>
                         <h3 class="text-white font-weight-bold"
@@ -104,18 +104,14 @@
 
                 const meetingDetailDiv = document.querySelector(".meeting")
                 const participantsDiv = document.querySelector(".participants")
-                const toListBtn = document.querySelector("#toList")
+                const backBtn = document.querySelector("#toBack")
 
                 const parts = window.location.pathname.split('/');
                 const meetingId = parts[parts.length - 1];
                 // NOTE : 모임 상세 & 참여자 목록에 쓰기 위해 전역으로 선언헀음,
                 let formattedStartAt = "";
 
-                toListBtn.addEventListener("click", () => {
-
-                    // TODO : 페이징 파라미터를 붙여서 뒤로가기를 해야 한다.
-                    console.log("click..")
-                })
+                backBtn.addEventListener("click", toBack)
 
                 // REST API 호출 및 응답 처리
                 fetch(`/api/meeting/${meetingId}`)

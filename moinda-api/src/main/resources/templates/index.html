@@ -11,29 +11,35 @@
                     <div class="col-lg-8 align-self-end">
                         <th:block th:unless="${session.session == null}">
                             <h3 class="text-white font-weight-bold">
-                                안녕하세요, [[${session.session.name}]] 님 <br> 코딩 할 시간입니다.
+                                Hello!, [[${session.session.name}]]
+                            </h3>
+                            <h3 class="text-white font-weight-bold">
+                                Let's Mo Gak Ko !
                             </h3>
                             <hr class="divider" />
                         </th:block>
                         <th:block th:if="${session.session == null}">
                             <h3 class="text-white font-weight-bold">
-                                모각코 할 시간입니다.
+                                Let's Mo Gak Ko !
                             </h3>
                             <hr class="divider" />
                         </th:block>
                     </div>
                     <div class="col-lg-8 align-self-baseline">
-                        <a class="btn btn-primary btn-xl" id="meetings" th:href="@{/meetings}">
+                        <a class="btn btn-primary btn-xl" id="meetings" th:href="@{/meetings}"
+                            style="font-size: 1rem;">
                             모각코를 찾아보자
                         </a>
                     </div>
                     <div class="col-lg-8 align-self-baseline">
-                        <a class="btn btn-primary btn-xl" id="myMeetings" th:href="@{/myMeetings}">
+                        <a class="btn btn-primary btn-xl" id="myMeetings" th:href="@{/myMeetings}"
+                           style="font-size: 1rem;">
                             내 모각코를 보자
                         </a>
                     </div>
                     <div class="col-lg-8 align-self-baseline">
-                        <a class="btn btn-primary btn-xl" id="register" th:href="@{/meeting/register}">
+                        <a class="btn btn-primary btn-xl" id="register" th:href="@{/meeting/register}"
+                           style="font-size: 1rem;">
                             모각코를 만들자
                         </a>
                     </div>

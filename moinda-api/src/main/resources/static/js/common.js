@@ -24,3 +24,8 @@ const colors = [
     '#FF9800',
     '#39bbb0',
 ];
+
+const toBack = () => {
+    // window.history.replaceState({page: 1}, "", "http://localhost:9090");
+    window.history.back()
+}

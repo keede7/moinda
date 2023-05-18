@@ -8,15 +8,38 @@
         <header class="masthead" style="min-height: 100vh; height: auto;">
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider" />
+                    <div class="col-lg-8 col-xl-6 text-center"
+                         style="display: flex;
+                                font-size: x-large;
+                                color: white;
+                                align-items: center;">
+                        <div style="text-align: left;
+                                    padding: 0px 10px;"
+                             id="toBack">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </div>
+                        <h3 class="text-white font-weight-bold"
+                            style="flex: 1;
+                                    padding-right: 30px;
+                                    margin-bottom: 0px;">
+                            Let's Mo Gak Ko !
+                        </h3>
+                    </div>
+                    <div style="display: block;">
+                        <hr class="divider">
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
                         <div class="inParticipatingMeetings">
-<!--                            TODO : 최초로 데이터가 없을경우 태그를 넣어둘 필요?-->
+
+                        </div>
+                        <div class="noMeetingTitle"
+                                style="text-align: center;
+                                    color: white;
+                                    font-size: larger;
+                                    padding: 30px 0px;">
+                                참여중인 모임이 없습니다.
                         </div>
                     </div>
                 </div>
@@ -26,14 +49,27 @@
         <script th:inline="javascript">
 
             window.onload = () => {
+
+                const session = [[${session.session}]]
+
                 const meetingsDiv = document.querySelector(".inParticipatingMeetings")
+                const noMeetingTitleDiv = document.querySelector(".noMeetingTitle")
+
+                const backBtn = document.querySelector("#toBack")
+                backBtn.addEventListener("click", toBack)
 
                 fetch('/api/meeting/in-participating')
                     .then(response => response.json())
                     .then(meetings => {
-                        if(!meetings) {
+                        console.log(meetings)
+                        console.log(!meetings)
+                        console.log(meetings.length <= 0)
+
+                        if(!meetings || meetings.length <= 0) {
                             return;
                         }
+
+                        noMeetingTitleDiv.style.display = "none";
 
                         meetings.forEach(meeting => {
 
@@ -97,16 +133,19 @@
                     });
 
                 // Function
-                const makeBody = (text, ...data) => `<div class="text-white font-weight-bold"> ${text} : ${data.join(" ")} </div>`
+                const makeBody = (text, ...data) =>
+                    `<div class="text-white font-weight-bold">
+                            ${text} : ${data.join(" ")}
+                    </div>`
 
                 // TODO : 한명당 하나의 모임에만 들어가기 떄문에, 본인 아이디만으로 충분하게 할 수는 있다.
                 // TODO : 하지만 이후에 meetingId 가 필요해 질 것이므로 meeting를 보내기만 한다.
                 const leave = meetingId => {
                     const leaveRequestDto = {
                         "meetingId" : meetingId,
-                        "memberId": 1,
+                        "memberId": session.memberId,
                     }
-                    // TODO : Check Function
+
                     callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
                 }
 

@@ -8,9 +8,25 @@
         <header class="masthead" style="height: auto; min-height: 100vh;">
             <div class="container px-4 px-lg-5 h-75">
                 <div class="row gx-4 gx-lg-5 h-20 align-items-center justify-content-center">
-                    <div class="col-lg-8 col-xl-6 text-center">
-                        <h3 class="text-white font-weight-bold">Let's Mo Gak Ko!</h3>
-                        <hr class="divider"/>
+                    <div class="col-lg-8 col-xl-6 text-center"
+                         style="display: flex;
+                                font-size: x-large;
+                                color: white;
+                                align-items: center;">
+                        <div style="text-align: left;
+                                    padding: 0px 10px;"
+                             id="toBack">
+                            <i class="bi bi-arrow-counterclockwise"></i>
+                        </div>
+                        <h3 class="text-white font-weight-bold"
+                            style="flex: 1;
+                                    padding-right: 30px;
+                                    margin-bottom: 0px;">
+                            Let's Mo Gak Ko !
+                        </h3>
+                    </div>
+                    <div style="display: block;">
+                        <hr class="divider">
                     </div>
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center"
@@ -19,7 +35,7 @@
                         <div class="meetings">
 
                         </div>
-                        <div class="pagination col-lg-6 text-white font-weight-bold"
+                        <div class="pagination text-white font-weight-bold"
                              style="display: flex; justify-content: center;">
                         </div>
                     </div>
@@ -43,6 +59,9 @@
                 const session = [[${session.session}]]
 
                 const meetingsDiv = document.querySelector(".meetings")
+
+                const backBtn = document.querySelector("#toBack")
+                backBtn.addEventListener("click", toBack)
 
                 fetch(`/api/meeting/paginated${href}`)
                     .then(response => response.json())
@@ -275,18 +294,18 @@
 
                     if (meeting.prev) {
                         paginationInnerHtml +=
-                            `<a href="/meetings?page=${start - 1}&size=${size}" style="margin: 0px 10px 0px 10px">이전</a>`
+                            `<a class="meetingPagination" href="/meetings?page=${start - 1}&size=${size}">이전</a>`
                     }
 
                     paginations.forEach(page => {
                         // TODO : 어떤 번호의 페이지가 활성화되었는지 표시하기 위해 색상에 대한 분기처리 필요
                         paginationInnerHtml +=
-                            `<a href="/meetings?page=${page}&size=${size}" style="margin: 0px 10px 0px 10px;">${page}</a>`
+                            `<a class="meetingPagination" href="/meetings?page=${page}&size=${size}">${page}</a>`
                     })
 
                     if (meeting.next) {
                         paginationInnerHtml +=
-                            `<a href="/meetings?page=${end + 1}&size=${size}" style="margin: 0px 10px 0px 10px">다음</a>`
+                            `<a class="meetingPagination" href="/meetings?page=${end + 1}&size=${size}">다음</a>`
                     }
 
                     pagination.innerHTML += paginationInnerHtml
