@@ -6,4 +6,5 @@ include(
     "moinda-domains",
     "moinda-commons",
     "moinda-batch",
+    "moinda-security",
 )

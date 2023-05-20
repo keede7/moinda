@@ -4,6 +4,7 @@ import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.presentation.member.LoginRequestDto
 
 /**
+ * 05-23 ~ 미사용
  * @author keede
  * Created on 2023-04-08
  */

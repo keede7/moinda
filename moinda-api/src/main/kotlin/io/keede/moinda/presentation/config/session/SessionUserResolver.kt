@@ -31,13 +31,8 @@ class SessionUserResolver : HandlerMethodArgumentResolver {
 
         val request = webRequest.getNativeRequest(HttpServletRequest::class.java)
 
-        val cookies = request?.cookies ?: return null
+        val session = request?.session
 
-        return cookies.filter { it.name == Constants.COOKIE_NAME }[0]
-            .let {
-                request
-                    .getSession(false)
-                    .getAttribute(it.value)
-            }
+        return session?.getAttribute(Constants.SESSION_KEY)
     }
 }

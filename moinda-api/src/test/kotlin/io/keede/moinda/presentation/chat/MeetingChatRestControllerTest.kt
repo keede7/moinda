@@ -17,6 +17,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
@@ -52,7 +54,8 @@ internal class MeetingChatRestControllerTest : BaseApi() {
                 get(UriMaker.toMeetingChatApiUri("message", meetingId.toString()))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then

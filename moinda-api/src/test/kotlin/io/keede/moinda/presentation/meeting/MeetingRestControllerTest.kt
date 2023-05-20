@@ -22,6 +22,11 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -74,8 +79,9 @@ internal class MeetingRestControllerTest : BaseApi() {
                     .content(toJson(sut))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
-                    .cookie(super.cookie)
-            )
+                    .with(csrf())
+                    .with(oauth2Login())
+                )
 
         // Then
         perform
@@ -95,7 +101,7 @@ internal class MeetingRestControllerTest : BaseApi() {
             .perform(
                 get(UriMaker.toMeetingApiUri(meetingId))
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(oauth2Login())
             )
 
         // Then
@@ -125,7 +131,7 @@ internal class MeetingRestControllerTest : BaseApi() {
                     .param("page", pagePaginatedMeetingRequestDto.page.toString())
                     .param("size", pagePaginatedMeetingRequestDto.size.toString())
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(oauth2Login())
             )
 
         // Then
@@ -158,7 +164,8 @@ internal class MeetingRestControllerTest : BaseApi() {
                     .content(toJson(participateDto))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -189,7 +196,8 @@ internal class MeetingRestControllerTest : BaseApi() {
                     .content(toJson(leaveMeetingRequestDto))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -215,7 +223,7 @@ internal class MeetingRestControllerTest : BaseApi() {
                 get(UriMaker.toMeetingApiUri(meetingId.toString(), "participant"))
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(oauth2Login())
             )
 
         // Then

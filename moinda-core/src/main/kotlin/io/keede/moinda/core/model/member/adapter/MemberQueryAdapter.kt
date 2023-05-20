@@ -11,6 +11,9 @@ interface MemberQueryAdapter {
 
     fun findByEmail(email: String) : MemberJpaEntity
 
+    // TODO : Naming -> Security 전용 UseCase를 따로 생성해서 처리
+    fun findOAuth2ByEmail(email: String) : MemberJpaEntity?
+
     fun existMemberByEmail(email: String): Boolean
 
     fun findParticipateInMeetMembers(meetingId: Long) : List<MemberJpaEntity>
