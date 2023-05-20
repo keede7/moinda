@@ -1,13 +1,9 @@
 package io.keede.moinda.presentation
 
-import io.keede.moinda.common.member.session.Constants
-import io.keede.moinda.common.member.session.SessionResponse
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import javax.servlet.http.Cookie
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 
 /**
@@ -16,6 +12,8 @@ import javax.servlet.http.HttpServletResponse
  */
 @Controller
 class ViewController {
+
+    private val log = LoggerFactory.getLogger(this::class.java)
 
     @GetMapping("/sample")
     fun maps2(): String = "sample/thema-sample"
