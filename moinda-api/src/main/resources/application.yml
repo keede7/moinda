@@ -4,6 +4,10 @@ spring:
   profiles:
     include:
       - core
+#  특정 profile을 사용했을 떄 여러 개의 profile을 참조할 수 있음.
+    group:
+      local: logging-console, logging-local-config
+      dev: logging-file-config
 #  config:
 #    import:
 #      - application-core.yml
