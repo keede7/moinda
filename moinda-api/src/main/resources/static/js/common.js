@@ -14,6 +14,10 @@ const displayButton = (button) => {
     button.style.display = ""
 }
 
+const disappearButton = (button) => {
+    button.style.display = "none";
+}
+
 const colors = [
     '#2196F3',
     '#32c787',
@@ -28,4 +32,15 @@ const colors = [
 const toBack = () => {
     // window.history.replaceState({page: 1}, "", "http://localhost:9090");
     window.history.back()
+}
+
+const toMain = () => {
+    window.location.href = "/";
+}
+
+const isLogin = (session) => {
+    if(!session) {
+        alert("로그인이 필요한 서비스입니다.")
+        window.location.href = "/login"
+    }
 }

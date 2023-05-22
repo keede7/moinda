@@ -47,7 +47,7 @@
 
             window.onload = () => {
                 let href = window.location.href
-
+                console.log(href)
                 const isUri = href.includes("?page")
 
                 if (!isUri) {
@@ -61,7 +61,7 @@
                 const meetingsDiv = document.querySelector(".meetings")
 
                 const backBtn = document.querySelector("#toBack")
-                backBtn.addEventListener("click", toBack)
+                backBtn.addEventListener("click", toMain)
 
                 fetch(`/api/meeting/paginated${href}`)
                     .then(response => response.json())
@@ -122,20 +122,13 @@
                                     </div>
                                     <button class="btn btn-primary btn-xl participate"
                                     style="height: 50px;
-                                            padding: 10px 36px;
-                                            display: none;"
+                                            padding: 10px 36px;"
                                     type="button" name='participate'> 참가하기 </button>
                                     <button class="btn btn-primary btn-xl leave"
                                     style="height: 50px;
                                             padding: 10px 36px;
                                             display: none;"
                                     type="button" name="leave"> 참여취소 </button>
-                                    <!-- TODO : 화면의 빈 부분을 채우기 위해 선언-->
-                                    <button class="btn btn-primary btn-xl leave"
-                                    style="height: 50px;
-                                            padding: 10px 36px;
-                                            display: none;"
-                                    type="button" name="look"> 보기 </button>
                                 </div>
                              `
 
@@ -145,13 +138,11 @@
                 // 각 버튼 활성화 여부 및 표시 여부
                 const activeRenderingButton = () => {
 
-                    const meetings = document.querySelectorAll("div[name='meeting']")
-                    const lookButtons = document.querySelectorAll('button[name="look"]');
-                    // 로그인을 하지 않았다면 나머지 버튼을 숨겨놓는다.
-                    if (!session) {
-                        renderingLookButtons(lookButtons)
+                    if(!session) {
                         return;
                     }
+
+                    const meetings = document.querySelectorAll("div[name='meeting']")
 
                     fetch(`/api/member/${session.memberId}`)
                         .then(response => response.json())
@@ -170,38 +161,24 @@
 
                                 if (participatingMeetingId === parseInt(meetingId)) {
                                     displayButton(leaveBtn)
-                                } else {
-                                    displayButton(participateBtn)
+                                    disappearButton(participateBtn)
                                 }
                             })
                         })
                 }
-
-                const renderingLookButtons = (lookButtons) => {
-                    lookButtons.forEach(button => {
-                        displayButton(button)
-                        button.addEventListener(
-                            "click",
-                            () => {
-                                const meetingId = button.closest('div[name="meeting"]')
-                                    .querySelector('div[name="meetingInfo"]')
-                                    .getAttribute(`value`)
-
-                                console.log(meetingId)
-                                location.href = `/meeting-detail/${meetingId}`
-                            }
-                        )
-                    })
-                }
                 // 참여 이벤트
                 const participate = meetingId => {
 
-                    const participateMeetingRequestDto = {
-                        "meetingId": meetingId,
-                        "memberId": session.memberId,
-                    }
+                    isLogin(session)
 
-                    callRestApi(() => participateEvent(meetingId), "POST", "/api/meeting/participate", participateMeetingRequestDto)
+                    if(session && confirm("참여하시겠습니까?")) {
+                        const participateMeetingRequestDto = {
+                            "meetingId": meetingId,
+                            "memberId": session.memberId,
+                        }
+
+                        callRestApi(() => participateEvent(meetingId), "POST", "/api/meeting/participate", participateMeetingRequestDto)
+                    }
                 }
                 // 참여 이벤트 적용
                 const makeParticipateEvent = () => {
@@ -215,7 +192,6 @@
                         button.addEventListener("click", () => participate(meetingId))
                     })
                 }
-
                 // 참여 이벤트 결과처리
                 function participateEvent(meetingId) {
                     try {
@@ -232,7 +208,6 @@
                         alert(`요청에 실패했습니다. 서버에 문의해주세요.`);
                     }
                 }
-
                 // 상세 보기 이벤트
                 const makeToGetMeetingDetailEvent = () => {
                     const meetingElements = document.querySelectorAll('div[name="meetingInfo"]');
@@ -249,11 +224,16 @@
                 }
                 // 참여 취소 이벤트
                 const leave = () => {
-                    const leaveRequestDto = {
-                        "memberId": session.memberId,
-                    }
 
-                    callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
+                    isLogin(session)
+
+                    if(session && confirm("취소하시겠습니까?")) {
+                        const leaveRequestDto = {
+                            "memberId": session.memberId,
+                        }
+
+                        callRestApi(leaveEvent, "POST", "/api/meeting/leave", leaveRequestDto)
+                    }
                 }
                 // 참여 취소 이벤트 적용
                 const makeLeaveButtonEvent = () => {
