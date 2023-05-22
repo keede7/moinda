@@ -63,16 +63,21 @@
                                 color: white;
                                 align-items: center;">
                         <div style="text-align: left;
-                                    padding: 0px 10px;"
+                                    padding: 0px 10px;
+                                    font-family: emoji;"
                                 id="toBack">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </div>
                         <h3 class="text-white font-weight-bold"
                             style="flex: 1;
-                                    padding-right: 30px;
                                     margin-bottom: 0px;">
                             Let's Mo Gak Ko !
                         </h3>
+                        <div style="text-align: right;
+                                    padding: 0px 10px;"
+                             id="toMain">
+                            <i class="bi bi-house-door"></i>
+                        </div>
                     </div>
                     <div style="display: block;">
                         <hr class="divider">
@@ -112,16 +117,19 @@
 
                 const meetingDetailDiv = document.querySelector(".meeting")
                 const participantsDiv = document.querySelector(".participants")
+
+                const mainBtn = document.querySelector("#toMain")
+                mainBtn.addEventListener("click", toMain)
                 const backBtn = document.querySelector("#toBack")
+                backBtn.addEventListener("click", () => {
+                    window.location.href = `/meetings${href}`
+                })
 
                 const parts = window.location.pathname.split('/');
                 const meetingId = parts[parts.length - 1];
                 // NOTE : 모임 상세 & 참여자 목록에 쓰기 위해 전역으로 선언헀음,
                 let formattedStartAt = "";
 
-                backBtn.addEventListener("click", () => {
-                    window.location.href = `/meetings${href}`
-                })
 
                 // REST API 호출 및 응답 처리
                 fetch(`/api/meeting/${meetingId}`)

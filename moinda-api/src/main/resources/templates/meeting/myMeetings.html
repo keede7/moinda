@@ -14,16 +14,21 @@
                                 color: white;
                                 align-items: center;">
                         <div style="text-align: left;
-                                    padding: 0px 10px;"
+                                    padding: 0px 10px;
+                                    font-family: emoji;"
                              id="toBack">
                             <i class="bi bi-arrow-counterclockwise"></i>
                         </div>
                         <h3 class="text-white font-weight-bold"
                             style="flex: 1;
-                                    padding-right: 30px;
                                     margin-bottom: 0px;">
                             Let's Mo Gak Ko !
                         </h3>
+                        <div style="text-align: right;
+                                    padding: 0px 10px;"
+                             id="toMain">
+                            <i class="bi bi-house-door"></i>
+                        </div>
                     </div>
                     <div style="display: block;">
                         <hr class="divider">
@@ -55,6 +60,8 @@
                 const meetingsDiv = document.querySelector(".inParticipatingMeetings")
                 const noMeetingTitleDiv = document.querySelector(".noMeetingTitle")
 
+                const mainBtn = document.querySelector("#toMain")
+                mainBtn.addEventListener("click", toMain)
                 const backBtn = document.querySelector("#toBack")
                 backBtn.addEventListener("click", toBack)
 
@@ -63,7 +70,6 @@
                     .then(meetings => {
                         console.log(meetings)
                         console.log(!meetings)
-                        console.log(meetings.length <= 0)
 
                         if(!meetings || meetings.length <= 0) {
                             return;
