@@ -19,40 +19,41 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/api/member")
 class MemberRestController(
-    private val memberCommandUseCase: MemberCommandUseCase,
+    // TODO : OAuth2 연동완료시 삭제
+//    private val memberCommandUseCase: MemberCommandUseCase,
     private val memberQueryUseCase: MemberQueryUseCase,
-    private val loginUseCase: LoginUseCase
+//    private val loginUseCase: LoginUseCase
 ) {
-
-    @PostMapping("/signup")
-    fun signup(
-        @RequestBody @Valid signUpMemberDto: SignUpMemberDto
-    ): MemberResponseDto =
-        memberCommandUseCase.signup(
-            MemberCommandUseCase.Command(signUpMemberDto.toDomain())
-        ).let(Member::toMemberResponseDto)
-
-    @PostMapping("/login")
-    fun login(
-        @RequestBody @Valid loginRequestDto: LoginRequestDto,
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ) {
-        val member = loginUseCase.login(
-            LoginUseCase.Command(
-                loginRequestDto.email,
-                loginRequestDto.password
-            )
-        )
-
-        this.createSession(member, request, response)
-    }
-
-    @PostMapping("/logout")
-    fun logout(
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ) = this.removeSession(request)
+// TODO : OAuth2 연동완료시 삭제
+//    @PostMapping("/signup")
+//    fun signup(
+//        @RequestBody @Valid signUpMemberDto: SignUpMemberDto
+//    ): MemberResponseDto =
+//        memberCommandUseCase.signup(
+//            MemberCommandUseCase.Command(signUpMemberDto.toDomain())
+//        ).let(Member::toMemberResponseDto)
+//
+//    @PostMapping("/login")
+//    fun login(
+//        @RequestBody @Valid loginRequestDto: LoginRequestDto,
+//        request: HttpServletRequest,
+//        response: HttpServletResponse
+//    ) {
+//        val member = loginUseCase.login(
+//            LoginUseCase.Command(
+//                loginRequestDto.email,
+//                loginRequestDto.password
+//            )
+//        )
+//
+//        this.createSession(member, request, response)
+//    }
+//
+//    @PostMapping("/logout")
+//    fun logout(
+//        request: HttpServletRequest,
+//        response: HttpServletResponse
+//    ) = this.removeSession(request)
 
     @GetMapping("/{memberId}")
     fun getOne(
@@ -61,32 +62,32 @@ class MemberRestController(
         memberQueryUseCase.getById(
             MemberQueryUseCase.Query(memberId)
         ).let(Member::toMemberResponseDto)
-
-    private fun createSession(
-        member: Member,
-        request: HttpServletRequest,
-        response: HttpServletResponse
-    ) {
-        val session = request.getSession(true)
-
-        val toSessionResponse = member.toSessionResponse()
-
-        session.setAttribute(Constants.SESSION_KEY, toSessionResponse)
-        session.maxInactiveInterval = Constants.MAX_IN_ACTIVE_INTERVAL
-
-        Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
-            .also {
-                it.maxAge = Constants.MAX_IN_ACTIVE_INTERVAL
-                it.path = "/"
-                response.addCookie(it)
-            }
-    }
-
-    private fun removeSession(
-        request: HttpServletRequest
-    ) {
-        val session = request.getSession(false)
-
-        session?.invalidate()
-    }
+// TODO : OAuth2 연동완료시 삭제
+//    private fun createSession(
+//        member: Member,
+//        request: HttpServletRequest,
+//        response: HttpServletResponse
+//    ) {
+//        val session = request.getSession(true)
+//
+//        val toSessionResponse = member.toSessionResponse()
+//
+//        session.setAttribute(Constants.SESSION_KEY, toSessionResponse)
+//        session.maxInactiveInterval = Constants.MAX_IN_ACTIVE_INTERVAL
+//
+//        Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
+//            .also {
+//                it.maxAge = Constants.MAX_IN_ACTIVE_INTERVAL
+//                it.path = "/"
+//                response.addCookie(it)
+//            }
+//    }
+//
+//    private fun removeSession(
+//        request: HttpServletRequest
+//    ) {
+//        val session = request.getSession(false)
+//
+//        session?.invalidate()
+//    }
 }

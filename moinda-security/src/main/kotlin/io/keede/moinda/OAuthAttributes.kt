@@ -25,7 +25,7 @@ data class OAuthAttributes(
             )
 
         fun of(
-            registrationId: String?,
+//            registrationId: String?,
             userNameAttributeName: String?,
             attributes: Map<String, Any>
         ): OAuthAttributes =

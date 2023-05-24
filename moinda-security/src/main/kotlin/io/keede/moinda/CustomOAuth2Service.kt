@@ -29,10 +29,10 @@ class CustomOAuth2Service(
         val delegate: OAuth2UserService<OAuth2UserRequest, OAuth2User> = DefaultOAuth2UserService()
         val oAuth2User = delegate.loadUser(userRequest)
 
-        val registrationId = userRequest?.let {
-            it.clientRegistration
-                .registrationId
-        }
+//        val registrationId = userRequest?.let {
+//            it.clientRegistration
+//                .registrationId
+//        }
 
         val userNameAttributeName = userRequest?.let {
             it.clientRegistration
@@ -41,7 +41,7 @@ class CustomOAuth2Service(
                 .userNameAttributeName
         }
 
-        val attributes = OAuthAttributes.of(registrationId, userNameAttributeName, oAuth2User.attributes)
+        val attributes = OAuthAttributes.of(userNameAttributeName, oAuth2User.attributes)
 
         // TODO : 사용자를 저장하거나 수정한다.
         val memberJpaEntity = storeOAuthMember(attributes)

@@ -42,8 +42,12 @@ internal class SecurityConfig(
 
             .and()
             .oauth2Login()
+            .loginPage("/login")
+            .defaultSuccessUrl("/")
+            .failureUrl("/login")
             .userInfoEndpoint()
             .userService(this.oAuth2Service)
+
 
         return http.build()
     }

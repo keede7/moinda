@@ -33,11 +33,12 @@ internal class MemberRestControllerTest : BaseApi() {
     @MockkBean
     private lateinit var querySut: MemberQueryUseCase
 
-    @MockkBean
-    private lateinit var memberCommandUseCase: MemberCommandUseCase
-
-    @MockkBean
-    private lateinit var loginUseCase: LoginUseCase
+    // TODO : OAuth2 연동완료시 삭제
+//    @MockkBean
+//    private lateinit var memberCommandUseCase: MemberCommandUseCase
+//
+//    @MockkBean
+//    private lateinit var loginUseCase: LoginUseCase
 
     @BeforeEach
     fun init() {
@@ -56,7 +57,7 @@ internal class MemberRestControllerTest : BaseApi() {
         val perform = super.mockMvc
             .perform(
                 get(UriMaker.toMemberApiUri(memberId))
-                    .session(super.session) // 없으면 만료관련 예외가 우선 발생한다, 다른 설정 및 코드를 먼저 바꿔야 가능.
+                    .session(super.session)
                     .with(csrf())
                     .with(oauth2Login())
             )
