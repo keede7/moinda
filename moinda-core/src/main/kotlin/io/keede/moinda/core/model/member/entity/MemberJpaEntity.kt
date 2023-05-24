@@ -8,6 +8,7 @@ import org.hibernate.annotations.DynamicUpdate
 import javax.persistence.*
 
 /**
+ * 05-24 : OAuth2 기준으로 Entity 변경
  * @author keede
  * Created on 2023-04-05
  */
@@ -25,20 +26,7 @@ class MemberJpaEntity(
     @Comment("사용자 이메일")
     var email: String,
 
-    @Column(name = "password", length = 300, nullable = false)
-    @Comment("사용자 패스워드")
-    var password: String,
-
-    @Lob
-    @Comment("사용자 소개")
-    var introduce: String?,
-
     ) : BaseEntity() {
-
-    // TODO : OAuth2 Test
-    constructor(name: String, email: String) : this(
-        name,email,"1212","테스트"
-    )
 
     // TODO : 2차
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
@@ -66,12 +54,6 @@ class MemberJpaEntity(
 
     fun leaveMeeting() {
         this.meetingJpaEntity = null
-    }
-
-    fun isMatchPassword(password: String) {
-        if (this.password != password) {
-            throw RuntimeException("패스워드가 일치하지 않습니다.")
-        }
     }
 
     // TODO : 참여중인 아이디 하나를 제공한다. 2차 개발시 여러값으로 변환 될 수 있음,

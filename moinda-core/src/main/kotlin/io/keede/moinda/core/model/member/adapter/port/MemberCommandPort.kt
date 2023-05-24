@@ -20,8 +20,6 @@ internal class MemberCommandPort(
         val entity = MemberJpaEntity(
             createMember.name,
             createMember.email,
-            createMember.password,
-            createMember.introduce
         )
 
         return memberJpaRepository.save(entity)
@@ -33,8 +31,6 @@ internal class MemberCommandPort(
         var entity = MemberJpaEntity(
             "테스트유저1",
             "test1@naver.com",
-            "1212",
-            "안녕하세요?"
         )
         entity = memberJpaRepository.save(entity)
 
@@ -42,8 +38,6 @@ internal class MemberCommandPort(
             MemberJpaEntity(
                 "테스트유저2",
                 "test2@naver.com",
-                "1212",
-                "안녕하세요?"
             )
         )
 
