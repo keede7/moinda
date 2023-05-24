@@ -40,7 +40,7 @@ internal class MeetingCommandPort(
     // TODO : 추후 삭제
     @PostConstruct
     fun init() {
-        for (index in 1..129) {
+        for (index in 1..22) {
             val entity = MeetingJpaEntity(
                 "오늘의 모임 $index",
                 Location(

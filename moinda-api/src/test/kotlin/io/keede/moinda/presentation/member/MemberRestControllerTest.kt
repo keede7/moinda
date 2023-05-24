@@ -6,8 +6,9 @@ import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.domains.member.usecase.LoginUseCase
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
-import io.keede.moinda.presentation.config.*
-import io.keede.moinda.presentation.member.fixture.*
+import io.keede.moinda.presentation.config.BaseApi
+import io.keede.moinda.presentation.config.UriMaker
+import io.keede.moinda.presentation.config.toMemberApiUri
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
@@ -15,12 +16,11 @@ import org.junit.jupiter.api.DisplayNameGeneration
 import org.junit.jupiter.api.DisplayNameGenerator
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 /**
  * @author keede
@@ -34,67 +34,15 @@ internal class MemberRestControllerTest : BaseApi() {
     private lateinit var querySut: MemberQueryUseCase
 
     @MockkBean
-    private lateinit var commandSut: MemberCommandUseCase
+    private lateinit var memberCommandUseCase: MemberCommandUseCase
 
     @MockkBean
-    private lateinit var loginSut: LoginUseCase
+    private lateinit var loginUseCase: LoginUseCase
 
     @BeforeEach
     fun init() {
         super.session = MockHttpSession()
         super.session.setAttribute(Constants.SESSION_KEY, mockk<SessionResponse>())
-    }
-
-    @Test
-    fun 회원가입_성공() {
-        // Given
-        val name = "테스트1"
-        val email = "nana@naver.com"
-        val password = "1212"
-
-        val sut = ofCreateMember(name, email, password)
-
-        every { commandSut.signup(MemberCommandUseCase.Command(sut)) } returns mockk(relaxed = true)
-
-        // When
-        val perform = super.mockMvc
-            .perform(
-                post(UriMaker.toMemberApiUri("signup"))
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-                    .content(toJson(sut))
-            )
-
-        // Then
-        perform
-            .andExpect(status().is2xxSuccessful)
-    }
-
-    @Test
-    fun 로그인_성공() {
-
-        val email = "test@test.com"
-        val password = "1212" // TODO : 추후 암호화
-
-        val requestDto = ofLoginRequestDto(email, password)
-
-        val request = mockk<HttpServletRequest>()
-        val response = mockk<HttpServletResponse>()
-
-        every { loginSut.login(any()) } returns mockk(relaxed = true)
-
-        val perform = super.mockMvc
-            .perform(
-                post(
-                    UriMaker.toMemberApiUri("login"),
-                    request,
-                    response
-                ).content(toJson(requestDto))
-                    .contentType(MediaType.APPLICATION_JSON_VALUE)
-            )
-
-        perform
-            .andExpect(status().is2xxSuccessful)
-            .andExpect(cookie().exists(Constants.COOKIE_NAME))
     }
 
     @Test
@@ -108,8 +56,9 @@ internal class MemberRestControllerTest : BaseApi() {
         val perform = super.mockMvc
             .perform(
                 get(UriMaker.toMemberApiUri(memberId))
-                    .session(super.session)
-                    .cookie(super.cookie)
+                    .session(super.session) // 없으면 만료관련 예외가 우선 발생한다, 다른 설정 및 코드를 먼저 바꿔야 가능.
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then

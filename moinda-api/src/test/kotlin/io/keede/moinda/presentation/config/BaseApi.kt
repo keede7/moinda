@@ -21,6 +21,7 @@ open class BaseApi {
 
     protected lateinit var session: MockHttpSession
 
+    // TODO : 추후 삭제
     protected val cookie = Cookie(Constants.COOKIE_NAME, Constants.SESSION_KEY)
 
     protected fun toJson(obj: Any): String {

@@ -52,6 +52,17 @@ internal class MemberQueryPort(
             .fetchOne() ?: throw RuntimeException("등록된 이메일이 아닙니다.")
     }
 
+    override fun findOAuth2ByEmail(email: String): MemberJpaEntity? {
+        return jpaQueryFactory
+            .selectFrom(memberJpaEntity)
+            .leftJoin(memberJpaEntity.meetingJpaEntity).fetchJoin()
+            .where(
+                memberJpaEntity.email.eq(email)
+                    .and(memberJpaEntity.deleteStatus.isFalse)
+            )
+            .fetchOne()
+    }
+
     // 회원 가입 시 이메일 중복검증에 사용한다.
     override fun existMemberByEmail(email: String): Boolean {
         return jpaQueryFactory

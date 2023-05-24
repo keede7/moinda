@@ -18,6 +18,8 @@ import org.junit.jupiter.api.*
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.http.MediaType
 import org.springframework.mock.web.MockHttpSession
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -64,7 +66,8 @@ internal class GroupRestControllerTest : BaseApi() {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(toJson(actual))
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -84,7 +87,8 @@ internal class GroupRestControllerTest : BaseApi() {
             .perform(
                 get(UriMaker.toGroupApiUri(groupId.toString()))
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -101,7 +105,8 @@ internal class GroupRestControllerTest : BaseApi() {
             .perform(
                 get(UriMaker.GROUP_API)
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -132,7 +137,8 @@ internal class GroupRestControllerTest : BaseApi() {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(toJson(actual))
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(csrf())
+                    .with(oauth2Login())
             )
 
         // Then
@@ -161,7 +167,7 @@ internal class GroupRestControllerTest : BaseApi() {
                     .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(toJson(actual))
                     .session(super.session)
-                    .cookie(super.cookie)
+                    .with(oauth2Login())
             )
 
         // Then

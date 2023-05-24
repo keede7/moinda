@@ -35,6 +35,11 @@ class MemberJpaEntity(
 
     ) : BaseEntity() {
 
+    // TODO : OAuth2 Test
+    constructor(name: String, email: String) : this(
+        name,email,"1212","테스트"
+    )
+
     // TODO : 2차
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST])
 //    @JoinColumn(name = "group_id", foreignKey = ForeignKey(value = ConstraintMode.NO_CONSTRAINT))
