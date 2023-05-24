@@ -3,8 +3,6 @@ package io.keede.moinda.presentation.member
 import com.ninjasquad.springmockk.MockkBean
 import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
-import io.keede.moinda.domains.member.usecase.LoginUseCase
-import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
 import io.keede.moinda.presentation.config.BaseApi
 import io.keede.moinda.presentation.config.UriMaker
@@ -17,8 +15,8 @@ import org.junit.jupiter.api.DisplayNameGenerator
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.mock.web.MockHttpSession
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors
-import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.oauth2Login
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -32,13 +30,6 @@ internal class MemberRestControllerTest : BaseApi() {
 
     @MockkBean
     private lateinit var querySut: MemberQueryUseCase
-
-    // TODO : OAuth2 연동완료시 삭제
-//    @MockkBean
-//    private lateinit var memberCommandUseCase: MemberCommandUseCase
-//
-//    @MockkBean
-//    private lateinit var loginUseCase: LoginUseCase
 
     @BeforeEach
     fun init() {

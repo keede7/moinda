@@ -7,11 +7,4 @@ package io.keede.moinda.common.member
 data class CreateMember(
     val name: String,
     val email: String,
-    val password: String,
-    val introduce: String?,
-) {
-    constructor(
-        name: String,
-        email: String,
-    ) : this(name, email, "1212", "테스트")
-}
+)

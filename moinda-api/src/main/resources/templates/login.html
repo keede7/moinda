@@ -36,31 +36,12 @@
                 </div>
                 <div class="row gx-4 gx-lg-5 justify-content-center mb-5">
                     <div class="col-lg-6">
-<!--                         TODO : OAuth2 연동완료시 삭제-->
-<!--                        <form id="contactForm" data-sb-form-api-token="API_TOKEN">-->
-<!--                            &lt;!&ndash; Name input&ndash;&gt;-->
-<!--                            <div class="form-floating mb-3">-->
-<!--                                <input class="form-control" id="email" type="email" placeholder="Enter your email..." />-->
-<!--                                <label for="email">Email</label>-->
-<!--                            </div>-->
-<!--                            &lt;!&ndash; Email address input&ndash;&gt;-->
-<!--                            <div class="form-floating mb-3">-->
-<!--                                <input class="form-control" id="password" type="password" placeholder="8자 이상을 권장합니다." />-->
-<!--                                <label for="password">Password</label>-->
-<!--                            </div>-->
-<!--                            <div class="d-grid mb-3">-->
-<!--                                <button class="btn btn-primary btn-xl" id="loginButton" type="button">로그인</button>-->
-<!--                            </div>-->
-<!--                            <div class="d-grid mb-3">-->
-<!--                                <button class="btn btn-primary btn-xl" id="signUpButton" type="button">회원가입</button>-->
-<!--                            </div>-->
-                            <div class="d-grid mb-3">
-                                <a class="btn btn-primary btn-xl" id="google" href="/oauth2/authorization/google"
-                                   style="font-size: 1rem;">
-                                    구글 로그인
-                                </a>
-                            </div>
-<!--                        </form>-->
+                        <div class="d-grid mb-3">
+                            <a class="btn btn-primary btn-xl" id="google" href="/oauth2/authorization/google"
+                               style="font-size: 1rem;">
+                                구글 로그인
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,48 +50,12 @@
         <script th:inline="javascript">
 
             window.onload = () => {
-                // TODO : OAuth2 연동완료시 삭제
-                // const loginButton = document.querySelector("#loginButton")
-                // const signUpButton = document.querySelector("#signUpButton")
 
                 const mainBtn = document.querySelector("#toMain")
                 mainBtn.addEventListener("click", toMain)
                 const backBtn = document.querySelector("#toBack")
                 backBtn.addEventListener("click", toBack)
 
-                // TODO : OAuth2 연동완료시 삭제
-                // loginButton.addEventListener("click", login)
-                // signUpButton.addEventListener("click", () => {
-                //     location.href = "/signup"
-                // })
-
-                // function login() {
-                //     const email = document.querySelector("#email")
-                //     const password = document.querySelector("#password")
-                //
-                //     const loginInputs = {
-                //         "email" : email.value,
-                //         "password" : password.value,
-                //     }
-                //
-                //     callRestApi(loginEvent, "POST", "/api/member/login", loginInputs);
-                // }
-                //
-                // function loginEvent() {
-                //     try {
-                //         if (httpRequest.readyState === XMLHttpRequest.DONE) {
-                //             if (httpRequest.status === 200) {
-                //                 window.location.href = "/"
-                //             } else {
-                //                 alert(httpRequest.responseText);
-                //                 return;
-                //             }
-                //         }
-                //     }
-                //     catch( e ) {
-                //         alert('Caught Exception: ' + e.description);
-                //     }
-                // }
             }
 
         </script>

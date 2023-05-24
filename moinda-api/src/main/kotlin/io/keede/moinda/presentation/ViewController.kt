@@ -25,9 +25,6 @@ class ViewController {
     @GetMapping("/maps")
     fun maps(): String = "sample/maps"
 
-    @GetMapping("/signup")
-    fun signup(): String = "signup"
-
     @GetMapping("/login")
     fun login(): String = "login"
 
