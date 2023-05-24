@@ -1,4 +1,4 @@
-package io.keede.moinda
+package io.keede.moinda.model
 
 /**
  * @author keede
