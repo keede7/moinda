@@ -57,6 +57,11 @@
                 <MaxIndex>10</MaxIndex> -->
             </rollingPolicy>
         </appender>
+        <appender name="PROFILE-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${LOG_PATTERN}</pattern>
+            </encoder>
+        </appender>
     </springProfile>
 
     <logger name="${MODULE_PATH}"
