@@ -1,4 +1,4 @@
-package io.keede.moinda
+package io.keede.moinda.service
 
 import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.common.member.session.Constants
@@ -6,6 +6,7 @@ import io.keede.moinda.common.member.session.SessionResponse
 import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
 import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
+import io.keede.moinda.model.OAuthAttributes
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
