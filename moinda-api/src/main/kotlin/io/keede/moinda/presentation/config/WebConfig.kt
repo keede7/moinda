@@ -19,6 +19,7 @@ class WebConfig : WebMvcConfigurer {
         "/api/member/login",
         "/api/member/signup",
         "/api/meeting/**",
+        "/actuator/**",
     )
 
     override fun addArgumentResolvers(resolvers: MutableList<HandlerMethodArgumentResolver>) {
