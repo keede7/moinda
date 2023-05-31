@@ -22,3 +22,10 @@ server:
     session:
       timeout: 30m
       tracking-modes: cookie
+
+# https://hudi.blog/spring-boot-actuator-prometheus-grafana-set-up/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
