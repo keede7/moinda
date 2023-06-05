@@ -1,51 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration>
-<!--  TODO : Property를 다른 파일로 분리해서 참조해 쓸 수 있을까요  -->
-<!--  TODO : 파일이 생성되는 위치 테스트 필요  -->
+    <!--  NOTE : 파일이 생성되는 위치 의논 필요  -->
+    <property name="ACTIVE_PROFILE" value="${spring.profiles.active}" />
+
     <property name="LOG_PATH" value="/logs" />
     <!-- log file name -->
     <property name="LOG_FILE_NAME" value="moinda" />
     <!-- pattern -->
-    <property name="LOG_PATTERN"
+    <property name="LOG_DISPLAY_PATTERN"
               value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [ %level ] %logger{36} - %msg%n" />
-
-    <property name="LOG_LOCAL_PATTERN"
-              value="%d{HH:mm:ss.SSS} [%thread] [ %level ] %logger{36} - %msg%n" />
-
-    <property name="LOG_FILE_ROLLING_NAME_PATTERN"
-              value="${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}_%i.log"/>
 
     <property name="MODULE_PATH" value="io.keede.moinda"/>
     <property name="HIKARI_PATH" value="com.zaxxer.hikari"/>
 
     <property name="LOG_LEVEL_ROOT" value="INFO"/>
     <property name="LOG_LEVEL_API_PATH" value="DEBUG"/>
-    <property name="LOG_LEVEL_Hikari_PACKAGE" value="INFO"/>
+    <property name="LOG_LEVEL_HIKARI_PACKAGE" value="INFO"/>
 
-    <!--  각 <springProfile> 의 name 속성은 profile로 활성화 해야한다.  -->
-    <springProfile name="logging-console">
-        <appender name="PROFILE-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${LOG_LOCAL_PATTERN}</pattern>
-            </encoder>
-        </appender>
-    </springProfile>
+    <appender name="CONSOLE_DISPLAY_APPENDER" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${LOG_DISPLAY_PATTERN}</pattern>
+        </encoder>
+    </appender>
 
-    <springProfile name="logging-file-config">
-        <appender name="PROFILE-APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <springProfile name="${ACTIVE_PROFILE}">
+        <appender name="FILE_APPENDER" class="ch.qos.logback.core.rolling.RollingFileAppender">
             <!-- 파일경로 설정 -->
-            <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+            <file>${LOG_PATH}/${LOG_FILE_NAME}-${ACTIVE_PROFILE}.log</file>
 
             <!-- 출력패턴 설정 -->
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${LOG_PATTERN}</pattern>
+                <pattern>${LOG_DISPLAY_PATTERN}</pattern>
             </encoder>
 
             <!-- Rolling 정책 -->
             <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
                 <!-- .gz,.zip 등을 넣으면 자동 일자별 로그파일 압축 -->
-                <fileNamePattern>${LOG_FILE_ROLLING_NAME_PATTERN}</fileNamePattern>
+                <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}-${ACTIVE_PROFILE}.%d{yyyy-MM-dd}_%i.log</fileNamePattern>
                 <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                     <!-- 파일당 최고 용량 kb, mb, gb -->
                     <maxFileSize>10MB</maxFileSize>
@@ -57,26 +49,38 @@
                 <MaxIndex>10</MaxIndex> -->
             </rollingPolicy>
         </appender>
-        <appender name="PROFILE-APPENDER" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>${LOG_PATTERN}</pattern>
-            </encoder>
-        </appender>
+
+        <logger name="${MODULE_PATH}"
+                level="${LOG_LEVEL_API_PATH}"
+                additivity="false">
+            <appender-ref ref="FILE_APPENDER"/>
+        </logger>
+
+        <logger name="${HIKARI_PATH}"
+                level="${LOG_LEVEL_HIKARI_PACKAGE}"
+                additivity="false">
+            <appender-ref ref="FILE_APPENDER"/>
+        </logger>
+
+        <root level="${LOG_LEVEL_ROOT}">
+            <appender-ref ref="FILE_APPENDER" />
+        </root>
+
     </springProfile>
 
     <logger name="${MODULE_PATH}"
             level="${LOG_LEVEL_API_PATH}"
             additivity="false">
-        <appender-ref ref="PROFILE-APPENDER"/>
+        <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
     </logger>
 
     <logger name="${HIKARI_PATH}"
-            level="${LOG_LEVEL_Hikari_PACKAGE}"
+            level="${LOG_LEVEL_HIKARI_PACKAGE}"
             additivity="false">
-        <appender-ref ref="PROFILE-APPENDER"/>
+        <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
     </logger>
 
     <root level="${LOG_LEVEL_ROOT}">
-        <appender-ref ref="PROFILE-APPENDER" />
+        <appender-ref ref="CONSOLE_DISPLAY_APPENDER" />
     </root>
 </configuration>
