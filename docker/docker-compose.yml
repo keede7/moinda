@@ -23,9 +23,11 @@ services:
 
   local-app:
     container_name: local-app
+    environment:
+      - SPRING_PROFILES_ACTIVE=local,core,oauth,logging-console
     build:
       context: ..
-      dockerfile: ../Dockerfile
+      dockerfile: ./Dockerfile
     ports:
       - "9090:9090"
     restart: always
