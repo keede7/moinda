@@ -4,7 +4,7 @@
     <!--  NOTE : 파일이 생성되는 위치 의논 필요  -->
     <property name="ACTIVE_PROFILE" value="${spring.profiles.active}" />
 
-    <property name="LOG_PATH" value="/logs" />
+    <property name="LOG_PATH" value="/var/logs" />
     <!-- log file name -->
     <property name="LOG_FILE_NAME" value="moinda" />
     <!-- pattern -->
@@ -54,33 +54,20 @@
                 level="${LOG_LEVEL_API_PATH}"
                 additivity="false">
             <appender-ref ref="FILE_APPENDER"/>
+            <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
         </logger>
 
         <logger name="${HIKARI_PATH}"
                 level="${LOG_LEVEL_HIKARI_PACKAGE}"
                 additivity="false">
             <appender-ref ref="FILE_APPENDER"/>
+            <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
         </logger>
 
         <root level="${LOG_LEVEL_ROOT}">
             <appender-ref ref="FILE_APPENDER" />
+            <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
         </root>
 
     </springProfile>
-
-    <logger name="${MODULE_PATH}"
-            level="${LOG_LEVEL_API_PATH}"
-            additivity="false">
-        <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
-    </logger>
-
-    <logger name="${HIKARI_PATH}"
-            level="${LOG_LEVEL_HIKARI_PACKAGE}"
-            additivity="false">
-        <appender-ref ref="CONSOLE_DISPLAY_APPENDER"/>
-    </logger>
-
-    <root level="${LOG_LEVEL_ROOT}">
-        <appender-ref ref="CONSOLE_DISPLAY_APPENDER" />
-    </root>
 </configuration>

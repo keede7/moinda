@@ -8,8 +8,6 @@ services:
       MYSQL_DATABASE: boilerplate
       MYSQL_ROOT_HOST: '%'
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 1234
       TZ: 'Asia/Seoul'
     restart: always
     ports:
@@ -24,7 +22,9 @@ services:
   local-app:
     container_name: local-app
     environment:
-      - SPRING_PROFILES_ACTIVE=local,core,oauth,logging-console
+      - SPRING_PROFILES_ACTIVE=local,core,oauth
+#      - jasypt.encryptor.password= TODO 사용할떄 변경할것
+      - TZ=Asia/Seoul
     build:
       context: ..
       dockerfile: ./Dockerfile
@@ -35,6 +35,40 @@ services:
       - local-db
     networks:
       - boilerplate-local
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9091:9091
+    restart: unless-stopped
+    volumes:
+      - ../prometheus:/etc/prometheus
+      - prom_data:/prometheus
+    depends_on:
+      - local-app
+    networks:
+      - boilerplate-local
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=grafana
+    volumes:
+      - ../grafana:/etc/grafana/provisioning/datasources
+    depends_on:
+      - local-app
+    networks:
+      - boilerplate-local
+volumes:
+  prom_data:
 
 networks:
   boilerplate-local:
