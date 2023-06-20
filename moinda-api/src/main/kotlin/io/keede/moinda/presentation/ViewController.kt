@@ -4,6 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.ResponseBody
 
 
 /**
@@ -19,7 +20,17 @@ class ViewController {
     fun maps2(): String = "sample/thema-sample"
 
     @GetMapping("/")
-    fun index(): String = "index"
+    fun index(): String {
+        log.info("index..")
+        return "index"
+    }
+
+    @GetMapping("/error")
+    @ResponseBody
+    fun index2(): String {
+        log.error("i error..")
+        return "index"
+    }
 
     // TODO : kakao Map Test
     @GetMapping("/maps")

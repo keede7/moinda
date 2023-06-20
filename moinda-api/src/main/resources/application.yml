@@ -22,10 +22,26 @@ server:
     session:
       timeout: 30m
       tracking-modes: cookie
+  tomcat:
+    mbeanregistry:
+      enabled: true
 
 # https://hudi.blog/spring-boot-actuator-prometheus-grafana-set-up/
 management:
+  info:
+    java:
+      enabled: true
+    os:
+      enabled: true
+    env:
+      enabled: true
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    health:
+      # 각 health 정보를 상세하게 또는 간단하게 표현할지에 대한 속성을 선언한다.
+      #      show-details: always
+      show-components: always
+

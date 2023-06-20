@@ -14,8 +14,14 @@ scrape_configs:
     honor_timestamps: true
     scrape_interval: 15s
     scrape_timeout: 10s
-    metrics_path: /actuator/prometheus
+#    metrics_path: /actuator/prometheus
     scheme: http
     static_configs:
       - targets:
-          - localhost:9090
+          - host.docker.internal:9090
+
+  - job_name: "spring-actuator"
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 1s
+    static_configs:
+      - targets: [ 'host.docker.internal:8080' ]
