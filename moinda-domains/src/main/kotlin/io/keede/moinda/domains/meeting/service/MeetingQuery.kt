@@ -2,7 +2,7 @@ package io.keede.moinda.domains.meeting.service
 
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
 import io.keede.moinda.core.model.meeting.entity.MeetingProjection
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.meeting.domain.Meeting
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
 import io.keede.moinda.mapper.PaginatedDomain
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 internal class MeetingQuery(
     private val meetingQueryAdapter: MeetingQueryAdapter,
-    private val memberQueryAdapter: MemberQueryAdapter,
+    private val memberQueryPort: MemberQueryPort,
 ) : MeetingQueryUseCase {
 
     override fun getById(query: MeetingQueryUseCase.Query): Meeting {
@@ -41,7 +41,7 @@ internal class MeetingQuery(
 
     // 내 모임을 조회할 떄 사용한다
     override fun getInParticipatingMeetingsByMemberId(memberId: Long?): List<Meeting> {
-        val memberJpaEntity = memberQueryAdapter.findWithFetch(memberId)
+        val memberJpaEntity = memberQueryPort.findWithFetch(memberId)
         val meetingJpaEntity = memberJpaEntity.meetingJpaEntity
 
         // TODO : 조회를 할 시점에 특정 사용자가 현재 참여하고 있는 모임이 없을 수 있다.

@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.member.adapter.port
+package io.keede.moinda.core.model.member.port.adapter
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 import io.keede.moinda.core.model.member.entity.QMemberJpaEntity
 import io.keede.moinda.core.model.member.entity.QMemberJpaEntity.memberJpaEntity
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service
  * Created on 2023-04-05
  */
 @Service
-internal class MemberQueryPort(
+internal class MemberQueryAdapter(
     private val jpaQueryFactory: JPAQueryFactory
-) : MemberQueryAdapter, QuerydslRepositorySupport(QMemberJpaEntity::class.java) {
+) : MemberQueryPort, QuerydslRepositorySupport(QMemberJpaEntity::class.java) {
 
     override fun findById(memberId: Long?): MemberJpaEntity {
         return jpaQueryFactory

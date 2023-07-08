@@ -2,7 +2,7 @@ package io.keede.moinda.domains.chat.service
 
 import io.keede.moinda.core.model.chat.adapter.MeetingChatCommandAdapter
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.chat.usecase.MeetingChatCommandUseCase
 import io.keede.moinda.domains.config.UseCaseTest
 import io.mockk.every
@@ -23,7 +23,7 @@ internal class MeetingChatCommandTest {
     private lateinit var meetingChatCommandAdapter: MeetingChatCommandAdapter
 
     @MockK
-    private lateinit var memberQueryAdapter: MemberQueryAdapter
+    private lateinit var memberQueryPort: MemberQueryPort
 
     @MockK
     private lateinit var meetingQueryAdapter: MeetingQueryAdapter
@@ -34,7 +34,7 @@ internal class MeetingChatCommandTest {
     fun init() {
         this.sut = MeetingChatCommand(
             this.meetingChatCommandAdapter,
-            this.memberQueryAdapter,
+            this.memberQueryPort,
             this.meetingQueryAdapter
         )
     }
@@ -45,13 +45,13 @@ internal class MeetingChatCommandTest {
         val command = mockk<MeetingChatCommandUseCase.Command>(relaxed = true)
 
         every { meetingChatCommandAdapter.save(command.createMeetingChat) } returns mockk(relaxed = true)
-        every { memberQueryAdapter.findById(command.createMeetingChat.memberId) } returns mockk(relaxed = true)
+        every { memberQueryPort.findById(command.createMeetingChat.memberId) } returns mockk(relaxed = true)
         every { meetingQueryAdapter.findById(command.createMeetingChat.meetingId) } returns mockk(relaxed = true)
 
         this.sut.create(command)
 
         verify(exactly = 1) { meetingChatCommandAdapter.save(command.createMeetingChat) }
-        verify(exactly = 1) { memberQueryAdapter.findById(command.createMeetingChat.memberId) }
+        verify(exactly = 1) { memberQueryPort.findById(command.createMeetingChat.memberId) }
         verify(exactly = 1) { meetingQueryAdapter.findById(command.createMeetingChat.meetingId) }
 
     }

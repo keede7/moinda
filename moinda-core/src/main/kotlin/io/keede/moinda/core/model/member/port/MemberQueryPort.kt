@@ -1,11 +1,11 @@
-package io.keede.moinda.core.model.member.adapter
+package io.keede.moinda.core.model.member.port
 
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 /**
  * @author keede
  * Created on 2023-04-05
  */
-interface MemberQueryAdapter {
+interface MemberQueryPort {
 
     fun findById(memberId: Long?) : MemberJpaEntity
 

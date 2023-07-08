@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.meeting.service
 
 import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
 import io.mockk.every
@@ -18,7 +18,7 @@ internal class MeetingQueryTest {
     private lateinit var meetingQueryAdapter: MeetingQueryAdapter
 
     @MockK
-    private lateinit var memberQueryAdapter: MemberQueryAdapter
+    private lateinit var memberQueryPort: MemberQueryPort
 
     private lateinit var sut: MeetingQueryUseCase
 
@@ -26,7 +26,7 @@ internal class MeetingQueryTest {
     fun init() {
         this.sut = MeetingQuery(
             this.meetingQueryAdapter,
-            this.memberQueryAdapter,
+            this.memberQueryPort,
         )
     }
 
@@ -48,11 +48,11 @@ internal class MeetingQueryTest {
 
         val memberId = 1L
 
-        every { memberQueryAdapter.findWithFetch(any())} returns mockk(relaxed = true)
+        every { memberQueryPort.findWithFetch(any())} returns mockk(relaxed = true)
 
         this.sut.getInParticipatingMeetingsByMemberId(memberId)
 
-        verify(exactly = 1) { memberQueryAdapter.findWithFetch(memberId) }
+        verify(exactly = 1) { memberQueryPort.findWithFetch(memberId) }
 
     }
 

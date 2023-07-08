@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.member.service
 
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.member.usecase.MemberQueryUseCase
 import io.mockk.every
@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Test
 internal class MemberQueryTest {
 
     @MockK
-    private lateinit var memberQueryAdapter: MemberQueryAdapter
+    private lateinit var memberQueryPort: MemberQueryPort
 
     private lateinit var sut: MemberQueryUseCase
 
     @BeforeEach
     fun init() {
-        this.sut = MemberQuery(this.memberQueryAdapter)
+        this.sut = MemberQuery(this.memberQueryPort)
     }
 
     @Test
@@ -32,11 +32,11 @@ internal class MemberQueryTest {
 
         val query = mockk<MemberQueryUseCase.Query>(relaxed = true)
 
-        every { memberQueryAdapter.findById(query.memberId) } returns mockk(relaxed = true)
+        every { memberQueryPort.findById(query.memberId) } returns mockk(relaxed = true)
 
         this.sut.getById(query)
 
-        verify(exactly = 1) { memberQueryAdapter.findById(query.memberId) }
+        verify(exactly = 1) { memberQueryPort.findById(query.memberId) }
 
     }
 
@@ -45,11 +45,11 @@ internal class MemberQueryTest {
 
         val query = mockk<MemberQueryUseCase.ParticipateMemberByMeetingId>(relaxed = true)
 
-        every { memberQueryAdapter.findParticipateInMeetMembers(query.meetingId) } returns mockk(relaxed = true)
+        every { memberQueryPort.findParticipateInMeetMembers(query.meetingId) } returns mockk(relaxed = true)
 
         this.sut.getParticipateInMeetMembers(query)
 
-        verify(exactly = 1) { memberQueryAdapter.findParticipateInMeetMembers(query.meetingId) }
+        verify(exactly = 1) { memberQueryPort.findParticipateInMeetMembers(query.meetingId) }
 
     }
 }

@@ -3,8 +3,8 @@ package io.keede.moinda.service
 import io.keede.moinda.common.member.CreateMember
 import io.keede.moinda.common.member.session.Constants
 import io.keede.moinda.common.member.session.SessionResponse
-import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.member.port.MemberCommandPort
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 import io.keede.moinda.model.OAuthAttributes
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -21,8 +21,8 @@ import javax.servlet.http.HttpSession
 @Service
 class CustomOAuth2Service(
     // TODO : Core가 아니라 Domain Layer를 의존하는 것으로 수정하여 UseCase 의존하게 변경
-    private val memberQueryAdapter: MemberQueryAdapter,
-    private val memberCommandAdapter: MemberCommandAdapter,
+    private val memberQueryPort: MemberQueryPort,
+    private val memberCommandPort: MemberCommandPort,
     private val httpSession: HttpSession,
 ) : OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
@@ -78,8 +78,8 @@ class CustomOAuth2Service(
     private fun storeOAuthMember(attributes: OAuthAttributes): MemberJpaEntity? {
 
         // TODO : 저장 또는 업데이트를 해야한다.
-        return memberQueryAdapter.findOAuth2ByEmail(attributes.email)
-            ?: return memberCommandAdapter.save(
+        return memberQueryPort.findOAuth2ByEmail(attributes.email)
+            ?: return memberCommandPort.save(
                 CreateMember(
                     attributes.name,
                     attributes.email,
