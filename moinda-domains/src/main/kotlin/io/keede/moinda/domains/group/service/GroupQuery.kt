@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.group.service
 
-import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
+import io.keede.moinda.core.model.group.port.GroupQueryPort
 import io.keede.moinda.domains.group.domain.Group
 import io.keede.moinda.domains.group.usecase.GroupQueryUseCase
 import org.springframework.stereotype.Service
@@ -13,17 +13,17 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class GroupQuery(
-    private val groupQueryAdapter: GroupQueryAdapter
+    private val groupQueryPort: GroupQueryPort
 ) : GroupQueryUseCase {
 
     override fun getGroupById(query: GroupQueryUseCase.Query): Group {
-        val entity = groupQueryAdapter.findById(query.groupId)
+        val entity = groupQueryPort.findById(query.groupId)
 
         return Group(entity)
     }
 
     override fun getGroups(): List<Group> {
-        val entities = groupQueryAdapter.findGroups()
+        val entities = groupQueryPort.findGroups()
 
         return entities.stream()
             .map { Group(entity = it) }

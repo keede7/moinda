@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.member.service
 
-import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
+import io.keede.moinda.core.model.group.port.GroupQueryPort
 import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.member.port.MemberCommandPort
 import io.keede.moinda.core.model.member.port.MemberQueryPort
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 internal class MemberCommand(
     private val memberCommandPort: MemberCommandPort,
     private val memberQueryPort: MemberQueryPort,
-    private val groupQueryAdapter: GroupQueryAdapter,
+    private val groupQueryPort: GroupQueryPort,
     private val meetingQueryPort: MeetingQueryPort,
 ) : MemberCommandUseCase {
 
@@ -32,7 +32,7 @@ internal class MemberCommand(
 
     // TODO : 2차
     override fun participate(participate: MemberCommandUseCase.ParticipateToGroup) {
-        val groupJpaEntity = groupQueryAdapter.findById(participate.groupId)
+        val groupJpaEntity = groupQueryPort.findById(participate.groupId)
         // TODO : fetch 걸지 않는 조회성 메서드로 변경
         val memberJpaEntity = memberQueryPort.findById(participate.memberId)
 
