@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.meeting.adapter.port
+package io.keede.moinda.core.model.meeting.port.adapter
 
 import io.keede.moinda.common.meeting.CreateMeeting
-import io.keede.moinda.core.model.meeting.adapter.MeetingCommandAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingCommandPort
 import io.keede.moinda.core.model.meeting.entity.Location
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaRepository
@@ -16,9 +16,9 @@ import javax.annotation.PostConstruct
  */
 @Service
 @Transactional
-internal class MeetingCommandPort(
+internal class MeetingCommandAdapter(
     private val meetingJpaRepository: MeetingJpaRepository,
-) : MeetingCommandAdapter {
+) : MeetingCommandPort {
     override fun save(createMeeting: CreateMeeting): MeetingJpaEntity {
 
         val meetingJpaEntity = MeetingJpaEntity(

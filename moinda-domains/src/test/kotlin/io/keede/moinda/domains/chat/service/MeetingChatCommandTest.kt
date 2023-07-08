@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.chat.service
 
 import io.keede.moinda.core.model.chat.adapter.MeetingChatCommandAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.chat.usecase.MeetingChatCommandUseCase
 import io.keede.moinda.domains.config.UseCaseTest
@@ -26,7 +26,7 @@ internal class MeetingChatCommandTest {
     private lateinit var memberQueryPort: MemberQueryPort
 
     @MockK
-    private lateinit var meetingQueryAdapter: MeetingQueryAdapter
+    private lateinit var meetingQueryPort: MeetingQueryPort
 
     private lateinit var sut: MeetingChatCommandUseCase
 
@@ -35,7 +35,7 @@ internal class MeetingChatCommandTest {
         this.sut = MeetingChatCommand(
             this.meetingChatCommandAdapter,
             this.memberQueryPort,
-            this.meetingQueryAdapter
+            this.meetingQueryPort
         )
     }
 
@@ -46,13 +46,13 @@ internal class MeetingChatCommandTest {
 
         every { meetingChatCommandAdapter.save(command.createMeetingChat) } returns mockk(relaxed = true)
         every { memberQueryPort.findById(command.createMeetingChat.memberId) } returns mockk(relaxed = true)
-        every { meetingQueryAdapter.findById(command.createMeetingChat.meetingId) } returns mockk(relaxed = true)
+        every { meetingQueryPort.findById(command.createMeetingChat.meetingId) } returns mockk(relaxed = true)
 
         this.sut.create(command)
 
         verify(exactly = 1) { meetingChatCommandAdapter.save(command.createMeetingChat) }
         verify(exactly = 1) { memberQueryPort.findById(command.createMeetingChat.memberId) }
-        verify(exactly = 1) { meetingQueryAdapter.findById(command.createMeetingChat.meetingId) }
+        verify(exactly = 1) { meetingQueryPort.findById(command.createMeetingChat.meetingId) }
 
     }
 

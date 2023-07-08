@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.chat.service
 
 import io.keede.moinda.core.model.chat.adapter.MeetingChatCommandAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.chat.domain.MeetingChat
 import io.keede.moinda.domains.chat.usecase.MeetingChatCommandUseCase
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 class MeetingChatCommand(
     private val meetingChatCommandAdapter: MeetingChatCommandAdapter,
     private val memberQueryPort: MemberQueryPort,
-    private val meetingQueryAdapter: MeetingQueryAdapter,
+    private val meetingQueryPort: MeetingQueryPort,
 ) : MeetingChatCommandUseCase {
 
     override fun create(command: MeetingChatCommandUseCase.Command): MeetingChat {
@@ -25,7 +25,7 @@ class MeetingChatCommand(
         val meetingChatJpaEntity = meetingChatCommandAdapter.save(createMeetingChat)
 
         val memberJpaEntity = memberQueryPort.findById(createMeetingChat.memberId)
-        val meetingJpaEntity = meetingQueryAdapter.findById(createMeetingChat.meetingId)
+        val meetingJpaEntity = meetingQueryPort.findById(createMeetingChat.meetingId)
 
         meetingChatJpaEntity.initMember(memberJpaEntity)
         meetingChatJpaEntity.initMeeting(meetingJpaEntity)

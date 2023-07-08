@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.meeting.adapter
+package io.keede.moinda.core.model.meeting.port
 
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import java.time.LocalDateTime
@@ -7,7 +7,7 @@ import java.time.LocalDateTime
  * @author keede
  * Created on 2023-05-17
  */
-interface MeetingBatchAdapter {
+interface MeetingBatchPort {
 
     fun findExpiredMeetings(today: LocalDateTime) : List<MeetingJpaEntity>
 

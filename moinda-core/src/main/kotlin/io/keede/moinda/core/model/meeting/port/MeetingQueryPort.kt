@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.meeting.adapter
+package io.keede.moinda.core.model.meeting.port
 
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.MeetingProjection
@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable
  * @author keede
  * Created on 2023-04-18
  */
-interface MeetingQueryAdapter {
+interface MeetingQueryPort {
 
     fun findById(meetingId: Long) : MeetingJpaEntity
 

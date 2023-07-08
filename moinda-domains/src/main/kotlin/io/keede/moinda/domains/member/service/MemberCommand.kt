@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.member.service
 
 import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.member.port.MemberCommandPort
 import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.member.domain.Member
@@ -19,7 +19,7 @@ internal class MemberCommand(
     private val memberCommandPort: MemberCommandPort,
     private val memberQueryPort: MemberQueryPort,
     private val groupQueryAdapter: GroupQueryAdapter,
-    private val meetingQueryAdapter: MeetingQueryAdapter,
+    private val meetingQueryPort: MeetingQueryPort,
 ) : MemberCommandUseCase {
 
     override fun signup(command: MemberCommandUseCase.Command): Member {
@@ -48,7 +48,7 @@ internal class MemberCommand(
 
     override fun participate(participate: MemberCommandUseCase.ParticipateToMeeting) {
         val memberJpaEntity = memberQueryPort.findById(participate.memberId)
-        val meetingJpaEntity = meetingQueryAdapter.findById(participate.meetingId)
+        val meetingJpaEntity = meetingQueryPort.findById(participate.meetingId)
 
         memberJpaEntity.participate(meetingJpaEntity)
     }

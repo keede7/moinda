@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.member.service
 
 import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.member.port.MemberCommandPort
 import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.config.UseCaseTest
@@ -30,7 +30,7 @@ internal class MemberCommandTest {
     private lateinit var groupQueryAdapter: GroupQueryAdapter
 
     @MockK
-    private lateinit var meetingQueryAdapter: MeetingQueryAdapter
+    private lateinit var meetingQueryPort: MeetingQueryPort
 
     private lateinit var sut: MemberCommandUseCase
 
@@ -40,7 +40,7 @@ internal class MemberCommandTest {
             this.memberCommandPort,
             this.memberQueryPort,
             this.groupQueryAdapter,
-            this.meetingQueryAdapter,
+            this.meetingQueryPort,
         )
     }
 
@@ -89,12 +89,12 @@ internal class MemberCommandTest {
     fun 사용자_모임참여_성공() {
         val participateToMeeting = mockk<MemberCommandUseCase.ParticipateToMeeting>(relaxed = true)
 
-        every { meetingQueryAdapter.findById(participateToMeeting.meetingId) } returns mockk(relaxed = true)
+        every { meetingQueryPort.findById(participateToMeeting.meetingId) } returns mockk(relaxed = true)
         every { memberQueryPort.findById(participateToMeeting.memberId) } returns mockk(relaxed = true)
 
         sut.participate(participateToMeeting)
 
-        verify(exactly = 1) { meetingQueryAdapter.findById(participateToMeeting.meetingId) }
+        verify(exactly = 1) { meetingQueryPort.findById(participateToMeeting.meetingId) }
         verify(exactly = 1) { memberQueryPort.findById(participateToMeeting.memberId) }
     }
 
