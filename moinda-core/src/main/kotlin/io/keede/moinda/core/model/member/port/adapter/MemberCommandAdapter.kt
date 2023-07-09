@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.member.adapter.port
+package io.keede.moinda.core.model.member.port.adapter
 
 import io.keede.moinda.common.member.CreateMember
-import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
+import io.keede.moinda.core.model.member.port.MemberCommandPort
 import io.keede.moinda.core.model.member.entity.MemberJpaEntity
 import io.keede.moinda.core.model.member.entity.MemberJpaRepository
 import org.springframework.stereotype.Service
@@ -12,9 +12,9 @@ import javax.annotation.PostConstruct
  * Created on 2023-04-05
  */
 @Service
-internal class MemberCommandPort(
+internal class MemberCommandAdapter(
     private val memberJpaRepository: MemberJpaRepository
-) : MemberCommandAdapter {
+) : MemberCommandPort {
 
     override fun save(createMember: CreateMember): MemberJpaEntity {
         val entity = MemberJpaEntity(

@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.meeting.adapter.port
+package io.keede.moinda.core.model.meeting.port.adapter
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.MeetingProjection
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity
@@ -18,9 +18,9 @@ import org.springframework.stereotype.Service
  * Created on 2023-04-18
  */
 @Service
-internal class MeetingQueryPort(
+internal class MeetingQueryAdapter(
     private val jpaQueryFactory: JPAQueryFactory
-) : MeetingQueryAdapter, QuerydslRepositorySupport(QMeetingJpaEntity::class.java) {
+) : MeetingQueryPort, QuerydslRepositorySupport(QMeetingJpaEntity::class.java) {
 
     override fun findById(meetingId: Long): MeetingJpaEntity {
         return jpaQueryFactory

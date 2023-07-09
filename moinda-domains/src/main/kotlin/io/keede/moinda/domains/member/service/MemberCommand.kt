@@ -1,9 +1,9 @@
 package io.keede.moinda.domains.member.service
 
-import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
-import io.keede.moinda.core.model.member.adapter.MemberCommandAdapter
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.group.port.GroupQueryPort
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
+import io.keede.moinda.core.model.member.port.MemberCommandPort
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.member.domain.Member
 import io.keede.moinda.domains.member.usecase.MemberCommandUseCase
 import org.springframework.stereotype.Service
@@ -16,45 +16,45 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 internal class MemberCommand(
-    private val memberCommandAdapter: MemberCommandAdapter,
-    private val memberQueryAdapter: MemberQueryAdapter,
-    private val groupQueryAdapter: GroupQueryAdapter,
-    private val meetingQueryAdapter: MeetingQueryAdapter,
+    private val memberCommandPort: MemberCommandPort,
+    private val memberQueryPort: MemberQueryPort,
+    private val groupQueryPort: GroupQueryPort,
+    private val meetingQueryPort: MeetingQueryPort,
 ) : MemberCommandUseCase {
 
     override fun signup(command: MemberCommandUseCase.Command): Member {
 
-        memberQueryAdapter.existMemberByEmail(command.createMember.email)
+        memberQueryPort.existMemberByEmail(command.createMember.email)
 
-        val entity = memberCommandAdapter.save(command.createMember)
+        val entity = memberCommandPort.save(command.createMember)
         return Member(entity)
     }
 
     // TODO : 2차
     override fun participate(participate: MemberCommandUseCase.ParticipateToGroup) {
-        val groupJpaEntity = groupQueryAdapter.findById(participate.groupId)
+        val groupJpaEntity = groupQueryPort.findById(participate.groupId)
         // TODO : fetch 걸지 않는 조회성 메서드로 변경
-        val memberJpaEntity = memberQueryAdapter.findById(participate.memberId)
+        val memberJpaEntity = memberQueryPort.findById(participate.memberId)
 
 //        memberJpaEntity.participate(groupJpaEntity)
     }
 
     // TODO : 2차
     override fun leave(leave: MemberCommandUseCase.LeaveGroup) {
-        val memberJpaEntity = memberQueryAdapter.findById(leave.memberId)
+        val memberJpaEntity = memberQueryPort.findById(leave.memberId)
 
 //        memberJpaEntity.leaveGroup()
     }
 
     override fun participate(participate: MemberCommandUseCase.ParticipateToMeeting) {
-        val memberJpaEntity = memberQueryAdapter.findById(participate.memberId)
-        val meetingJpaEntity = meetingQueryAdapter.findById(participate.meetingId)
+        val memberJpaEntity = memberQueryPort.findById(participate.memberId)
+        val meetingJpaEntity = meetingQueryPort.findById(participate.meetingId)
 
         memberJpaEntity.participate(meetingJpaEntity)
     }
 
     override fun leave(leave: MemberCommandUseCase.LeaveMeeting) {
-        val memberJpaEntity = memberQueryAdapter.findById(leave.memberId)
+        val memberJpaEntity = memberQueryPort.findById(leave.memberId)
 
         memberJpaEntity.leaveMeeting()
     }

@@ -1,4 +1,4 @@
-package io.keede.moinda.core.model.group.adapter
+package io.keede.moinda.core.model.group.port
 
 import io.keede.moinda.common.group.CreateGroup
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
@@ -8,7 +8,7 @@ import io.keede.moinda.core.model.group.entity.GroupJpaEntity
  * @author keede
  * Created on 2023-03-18
  */
-interface GroupCommandAdapter {
+interface GroupCommandPort {
 
     fun save(createGroup: CreateGroup) : GroupJpaEntity
 

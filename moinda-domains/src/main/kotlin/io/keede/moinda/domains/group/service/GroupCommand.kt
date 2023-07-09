@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.group.service
 
-import io.keede.moinda.core.model.group.adapter.GroupCommandAdapter
+import io.keede.moinda.core.model.group.port.GroupCommandPort
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
 import io.keede.moinda.domains.group.domain.Group
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional
 class GroupCommand(
-    private val commandAdapter: GroupCommandAdapter
+    private val commandAdapter: GroupCommandPort
 ) : GroupCommandUseCase {
 
     override fun create(command: GroupCommandUseCase.Command): Group {

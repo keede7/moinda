@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.meeting.adapter.port
+package io.keede.moinda.core.model.meeting.port.adapter
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import io.keede.moinda.core.model.meeting.adapter.MeetingBatchAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingBatchPort
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity
 import io.keede.moinda.core.model.meeting.entity.QMeetingJpaEntity.meetingJpaEntity
@@ -16,9 +16,9 @@ import java.time.LocalDateTime
  */
 @Service
 @Transactional
-internal class MeetingBatchPort(
+internal class MeetingBatchAdapter(
     private val jpaQueryFactory: JPAQueryFactory
-) : MeetingBatchAdapter, QuerydslRepositorySupport(QMeetingJpaEntity::class.java) {
+) : MeetingBatchPort, QuerydslRepositorySupport(QMeetingJpaEntity::class.java) {
 
     override fun findExpiredMeetings(today: LocalDateTime): List<MeetingJpaEntity> {
         return jpaQueryFactory

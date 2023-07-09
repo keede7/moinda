@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.meeting.service
 
-import io.keede.moinda.core.model.meeting.adapter.MeetingBatchAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingBatchPort
 import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.meeting.usecase.MeetingBatchUseCase
 import io.mockk.every
@@ -19,13 +19,13 @@ import java.time.LocalDateTime
 internal class MeetingBatchTest{
 
     @MockK
-    private lateinit var meetingBatchAdapter: MeetingBatchAdapter
+    private lateinit var meetingBatchPort: MeetingBatchPort
 
     private lateinit var sut: MeetingBatchUseCase
 
     @BeforeEach
     fun init() {
-        this.sut = MeetingBatch(this.meetingBatchAdapter)
+        this.sut = MeetingBatch(this.meetingBatchPort)
     }
 
     @Test
@@ -33,11 +33,11 @@ internal class MeetingBatchTest{
 
         val today = mockk<LocalDateTime>()
 
-        every { meetingBatchAdapter.findExpiredMeetings(any()) } returns mockk(relaxed = true)
+        every { meetingBatchPort.findExpiredMeetings(any()) } returns mockk(relaxed = true)
 
         this.sut.cleanUpExpiredMeetings(today)
 
-        verify(exactly = 1) { meetingBatchAdapter.findExpiredMeetings(any()) }
+        verify(exactly = 1) { meetingBatchPort.findExpiredMeetings(any()) }
 
     }
 

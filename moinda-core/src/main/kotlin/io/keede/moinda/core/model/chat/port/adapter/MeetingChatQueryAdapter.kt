@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.chat.adapter.port
+package io.keede.moinda.core.model.chat.port.adapter
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import io.keede.moinda.core.model.chat.adapter.MeetingChatQueryAdapter
+import io.keede.moinda.core.model.chat.port.MeetingChatQueryPort
 import io.keede.moinda.core.model.chat.entity.MeetingChatProjection
 import io.keede.moinda.core.model.chat.entity.QMeetingChatJpaEntity
 import io.keede.moinda.core.model.chat.entity.QMeetingChatJpaEntity.meetingChatJpaEntity
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service
  * Created on 2023-05-08
  */
 @Service
-internal class MeetingChatQueryPort(
+internal class MeetingChatQueryAdapter(
     private val jpaQueryFactory: JPAQueryFactory
-) : MeetingChatQueryAdapter, QuerydslRepositorySupport(QMeetingChatJpaEntity::class.java) {
+) : MeetingChatQueryPort, QuerydslRepositorySupport(QMeetingChatJpaEntity::class.java) {
 
     // TODO : 메세지들을 보여줄 때의 설계가 추가적으로 필요함, EX) 스크롤링으로 추가요청 , 캐시전략 사용, 페이징처리
     override fun findChatsByMeetingId(meetingId: Long): List<MeetingChatProjection> {

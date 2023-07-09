@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.chat.service
 
-import io.keede.moinda.core.model.chat.adapter.MeetingChatQueryAdapter
+import io.keede.moinda.core.model.chat.port.MeetingChatQueryPort
 import io.keede.moinda.domains.chat.usecase.MeetingChatQueryUseCase
 import io.keede.moinda.domains.config.UseCaseTest
 import io.mockk.every
@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Test
 internal class MeetingChatQueryTest {
 
     @MockK
-    private lateinit var meetingChatQueryAdapter: MeetingChatQueryAdapter
+    private lateinit var meetingChatQueryPort: MeetingChatQueryPort
 
     private lateinit var sut: MeetingChatQueryUseCase
 
     @BeforeEach
     fun init() {
-        this.sut = MeetingChatQuery(this.meetingChatQueryAdapter)
+        this.sut = MeetingChatQuery(this.meetingChatQueryPort)
     }
 
     @Test
@@ -32,11 +32,11 @@ internal class MeetingChatQueryTest {
 
         val meetingId = 1L
 
-        every { meetingChatQueryAdapter.findChatsByMeetingId(any()) } returns mockk(relaxed = true)
+        every { meetingChatQueryPort.findChatsByMeetingId(any()) } returns mockk(relaxed = true)
 
         this.sut.getChatting(meetingId)
 
-        verify(exactly = 1) { meetingChatQueryAdapter.findChatsByMeetingId(meetingId) }
+        verify(exactly = 1) { meetingChatQueryPort.findChatsByMeetingId(meetingId) }
 
     }
 

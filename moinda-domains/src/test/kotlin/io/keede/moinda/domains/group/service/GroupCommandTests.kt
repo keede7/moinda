@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.group.service
 
-import io.keede.moinda.core.model.group.adapter.GroupCommandAdapter
+import io.keede.moinda.core.model.group.port.GroupCommandPort
 import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.group.usecase.GroupCommandUseCase
 import io.mockk.every
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 class GroupCommandTests {
 
     @MockK
-    private lateinit var commandAdapter: GroupCommandAdapter
+    private lateinit var commandAdapter: GroupCommandPort
 
     private lateinit var sut: GroupCommandUseCase
 

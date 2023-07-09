@@ -1,7 +1,7 @@
-package io.keede.moinda.core.model.group.adapter.port
+package io.keede.moinda.core.model.group.port.adapter
 
 import com.querydsl.jpa.impl.JPAQueryFactory
-import io.keede.moinda.core.model.group.adapter.GroupQueryAdapter
+import io.keede.moinda.core.model.group.port.GroupQueryPort
 import io.keede.moinda.core.model.group.entity.GroupJpaEntity
 import io.keede.moinda.core.model.group.entity.QGroupJpaEntity
 import io.keede.moinda.core.model.group.entity.QGroupJpaEntity.groupJpaEntity
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 internal class GroupQueryPort(
     private val jpaQueryFactory: JPAQueryFactory
-) : GroupQueryAdapter, QuerydslRepositorySupport(QGroupJpaEntity::class.java) {
+) : GroupQueryPort, QuerydslRepositorySupport(QGroupJpaEntity::class.java) {
 
     override fun findById(groupId: Long): GroupJpaEntity {
         return jpaQueryFactory

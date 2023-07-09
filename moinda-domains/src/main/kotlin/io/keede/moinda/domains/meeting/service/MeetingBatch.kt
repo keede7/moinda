@@ -1,6 +1,6 @@
 package io.keede.moinda.domains.meeting.service
 
-import io.keede.moinda.core.model.meeting.adapter.MeetingBatchAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingBatchPort
 import io.keede.moinda.core.model.meeting.entity.MeetingJpaEntity
 import io.keede.moinda.domains.meeting.usecase.MeetingBatchUseCase
 import org.springframework.stereotype.Service
@@ -14,12 +14,12 @@ import java.time.LocalDateTime
 @Service
 @Transactional
 internal class MeetingBatch(
-    private val meetingBatchAdapter: MeetingBatchAdapter
+    private val meetingBatchPort: MeetingBatchPort
 ) : MeetingBatchUseCase {
 
     // 당일 기준 종료날짜가 지났으면 삭제
     override fun cleanUpExpiredMeetings(today: LocalDateTime) {
-        meetingBatchAdapter.findExpiredMeetings(today)
+        meetingBatchPort.findExpiredMeetings(today)
             .forEach(MeetingJpaEntity::remove)
     }
 }

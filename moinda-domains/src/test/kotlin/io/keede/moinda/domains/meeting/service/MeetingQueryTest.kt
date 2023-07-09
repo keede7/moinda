@@ -1,7 +1,7 @@
 package io.keede.moinda.domains.meeting.service
 
-import io.keede.moinda.core.model.meeting.adapter.MeetingQueryAdapter
-import io.keede.moinda.core.model.member.adapter.MemberQueryAdapter
+import io.keede.moinda.core.model.meeting.port.MeetingQueryPort
+import io.keede.moinda.core.model.member.port.MemberQueryPort
 import io.keede.moinda.domains.config.UseCaseTest
 import io.keede.moinda.domains.meeting.usecase.MeetingQueryUseCase
 import io.mockk.every
@@ -15,18 +15,18 @@ import org.junit.jupiter.api.Test
 internal class MeetingQueryTest {
 
     @MockK
-    private lateinit var meetingQueryAdapter: MeetingQueryAdapter
+    private lateinit var meetingQueryPort: MeetingQueryPort
 
     @MockK
-    private lateinit var memberQueryAdapter: MemberQueryAdapter
+    private lateinit var memberQueryPort: MemberQueryPort
 
     private lateinit var sut: MeetingQueryUseCase
 
     @BeforeEach
     fun init() {
         this.sut = MeetingQuery(
-            this.meetingQueryAdapter,
-            this.memberQueryAdapter,
+            this.meetingQueryPort,
+            this.memberQueryPort,
         )
     }
 
@@ -35,11 +35,11 @@ internal class MeetingQueryTest {
 
         val query = mockk<MeetingQueryUseCase.Query>(relaxed = true)
 
-        every { meetingQueryAdapter.findById(any()) } returns mockk(relaxed = true)
+        every { meetingQueryPort.findById(any()) } returns mockk(relaxed = true)
 
         this.sut.getById(query)
 
-        verify(exactly = 1) { meetingQueryAdapter.findById(query.meetingId) }
+        verify(exactly = 1) { meetingQueryPort.findById(query.meetingId) }
 
     }
 
@@ -48,11 +48,11 @@ internal class MeetingQueryTest {
 
         val memberId = 1L
 
-        every { memberQueryAdapter.findWithFetch(any())} returns mockk(relaxed = true)
+        every { memberQueryPort.findWithFetch(any())} returns mockk(relaxed = true)
 
         this.sut.getInParticipatingMeetingsByMemberId(memberId)
 
-        verify(exactly = 1) { memberQueryAdapter.findWithFetch(memberId) }
+        verify(exactly = 1) { memberQueryPort.findWithFetch(memberId) }
 
     }
 
@@ -61,11 +61,11 @@ internal class MeetingQueryTest {
 
         val pageQuery = mockk<MeetingQueryUseCase.PageQuery>(relaxed = true)
 
-        every { meetingQueryAdapter.findMeetingByPaging(pageQuery.ofPageable()) } returns mockk(relaxed = true)
+        every { meetingQueryPort.findMeetingByPaging(pageQuery.ofPageable()) } returns mockk(relaxed = true)
 
         this.sut.getMeetings(pageQuery)
 
-        verify { meetingQueryAdapter.findMeetingByPaging(pageQuery.ofPageable()) }
+        verify { meetingQueryPort.findMeetingByPaging(pageQuery.ofPageable()) }
 
     }
 
