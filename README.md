@@ -32,20 +32,11 @@
 | `chore`    | 이외 패키지 관련 (`문서`, `build`, `환경설정`) |
 
 ### 기술 스택
-- Kotlin
-- Spring Boot
-- Querydsl
-- Thymeleaf
-- 
+- `Kotlin`
+- `Spring Boot 2.7.x`
+- `Querydsl` => `JooQ` ( 변경 예정 by 8.2 )
+- `Thymeleaf`
+
 ---
 
-### 선택 이유
-
-#### Kotlin
-
-사실 `Kotlin` 보다는 `Java` 로 개발을 하는 것이 익숙합니다.
-
-하지만, 연습이라는 명목적인 이유가 존재하며, **웹으로 배포하는 것 뿐만 아니라 앱으로 배포하는 부분**에 대한
-
-욕심도 조금 있기 때문에, 그와 비슷한 환경을 가질 수 있는 언어인 `Kotlin` 으로 선정했습니다.
 
