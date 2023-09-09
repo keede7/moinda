@@ -34,7 +34,7 @@
 ### 기술 스택
 - `Kotlin`
 - `Spring Boot 2.7.x`
-- `Querydsl` => `JooQ` ( 변경 예정 by 8.2 )
+- `Querydsl` => `JooQ` ( 변경 예정 by 8.2 ) [참고자료](https://github.com/etiennestuder/gradle-jooq-plugin)
 - `Thymeleaf`
 
 ---
